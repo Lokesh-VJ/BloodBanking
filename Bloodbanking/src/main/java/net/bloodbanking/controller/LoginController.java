@@ -16,7 +16,7 @@ public class LoginController {
  
 		ModelAndView mv = new ModelAndView("helloworld");
 		mv.addObject("message", message);
-		mv.addObject("name", name+" - Test");
+		mv.addObject("name", name+" - Test - Loki");
 		return mv;
 	}
 }
