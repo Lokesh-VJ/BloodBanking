@@ -6,7 +6,7 @@
 <hibernate-mapping>
 
 	<class 
-	    name="com.nhance.entity.DonationMst" 
+	    name="net.bloodbanking.entity.DonationMst" 
 	    table="donation_mst"
 	>
 	

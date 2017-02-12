@@ -6,7 +6,7 @@
 <hibernate-mapping>
 
 	<class 
-	    name="com.nhance.entity.InquiryForm" 
+	    name="net.bloodbanking.entity.InquiryForm" 
 	    table="inquiry_form"
 	>
 	
