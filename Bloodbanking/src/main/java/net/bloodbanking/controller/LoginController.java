@@ -6,16 +6,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class LoginController {
-	String message = "Welcome to Spring MVC!";
- 
+public class LoginController {	
 	@RequestMapping("/hello")
-	public ModelAndView showMessage(
-			@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-		System.out.println("in controller");
- 
+	public ModelAndView showMessage(@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
 		ModelAndView mv = new ModelAndView("forgotPassword");
-		mv.addObject("message", message);
 		mv.addObject("name", name+" - Test - Loki");
 		return mv;
 	}
