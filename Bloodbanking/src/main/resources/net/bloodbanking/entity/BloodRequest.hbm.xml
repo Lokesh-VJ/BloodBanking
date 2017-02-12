@@ -11,7 +11,7 @@
 	>
 	
 	    <id
-	        name="brID"
+	        name="brId"
 	        type="java.lang.Long"
 	        column="br_id"
 	    >
@@ -39,14 +39,6 @@
 	        name="locId"
 	        type="java.lang.Long"
 	        column="loc_id"
-	        not-null="true"
-	        length="4"
-	    />
-	    
-	    <property
-	        name="cityId"
-	        type="java.lang.Long"
-	        column="city_id"
 	        not-null="true"
 	        length="4"
 	    />
@@ -84,9 +76,9 @@
 	    />
 	    
 	      <property
-	        name="dDate"
+	        name="createdDate"
 	        type="java.sql.Timestamp"
-	        column="d_date"
+	        column="created_date"
 	        not-null="true"
 	        length="15"
 	    />

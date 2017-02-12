@@ -17,7 +17,7 @@ public class DonationMst implements Serializable {
 	
 	private String bgroup;
 	
-	private Date ddate;
+	private Date createdDate;
 	
 	private Long locationId;
 
@@ -61,12 +61,12 @@ public class DonationMst implements Serializable {
 		this.bgroup = bgroup;
 	}
 
-	public Date getDdate() {
-		return ddate;
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setDdate(Date ddate) {
-		this.ddate = ddate;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public Long getLocationId() {

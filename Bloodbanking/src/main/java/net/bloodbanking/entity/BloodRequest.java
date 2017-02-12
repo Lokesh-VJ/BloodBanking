@@ -13,9 +13,7 @@ public class BloodRequest implements Serializable {
 	
 	private Long bId;
 	
-	private Long locationId;
-	
-	private Long cityId;
+	private Long locId;
 	
 	private String contactNo;
 	
@@ -24,8 +22,10 @@ public class BloodRequest implements Serializable {
 	private String qty;
 	
 	private Long status;
-	
-   public Long getBrId() {
+
+	private Date createdDate;
+
+	public Long getBrId() {
 		return brId;
 	}
 
@@ -49,20 +49,12 @@ public class BloodRequest implements Serializable {
 		this.bId = bId;
 	}
 
-	public Long getLocationId() {
-		return locationId;
+	public Long getLocId() {
+		return locId;
 	}
 
-	public void setLocationId(Long locationId) {
-		this.locationId = locationId;
-	}
-
-	public Long getCityId() {
-		return cityId;
-	}
-
-	public void setCityId(Long cityId) {
-		this.cityId = cityId;
+	public void setLocId(Long locId) {
+		this.locId = locId;
 	}
 
 	public String getContactNo() {
@@ -97,14 +89,12 @@ public class BloodRequest implements Serializable {
 		this.status = status;
 	}
 
-	public Date getDdate() {
-		return ddate;
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setDdate(Date ddate) {
-		this.ddate = ddate;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
-
-private Date ddate;
 	
 }

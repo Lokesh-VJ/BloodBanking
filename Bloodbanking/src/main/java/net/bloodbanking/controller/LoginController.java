@@ -19,10 +19,16 @@ public class LoginController {
 	@Autowired
 	private LocationService locationService;
 	
-	@RequestMapping("/hello")
-	public ModelAndView showMessage(@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-		locationService.loadStateById(new StateMstDTO());
-		ModelAndView mv = new ModelAndView("forgotPassword");
+	@RequestMapping("/signup")
+	public ModelAndView signup(@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+		ModelAndView mv = new ModelAndView("signup");
+		mv.addObject("name", name+" - Test - Loki");
+		return mv;
+	}
+	
+	@RequestMapping("/newpassword")
+	public ModelAndView newpassword(@RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+		ModelAndView mv = new ModelAndView("newpassword");
 		mv.addObject("name", name+" - Test - Loki");
 		return mv;
 	}

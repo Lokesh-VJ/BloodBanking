@@ -11,7 +11,7 @@
 	>
 	
 	    <id
-	        name="dID"
+	        name="dId"
 	        type="java.lang.Long"
 	        column="d_id"
 	    >
@@ -51,9 +51,9 @@
 	    />
 	    
 	     <property
-	        name="ddate"
+	        name="createdDate"
 	        type="java.sql.Timestamp"
-	        column="ddate"
+	        column="created_date"
 	        not-null="true"
 	        length="15"
 	    />

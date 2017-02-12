@@ -37,7 +37,7 @@
 	    />
 	    
 	     <property
-	        name="conactNo"
+	        name="contactNo"
 	        type="java.lang.String"
 	        column="contact_no"
 	        not-null="true"

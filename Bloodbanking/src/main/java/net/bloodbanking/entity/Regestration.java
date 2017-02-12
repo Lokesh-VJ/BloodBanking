@@ -31,7 +31,7 @@ public class Regestration implements Serializable {
 	
 	private String gender;
 	
-	private String usetName;
+	private String userName;
 	
 	private String password;
 	
@@ -137,12 +137,12 @@ public class Regestration implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getUsetName() {
-		return usetName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsetName(String usetName) {
-		this.usetName = usetName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getPassword() {
