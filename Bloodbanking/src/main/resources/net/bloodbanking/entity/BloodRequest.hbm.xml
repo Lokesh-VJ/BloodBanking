@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+
+	<class 
+	    name="com.nhance.entity.BloodRequest" 
+	    table="blood_request"
+	>
+	
+	    <id
+	        name="brID"
+	        type="java.lang.Long"
+	        column="br_id"
+	    >
+	        <generator class="native" />
+	    </id>
+	
+	<property
+	        name="regId"
+	        type="java.lang.Long"
+	        column="reg_id"
+	        not-null="true"
+	        length="4"
+	    />
+	    
+	   
+	   <property
+	        name="bId"
+	        type="java.lang.Long"
+	        column="b_id"
+	        not-null="true"
+	        length="4"
+	    />
+	    
+	     <property
+	        name="locId"
+	        type="java.lang.Long"
+	        column="loc_id"
+	        not-null="true"
+	        length="4"
+	    />
+	    
+	    <property
+	        name="cityId"
+	        type="java.lang.Long"
+	        column="city_id"
+	        not-null="true"
+	        length="4"
+	    />
+	    
+	     <property
+	        name="contactNo"
+	        type="java.lang.String"
+	        column="contact_no"
+	        not-null="true"
+	        length="12"
+	    />
+	    
+	    <property
+	        name="bgroup"
+	        type="java.lang.Long"
+	        column="bgroup"
+	        not-null="true"
+	        length="10"
+	    />
+	    
+	    <property
+	        name="qty"
+	        type="java.lang.Long"
+	        column="qty"
+	        not-null="true"
+	        length="10"
+	    />
+	    
+	    <property
+	        name="status"
+	        type="java.lang.Long"
+	        column="status"
+	        not-null="true"
+	        length="1"
+	    />
+	    
+	      <property
+	        name="dDate"
+	        type="java.sql.Timestamp"
+	        column="d_date"
+	        not-null="true"
+	        length="15"
+	    />
+	</class>
+</hibernate-mapping>

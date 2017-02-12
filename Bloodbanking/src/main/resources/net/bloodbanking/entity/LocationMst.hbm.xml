@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+
+	<class 
+	    name="com.nhance.entity.LocationMst" 
+	    table="location_mst"
+	>
+	
+	    <id
+	        name="locationId"
+	        type="java.lang.Long"
+	        column="location_id"
+	    >
+	        <generator class="native" />
+	    </id>
+	    
+	    <property
+	        name="cityId"
+	        type="java.lang.Long"
+	        column="city_id"
+	        not-null="true"
+	        length="4"
+	    />
+	
+	
+	    <property
+	        name="locationName"
+	        type="java.lang.String"
+	        column="location_name"
+	        not-null="true"
+	        length="50"
+	    />
+	
+	</class>
+</hibernate-mapping>

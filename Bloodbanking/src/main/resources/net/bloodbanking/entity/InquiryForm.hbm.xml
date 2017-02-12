@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+
+	<class 
+	    name="com.nhance.entity.InquiryForm" 
+	    table="inquiry_form"
+	>
+	
+	   <id
+	        name="inqId"
+	        type="java.lang.Long"
+	        column="inq_id"
+	    >
+	        <generator class="native" />
+	    </id>
+	
+	    <property
+	        name="name"
+	        type="java.lang.String"
+	        column="name"
+	        not-null="true"
+	        length="20"
+	    />
+	     
+	    <property
+	        name="inquiry"
+	        type="java.lang.String"
+	        column="inquiry"
+	        not-null="true"
+	        length="255"
+	    />
+	     
+	    <property
+	        name="address"
+	        type="java.lang.String"
+	        column="address"
+	        not-null="true"
+	        length="50"
+	    />
+	    
+	   
+	    <property
+	        name="phoneNo"
+	        type="java.lang.String"
+	        column="phone_no"
+	        not-null="true"
+	        length="20"
+	    />
+	    
+	      
+	    <property
+	        name="email"
+	        type="java.lang.String"
+	        column="email"
+	        not-null="true"
+	        length="30"
+	    />
+	    
+	     <property
+	        name="date"
+	        type="java.sql.Timestamp"
+	        column="date"
+	        not-null="true"
+	        length="15"
+	    />
+	    
+	    <property
+	        name="flag"
+	        type="java.lang.Long"
+	        column="bgroup"
+	        not-null="true"
+	        length="1"
+	    />
+	</class>
+</hibernate-mapping>
