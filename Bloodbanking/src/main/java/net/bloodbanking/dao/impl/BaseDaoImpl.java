@@ -32,7 +32,6 @@ public class BaseDaoImpl implements BaseDao {
 	}
 
 	public HibernateTemplate getHibernateTemplate() {
-
 		return hibernateTemplate;
 	}
 

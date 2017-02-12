@@ -4,9 +4,8 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" >
     
 <hibernate-mapping>
-
 	<class 
-	    name="com.nhance.entity.StateMst" 
+	    name="net.bloodbanking.entity.StateMst" 
 	    table="state_mst"
 	>
 	
@@ -25,6 +24,5 @@
 	        not-null="true"
 	        length="50"
 	    />
-	
 	</class>
 </hibernate-mapping>
