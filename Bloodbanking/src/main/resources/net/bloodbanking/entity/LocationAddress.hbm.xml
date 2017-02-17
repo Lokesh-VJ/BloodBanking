@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+ <class catalog="blood_banking"
+  name="net.bloodbanking.entity.LocationAddress" table="location_address">
+  <id name="locationAddressId" type="java.lang.Long">
+   <column name="location_address_id"/>
+   <generator class="identity"/>
+  </id>
+  <property generated="never" lazy="false" name="referenceType" type="int">
+   <column name="reference_type" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="referenceId" type="string">
+   <column length="50" name="reference_id" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="name" type="string">
+   <column length="50" name="name"/>
+  </property>
+  <property generated="never" lazy="false" name="mobileNumber" type="string">
+   <column length="20" name="mobile_number"/>
+  </property>
+  <property generated="never" lazy="false" name="emailId" type="string">
+   <column length="30" name="email_id"/>
+  </property>
+  <property generated="never" lazy="false" name="address" type="string">
+   <column name="address"/>
+  </property>
+  <property generated="never" lazy="false" name="state" type="string">
+   <column length="50" name="state"/>
+  </property>
+  <property generated="never" lazy="false" name="city" type="string">
+   <column length="50" name="city"/>
+  </property>
+  <property generated="never" lazy="false" name="pincode" type="string">
+   <column length="10" name="pincode"/>
+  </property>
+ </class>
+</hibernate-mapping>

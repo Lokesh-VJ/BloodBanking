@@ -1,50 +1,33 @@
 package net.bloodbanking.entity;
 
-import java.io.Serializable;
+public class Feedback implements java.io.Serializable {
 
-public class Feedback implements Serializable {
-
-	private static final long serialVersionUID = 845720660513814694L;
-
-	private Long fId;
-	
-	private String name;
-
-	private String email;
-
+	private static final long serialVersionUID = -3995873444383150305L;
+	private long fid;
 	private String feedback;
 
-	public Long getfId() {
-		return fId;
+	public Feedback() {
 	}
 
-	public void setfId(Long fId) {
-		this.fId = fId;
+	public Feedback(long fid, String feedback) {
+		this.fid = fid;
+		this.feedback = feedback;
 	}
 
-	public String getName() {
-		return name;
+	public long getFid() {
+		return this.fid;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setFid(long fid) {
+		this.fid = fid;
 	}
 
 	public String getFeedback() {
-		return feedback;
+		return this.feedback;
 	}
 
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;
 	}
+
 }
-
-

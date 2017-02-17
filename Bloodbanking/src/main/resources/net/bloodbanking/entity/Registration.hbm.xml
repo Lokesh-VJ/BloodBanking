@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="net.bloodbanking.entity.Registration" table="registration" catalog="blood_banking" optimistic-lock="version">
+        <id name="registrationId" type="java.lang.Long">
+            <column name="registration_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="statusMst" class="net.bloodbanking.entity.StatusMst" fetch="select">
+            <column name="status" not-null="true">
+                <comment>to store the status</comment>
+            </column>
+        </many-to-one>
+        <property name="bloodGroup" type="int">
+            <column name="blood_group" not-null="true">
+                <comment>to store the blood group</comment>
+            </column>
+        </property>
+        <property name="birthDate" type="timestamp">
+            <column name="birth_date" length="19" not-null="true">
+                <comment>to store the birth date</comment>
+            </column>
+        </property>
+        <property name="gender" type="string">
+            <column name="gender" length="6" not-null="true">
+                <comment>to store the gender</comment>
+            </column>
+        </property>
+        <property name="userName" type="string">
+            <column name="user_name" length="20" not-null="true">
+                <comment>to store the user name</comment>
+            </column>
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="20" not-null="true">
+                <comment>to store the password</comment>
+            </column>
+        </property>
+        <property name="usertypeId" type="long">
+            <column name="usertype_id" not-null="true">
+                <comment>reference of the user_id from usertype_mst</comment>
+            </column>
+        </property>
+        <property name="securityQue" type="string">
+            <column name="security_que" length="30" not-null="true">
+                <comment>to store the security que</comment>
+            </column>
+        </property>
+        <property name="answer" type="string">
+            <column name="answer" length="15" not-null="true">
+                <comment>to store the answer</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

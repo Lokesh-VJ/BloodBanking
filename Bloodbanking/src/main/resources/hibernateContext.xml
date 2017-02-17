@@ -24,16 +24,18 @@
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="mappingResources">
 			<list>
-				<value>net/bloodbanking/entity/StateMst.hbm.xml</value>
-				<value>net/bloodbanking/entity/CityMst.hbm.xml</value>
-				<value>net/bloodbanking/entity/UsertypeMst.hbm.xml</value>
-				<value>net/bloodbanking/entity/LocationMst.hbm.xml</value>
-				<value>net/bloodbanking/entity/Regestration.hbm.xml</value>
-				<value>net/bloodbanking/entity/BloodbankMst.hbm.xml</value>
-				<value>net/bloodbanking/entity/DonationMst.hbm.xml</value>
-				<value>net/bloodbanking/entity/BloodRequest.hbm.xml</value>
-				<value>net/bloodbanking/entity/InquiryForm.hbm.xml</value>
+				<value>net/bloodbanking/entity/BloodGroupMst.hbm.xml</value>
+				<value>net/bloodbanking/entity/DonorBloodbankMapping.hbm.xml</value>
+				<value>net/bloodbanking/entity/EnquiryForm.hbm.xml</value>
 				<value>net/bloodbanking/entity/Feedback.hbm.xml</value>
+				<value>net/bloodbanking/entity/LocationAddress.hbm.xml</value>
+				<value>net/bloodbanking/entity/PatientBloodbankMapping.hbm.xml</value>
+				<value>net/bloodbanking/entity/Registration.hbm.xml</value>
+				<value>net/bloodbanking/entity/StatusMst.hbm.xml</value>
+				<value>net/bloodbanking/entity/UserLeftMenu.hbm.xml</value>
+				<value>net/bloodbanking/entity/UserSubMenu.hbm.xml</value>
+				<value>net/bloodbanking/entity/UserTypeMapping.hbm.xml</value>
+				<value>net/bloodbanking/entity/UserTypeMst.hbm.xml</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

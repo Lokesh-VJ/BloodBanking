@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="net.bloodbanking.entity.UserSubMenu" table="user_sub_menu" catalog="blood_banking" optimistic-lock="version">
+        <id name="subMenuId" type="java.lang.Integer">
+            <column name="sub_menu_id" />
+            <generator class="identity" />
+        </id>
+        <property name="subMenuName" type="string">
+            <column name="sub_menu_name" length="100" not-null="true" />
+        </property>
+        <set name="userTypeMappings" table="user_type_mapping" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="sub_menu_id" not-null="true">
+                    <comment>fk to user_sub_menu</comment>
+                </column>
+            </key>
+            <one-to-many class="net.bloodbanking.entity.UserTypeMapping" />
+        </set>
+    </class>
+</hibernate-mapping>

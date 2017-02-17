@@ -1,47 +1,17 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd" >
-    
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
-
-	<class 
-	    name="net.bloodbanking.entity.Feedback" 
-	    table="feedback"
-	>
-	
-	    <id
-	        name="fId"
-	        type="java.lang.Long"
-	        column="f_id"
-	    >
-	        <generator class="native" />
-	    </id>
-	    
-	<property
-	        name="name"
-	        type="java.lang.String"
-	        column="name"
-	        not-null="true"
-	        length="50"
-	    />
-	
-	    <property
-	        name="email"
-	        type="java.lang.String"
-	        column="email"
-	        not-null="true"
-	        length="50"
-	    />
-	    
-	    <property
-	        name="feedback"
-	        type="java.lang.String"
-	        column="feedback"
-	        not-null="true"
-	        length="255"
-	    />
-	
-	
-	</class>
+ <class catalog="blood_banking" name="net.bloodbanking.entity.Feedback" table="feedback">
+  <id name="fid" type="long">
+   <column name="fid"/>
+   <generator class="assigned"/>
+  </id>
+  <property generated="never" lazy="false" name="feedback" type="string">
+   <column name="feedback" not-null="true">
+    <comment>to store the feedback</comment>
+   </column>
+  </property>
+ </class>
 </hibernate-mapping>

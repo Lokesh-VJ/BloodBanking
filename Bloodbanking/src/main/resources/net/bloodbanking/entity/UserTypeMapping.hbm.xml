@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="net.bloodbanking.entity.UserTypeMapping" table="user_type_mapping" catalog="blood_banking" optimistic-lock="version">
+        <id name="privilegeId" type="java.lang.Integer">
+            <column name="privilege_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="userLeftMenu" class="net.bloodbanking.entity.UserLeftMenu" fetch="select">
+            <column name="left_menu_id" not-null="true">
+                <comment>fk to user_left_menu</comment>
+            </column>
+        </many-to-one>
+        <many-to-one name="userSubMenu" class="net.bloodbanking.entity.UserSubMenu" fetch="select">
+            <column name="sub_menu_id" not-null="true">
+                <comment>fk to user_sub_menu</comment>
+            </column>
+        </many-to-one>
+        <many-to-one name="userTypeMst" class="net.bloodbanking.entity.UserTypeMst" fetch="select">
+            <column name="user_type_id" not-null="true">
+                <comment>fk to user_type_mst</comment>
+            </column>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="net.bloodbanking.entity.UserTypeMst" table="user_type_mst" catalog="blood_banking" optimistic-lock="version">
+        <id name="usertypeId" type="java.lang.Integer">
+            <column name="usertype_id" />
+            <generator class="identity" />
+        </id>
+        <property name="usertypeName" type="string">
+            <column name="usertype_name" length="50" not-null="true">
+                <comment>to store user type name</comment>
+            </column>
+        </property>
+        <set name="userTypeMappings" table="user_type_mapping" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="user_type_id" not-null="true">
+                    <comment>fk to user_type_mst</comment>
+                </column>
+            </key>
+            <one-to-many class="net.bloodbanking.entity.UserTypeMapping" />
+        </set>
+    </class>
+</hibernate-mapping>

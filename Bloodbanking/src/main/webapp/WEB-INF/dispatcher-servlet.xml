@@ -17,8 +17,7 @@
 
 	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
 
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
 			<value>/WEB-INF/views/</value>
 		</property>
@@ -27,8 +26,7 @@
 		</property>
 	</bean>
 	
-	<mvc:resources mapping="/resources/**" location="/resources/"
-	cache-period="31556926"/>
+	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926"/>
 
     <mvc:annotation-driven />
     

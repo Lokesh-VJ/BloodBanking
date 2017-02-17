@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+ <class catalog="blood_banking"
+  name="net.bloodbanking.entity.BloodGroupMst" table="blood_group_mst">
+  <id name="bloodGroupId" type="java.lang.Integer">
+   <column name="blood_group_id"/>
+   <generator class="identity"/>
+  </id>
+  <property generated="never" lazy="false" name="bloodGroupName" type="string">
+   <column length="3" name="blood_group_name" not-null="true">
+    <comment>Blood group name</comment>
+   </column>
+  </property>
+ </class>
+</hibernate-mapping>
