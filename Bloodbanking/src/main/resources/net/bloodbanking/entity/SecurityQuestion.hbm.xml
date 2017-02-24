@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 23 Feb, 2017 7:58:34 PM by Hibernate Tools 5.1.0.Alpha1 -->
+<hibernate-mapping>
+    <class name="net.bloodbanking.entity.SecurityQuestion" table="security_question" catalog="blood_banking" optimistic-lock="version">
+        <id name="securityQuestionId" type="java.lang.Integer">
+            <column name="security_question_id" />
+            <generator class="identity" />
+        </id>
+        <property name="securityQuestion" type="string">
+            <column name="security_question" length="200" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

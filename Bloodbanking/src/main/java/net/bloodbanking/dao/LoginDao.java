@@ -1,9 +1,13 @@
 package net.bloodbanking.dao;
 
-import net.bloodbanking.dto.LoginDTO;
+import java.util.List;
+
+import net.bloodbanking.dto.RegistrationDTO;
+import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.entity.Registration;
+import net.bloodbanking.entity.SecurityQuestion;
 
 public interface LoginDao extends BaseDao{
-
-	LoginDTO loadUserByUsername(LoginDTO loginDTO);
-
+	public Registration loadRegistration(RegistrationDTO registrationDTO);
+	public List<SecurityQuestion> listSecurityQuestions(SecurityQuestionDTO securityQuestionDTO);
 }

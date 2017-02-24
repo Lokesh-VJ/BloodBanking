@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	<definition name="baseTile" template="/WEB-INF/jsp/layout.jsp">
+		<put-attribute name="head" value="/WEB-INF/jsp/head.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="foot" value="/WEB-INF/jsp/foot.jsp" />
+	</definition>
+	
+	<definition name="login" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />
+	</definition>
+	
+	<definition name="signup" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/signup.jsp" />
+	</definition>
+	
+	<definition name="verifySecurityQuestion" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/verifySecurityQuestion.jsp" />
+	</definition>
+	
+	<definition name="forgotPassword" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/forgotPassword.jsp" />
+	</definition>
+	
+	<definition name="enquiry" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/enquiry.jsp" />
+	</definition>
+	
+	<definition name="feedback" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/feedback.jsp" />
+	</definition>
+	
+	<definition name="welcome" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/welcome.jsp" />
+	</definition>
+	
+	<definition name="changePassword" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/changePassword.jsp" />
+	</definition>
+	
+</tiles-definitions>

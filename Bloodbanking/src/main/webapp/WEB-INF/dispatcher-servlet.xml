@@ -17,17 +17,24 @@
 
 	<tx:annotation-driven transaction-manager="hibernateTransactionManager" />
 
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/WEB-INF/views/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
+    <mvc:annotation-driven />
+
+	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926" />
+	
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass">
+			<value>org.springframework.web.servlet.view.tiles2.TilesView</value>
 		</property>
 	</bean>
 	
-	<mvc:resources mapping="/resources/**" location="/resources/" cache-period="31556926"/>
-
-    <mvc:annotation-driven />
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles.xml</value>
+			</list>
+		</property>
+	</bean>
     
 </beans>

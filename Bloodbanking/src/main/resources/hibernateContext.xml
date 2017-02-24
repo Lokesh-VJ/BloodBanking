@@ -31,6 +31,7 @@
 				<value>net/bloodbanking/entity/LocationAddress.hbm.xml</value>
 				<value>net/bloodbanking/entity/PatientBloodbankMapping.hbm.xml</value>
 				<value>net/bloodbanking/entity/Registration.hbm.xml</value>
+				<value>net/bloodbanking/entity/SecurityQuestion.hbm.xml</value>
 				<value>net/bloodbanking/entity/StatusMst.hbm.xml</value>
 				<value>net/bloodbanking/entity/UserLeftMenu.hbm.xml</value>
 				<value>net/bloodbanking/entity/UserSubMenu.hbm.xml</value>
