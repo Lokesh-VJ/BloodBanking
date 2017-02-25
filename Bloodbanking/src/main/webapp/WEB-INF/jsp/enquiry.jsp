@@ -13,11 +13,11 @@
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<label>Contact no.<span class="fieldMandatory">*</span></label>
-			<input type="text" name="locationAddressDTO.mobileNumber" id="locationAddressDTO_mobileNumber" value="${enquiryFormDTO.locationAddressDTO.mobileNumber}" pattern="/\d{11}/" maxlength="11" required />
+			<input type="text" name="locationAddressDTO.mobileNumber" id="locationAddressDTO_mobileNumber" value="${enquiryFormDTO.locationAddressDTO.mobileNumber}" minlength="10" maxlength="11" required />
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<label>Message<span class="fieldMandatory">*</span></label>
-			<input type="password" name="message" id="message" value="${enquiryFormDTO.message}" required />
+			<textarea name="message" id="message" required >${enquiryFormDTO.message}</textarea>
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<input type="submit" name="submit" id="submit" value="Send" />

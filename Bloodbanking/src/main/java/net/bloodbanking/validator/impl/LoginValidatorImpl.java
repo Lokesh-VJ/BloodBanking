@@ -47,8 +47,8 @@ public class LoginValidatorImpl extends BaseValidator<RegistrationDTO> implement
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		if(null == registration || !registration.getPassword().equals(registrationDTO.getPassword())){
 			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_CREDENTIALS));
-		}
-		if(registration.getStatusMst().getStatus() != AppConstants.ACTIVE){
+		}  
+		if(null != registration && registration.getStatusMst().getStatus() != AppConstants.ACTIVE){
 			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_NOT_ACTIVE));
 		}
 		
@@ -67,7 +67,7 @@ public class LoginValidatorImpl extends BaseValidator<RegistrationDTO> implement
 			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_SECURITY_DETAILS));
 		}
 		
-		if(registration.getStatusMst().getStatus().equals(AppConstants.DELETED)){
+		if(null != registration && registration.getStatusMst().getStatus().equals(AppConstants.DELETED)){
 			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_DELETED));
 		}
 		
@@ -88,7 +88,7 @@ public class LoginValidatorImpl extends BaseValidator<RegistrationDTO> implement
 			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_USER));
 		}
 		
-		if(registration.getSecurityQue().equals(AppConstants.DELETED)){
+		if(null != registration && registration.getSecurityQue().equals(AppConstants.DELETED)){
 			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_DELETED));
 		}
 		

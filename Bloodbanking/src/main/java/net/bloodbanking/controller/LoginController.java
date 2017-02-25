@@ -107,6 +107,7 @@ public class LoginController extends BaseController {
 	public String processEnquiry(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try{
 			loginService.processEnquiry(enquiryFormDTO);
+			enquiryFormDTO = new EnquiryFormDTO();
 			enquiryFormDTO.setMessage("Thank you. We will get back to you.");
 		}catch(NhanceApplicationException e){
 			handleApplicationExceptionForJson(enquiryFormDTO, e);
