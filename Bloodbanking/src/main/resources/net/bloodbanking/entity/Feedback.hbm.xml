@@ -3,15 +3,17 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
- <class catalog="blood_banking" name="net.bloodbanking.entity.Feedback" table="feedback">
-  <id name="fid" type="long">
-   <column name="fid"/>
-   <generator class="assigned"/>
-  </id>
-  <property generated="never" lazy="false" name="feedback" type="string">
-   <column name="feedback" not-null="true">
-    <comment>to store the feedback</comment>
-   </column>
-  </property>
- </class>
+	<class catalog="blood_banking" name="net.bloodbanking.entity.Feedback"
+		table="feedback">
+		<id name="fid" type="long">
+			<column name="fid" />
+			<generator class="identity" />
+		</id>
+		<property generated="never" lazy="false" name="feedback"
+			type="string">
+			<column name="feedback" not-null="true">
+				<comment>to store the feedback</comment>
+			</column>
+		</property>
+	</class>
 </hibernate-mapping>

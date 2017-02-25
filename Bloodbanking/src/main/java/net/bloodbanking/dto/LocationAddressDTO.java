@@ -4,18 +4,19 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import net.bloodbanking.dto.EnquiryFormDTO.validateProcessEnquiry;
+import net.bloodbanking.dto.FeedbackDTO.validateProcessFeedback;
 import net.bloodbanking.dto.RegistrationDTO.validateProcessSignup;
 
 public class LocationAddressDTO extends BaseDTO {
 	private Long locationAddressId;
 	private Integer referenceType;
 	private String referenceId;
-	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class})
+	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class, validateProcessFeedback.class})
 	private String name;
 	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class})
 	private String mobileNumber;
-	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class})
 	@Email
+	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class, validateProcessFeedback.class})
 	private String emailId;
 	@NotEmpty(groups = {validateProcessSignup.class})
 	private String address;

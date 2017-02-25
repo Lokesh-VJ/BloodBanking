@@ -11,10 +11,12 @@ import org.springframework.util.CollectionUtils;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.EnquiryFormDTO;
+import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.dto.StatusMstDTO;
 import net.bloodbanking.entity.EnquiryForm;
+import net.bloodbanking.entity.Feedback;
 import net.bloodbanking.entity.LocationAddress;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
@@ -23,6 +25,7 @@ import net.bloodbanking.enums.ReferenceTypeEnum;
 import net.bloodbanking.exception.NhanceApplicationException;
 import net.bloodbanking.service.LoginService;
 import net.bloodbanking.validator.EnquiryValidator;
+import net.bloodbanking.validator.FeedbackValidator;
 import net.bloodbanking.validator.LoginValidator;
 
 @Service("loginService")
@@ -36,6 +39,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	private EnquiryValidator enquiryValidator;
+	
+	@Autowired
+	private FeedbackValidator feedbackValidator;
 	
 	@Override
 	public RegistrationDTO loadRegistration(RegistrationDTO registrationDTO) throws NhanceApplicationException{
@@ -140,6 +146,22 @@ public class LoginServiceImpl implements LoginService {
 		locationAddress.setName(enquiryFormDTO.getLocationAddressDTO().getName());
 		locationAddress.setMobileNumber(enquiryFormDTO.getLocationAddressDTO().getMobileNumber());
 		locationAddress.setEmailId(enquiryFormDTO.getLocationAddressDTO().getEmailId());
+		loginDao.save(locationAddress);
+	}
+	
+	@Override
+	public void processFeedback(FeedbackDTO feedbackDTO) throws NhanceApplicationException{
+		feedbackValidator.validateProcessFeedback(feedbackDTO);
+		
+		Feedback feedback = new Feedback();
+		feedback.setFeedback(feedbackDTO.getFeedback());
+		loginDao.save(feedback);
+		
+		LocationAddress locationAddress = new LocationAddress();
+		locationAddress.setReferenceId(String.valueOf(feedback.getFid()));
+		locationAddress.setReferenceType(ReferenceTypeEnum.FEEDBACK.getCode());
+		locationAddress.setName(feedbackDTO.getLocationAddressDTO().getName());
+		locationAddress.setEmailId(feedbackDTO.getLocationAddressDTO().getEmailId());
 		loginDao.save(locationAddress);
 	}
 }

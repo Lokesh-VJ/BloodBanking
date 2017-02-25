@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.bloodbanking.dto.EnquiryFormDTO;
+import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.exception.NhanceApplicationException;
@@ -33,5 +34,8 @@ public interface LoginService {
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public void processEnquiry(EnquiryFormDTO enquiryFormDTO) throws NhanceApplicationException;
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void processFeedback(FeedbackDTO feedbackDTO) throws NhanceApplicationException;
 	
 }

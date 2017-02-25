@@ -3,26 +3,28 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
- <class catalog="blood_banking"
-  name="net.bloodbanking.entity.EnquiryForm" table="enquiry_form">
-  <id name="inqId" type="long">
-   <column name="inq_id"/>
-   <generator class="assigned"/>
-  </id>
-  <many-to-one class="net.bloodbanking.entity.StatusMst" fetch="select" name="statusMst">
-   <column name="status" not-null="true">
-    <comment>to store the status</comment>
-   </column>
-  </many-to-one>
-  <property generated="never" lazy="false" name="message" type="string">
-   <column name="message" not-null="true">
-    <comment>to store the inquiry</comment>
-   </column>
-  </property>
-  <property generated="never" lazy="false" name="createdDate" type="timestamp">
-   <column length="19" name="created_date" not-null="true">
-    <comment>to store the date</comment>
-   </column>
-  </property>
- </class>
+	<class catalog="blood_banking" name="net.bloodbanking.entity.EnquiryForm"
+		table="enquiry_form">
+		<id name="inqId" type="long">
+			<column name="inq_id" />
+			<generator class="identity" />
+		</id>
+		<many-to-one class="net.bloodbanking.entity.StatusMst"
+			fetch="select" name="statusMst">
+			<column name="status" not-null="true">
+				<comment>to store the status</comment>
+			</column>
+		</many-to-one>
+		<property generated="never" lazy="false" name="message" type="string">
+			<column name="message" not-null="true">
+				<comment>to store the inquiry</comment>
+			</column>
+		</property>
+		<property generated="never" lazy="false" name="createdDate"
+			type="timestamp">
+			<column length="19" name="created_date" not-null="true">
+				<comment>to store the date</comment>
+			</column>
+		</property>
+	</class>
 </hibernate-mapping>

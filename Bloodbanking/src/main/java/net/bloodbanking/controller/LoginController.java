@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ViewConstants;
 import net.bloodbanking.dto.EnquiryFormDTO;
+import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.exception.NhanceApplicationException;
@@ -108,7 +109,7 @@ public class LoginController extends BaseController {
 		try{
 			loginService.processEnquiry(enquiryFormDTO);
 			enquiryFormDTO = new EnquiryFormDTO();
-			enquiryFormDTO.setMessage("Thank you. We will get back to you.");
+			enquiryFormDTO.setResponseMessage("Thank you. We will get back to you.");
 		}catch(NhanceApplicationException e){
 			handleApplicationExceptionForJson(enquiryFormDTO, e);
 		}
@@ -116,15 +117,23 @@ public class LoginController extends BaseController {
 	}
 
 	@RequestMapping("/feedback.html")
-	public String feedback(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String feedback(FeedbackDTO feedbackDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("feedbackPageActive", "active");
+		map.put("feedbackDTO", feedbackDTO);
 		return ViewConstants.FEEDBACK;
 	}
 
 	@RequestMapping("/processFeedback.html")
-	public String processFeedback(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		return ViewConstants.FEEDBACK;
-	}
+	public String processFeedback(FeedbackDTO feedbackDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			loginService.processFeedback(feedbackDTO);
+			feedbackDTO = new FeedbackDTO();
+			feedbackDTO.setResponseMessage("Thank you. We will get back to you.");
+		}catch(NhanceApplicationException e){
+			handleApplicationExceptionForJson(feedbackDTO, e);
+		}
+		return feedback(feedbackDTO, request, response, map);
+		}
 
 	@RequestMapping("/welcome.html")
 	public String welcome(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {

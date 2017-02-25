@@ -11,6 +11,8 @@ public class ReferenceTypeEnum {
 	
 	public static final ReferenceTypeEnum ENQUIRY = new ReferenceTypeEnum( 2 , "Enquiry" );
 	
+	public static final ReferenceTypeEnum FEEDBACK = new ReferenceTypeEnum( 3 , "Feedback" );
+	
 	private Integer code;
 	
 	private String text;
