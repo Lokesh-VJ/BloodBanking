@@ -6,14 +6,6 @@ public class PatientBloodbankMappingId implements java.io.Serializable {
 	private long patientId;
 	private long bloodbankId;
 
-	public PatientBloodbankMappingId() {
-	}
-
-	public PatientBloodbankMappingId(long patientId, long bloodbankId) {
-		this.patientId = patientId;
-		this.bloodbankId = bloodbankId;
-	}
-
 	public long getPatientId() {
 		return this.patientId;
 	}

@@ -8,15 +8,6 @@ public class UserTypeMapping implements java.io.Serializable {
 	private UserSubMenu userSubMenu;
 	private UserTypeMst userTypeMst;
 
-	public UserTypeMapping() {
-	}
-
-	public UserTypeMapping(UserLeftMenu userLeftMenu, UserSubMenu userSubMenu, UserTypeMst userTypeMst) {
-		this.userLeftMenu = userLeftMenu;
-		this.userSubMenu = userSubMenu;
-		this.userTypeMst = userTypeMst;
-	}
-
 	public Integer getPrivilegeId() {
 		return this.privilegeId;
 	}

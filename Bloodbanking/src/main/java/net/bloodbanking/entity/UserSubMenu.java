@@ -10,18 +10,6 @@ public class UserSubMenu implements java.io.Serializable {
 	private String subMenuName;
 	private Set<UserTypeMapping> userTypeMappings = new HashSet<UserTypeMapping>(0);
 
-	public UserSubMenu() {
-	}
-
-	public UserSubMenu(String subMenuName) {
-		this.subMenuName = subMenuName;
-	}
-
-	public UserSubMenu(String subMenuName, Set<UserTypeMapping> userTypeMappings) {
-		this.subMenuName = subMenuName;
-		this.userTypeMappings = userTypeMappings;
-	}
-
 	public Integer getSubMenuId() {
 		return this.subMenuId;
 	}

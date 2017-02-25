@@ -11,19 +11,6 @@ public class StatusMst implements java.io.Serializable {
 	private Set<Registration> registrations = new HashSet<Registration>(0);
 	private Set<EnquiryForm> enquiryForms = new HashSet<EnquiryForm>(0);
 
-	public StatusMst() {
-	}
-
-	public StatusMst(String description) {
-		this.description = description;
-	}
-
-	public StatusMst(String description, Set<Registration> registrations, Set<EnquiryForm> enquiryForms) {
-		this.description = description;
-		this.registrations = registrations;
-		this.enquiryForms = enquiryForms;
-	}
-
 	public Integer getStatus() {
 		return this.status;
 	}

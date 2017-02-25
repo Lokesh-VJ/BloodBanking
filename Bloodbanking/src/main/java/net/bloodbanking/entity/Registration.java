@@ -16,22 +16,6 @@ public class Registration implements java.io.Serializable {
 	private String securityQue;
 	private String answer;
 
-	public Registration() {
-	}
-
-	public Registration(StatusMst statusMst, int bloodGroup, Date birthDate, String gender, String userName,
-			String password, long usertypeId, String securityQue, String answer) {
-		this.statusMst = statusMst;
-		this.bloodGroup = bloodGroup;
-		this.birthDate = birthDate;
-		this.gender = gender;
-		this.userName = userName;
-		this.password = password;
-		this.usertypeId = usertypeId;
-		this.securityQue = securityQue;
-		this.answer = answer;
-	}
-
 	public Long getRegistrationId() {
 		return this.registrationId;
 	}

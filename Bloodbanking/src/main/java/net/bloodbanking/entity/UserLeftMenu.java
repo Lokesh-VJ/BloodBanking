@@ -11,20 +11,6 @@ public class UserLeftMenu implements java.io.Serializable {
 	private String leftMenuDescription;
 	private Set<UserTypeMapping> userTypeMappings = new HashSet<UserTypeMapping>(0);
 
-	public UserLeftMenu() {
-	}
-
-	public UserLeftMenu(String leftMenuName, String leftMenuDescription) {
-		this.leftMenuName = leftMenuName;
-		this.leftMenuDescription = leftMenuDescription;
-	}
-
-	public UserLeftMenu(String leftMenuName, String leftMenuDescription, Set<UserTypeMapping> userTypeMappings) {
-		this.leftMenuName = leftMenuName;
-		this.leftMenuDescription = leftMenuDescription;
-		this.userTypeMappings = userTypeMappings;
-	}
-
 	public Integer getLeftMenuId() {
 		return this.leftMenuId;
 	}

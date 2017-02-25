@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ViewConstants;
+import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.exception.NhanceApplicationException;
 import net.bloodbanking.service.LoginService;
 
 @Controller("loginController")
@@ -22,75 +24,94 @@ public class LoginController extends BaseController {
 	private LoginService loginService;
 
 	@RequestMapping("/login.html")
-	public String login(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String login(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("loginPageActive", "active");
+		map.put("registrationDTO", registrationDTO);
 		return ViewConstants.LOGIN;
 	}
 
 	@RequestMapping("/processLogin.html")
 	public String processLogin(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		String userName = registrationDTO.getUserName();
-		String password = registrationDTO.getPassword();
-		
-		loginService.loadRegistration(registrationDTO);
-		if(null == registrationDTO 
-				|| !password.equals(registrationDTO.getPassword())){
-			// if user doesnot exists or password doesnot matches, go back to login...
-			map.put(AppConstants.ERROR_MSG_KEY, "Username/password not valid");
-			return login(request, response, map);
+		try{
+			loginService.processLogin(registrationDTO);
+			// set the session values...
+			setValueInSession(request, AppConstants.USERNAME, registrationDTO.getUserName());
+			// TODO, role needs to be enabled...
+			// setValueInSession(request, AppConstants.USERTYPE, loadedRegistrationDTO.getUsertypeId());
+		}catch(NhanceApplicationException e){
+			handleApplicationExceptionForJson(registrationDTO, e);
+			return login(registrationDTO, request, response, map);
 		}
-
-		if(registrationDTO.getStatusMstDTO().getStatus() != AppConstants.ACTIVE){
-			// if user not active, do not allow to login...
-			map.put(AppConstants.ERROR_MSG_KEY, "User not active, contact admin");
-			return login(request, response, map);
-		}
-
-		// set the session values...
-		setValueInSession(request, AppConstants.USERNAME, registrationDTO.getUserName());
-		// TODO, role needs to be enabled...
-		// setValueInSession(request, AppConstants.USERTYPE, loadedRegistrationDTO.getUsertypeId());
-
 		return welcome(request, response, map);
 	}
 
 	@RequestMapping("/forgotPassword.html")
-	public String forgotPassword(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String forgotPassword(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("securityQuestionList", loginService.listSecurityQuestions(new SecurityQuestionDTO()));
+		map.put("registrationDTO", registrationDTO);
 		return ViewConstants.VERIFYSECURITYQUESTION;
 	}
 
 	@RequestMapping("/verifySecurityQuestion.html")
-	public String verifySecurityQuestion(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		map.put("loginPageActive", "active");
+	public String verifySecurityQuestion(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			loginService.verifySecurityQuestion(registrationDTO);
+		}catch(NhanceApplicationException e){
+			handleApplicationExceptionForJson(registrationDTO, e);
+			return forgotPassword(new RegistrationDTO(), request, response, map);
+		}
+		map.put("registrationDTO", registrationDTO);
 		return ViewConstants.FORGOTPASSWORD;
 	}
 
 	@RequestMapping("/processForgotPassword.html")
-	public String processForgotPassword(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		return ViewConstants.FORGOTPASSWORD;
+	public String processForgotPassword(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			loginService.processForgotPassword(registrationDTO);
+		}catch(NhanceApplicationException e){
+			handleApplicationExceptionForJson(registrationDTO, e);
+			map.put("registrationDTO", registrationDTO);
+			return ViewConstants.FORGOTPASSWORD;
+		}
+		registrationDTO.setResponseMessage("Password reset success");
+		return login(registrationDTO, request, response, map);
 	}
-
+	
 	@RequestMapping("/signup.html")
-	public String signup(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String signup(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("signupPageActive", "active");
+		map.put("registrationDTO", registrationDTO);
 		return ViewConstants.SIGNUP;
 	}
 
 	@RequestMapping("/processSignup.html")
-	public String processSignup(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		return ViewConstants.SIGNUP;
+	public String processSignup(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			loginService.processSignup(registrationDTO);
+		}catch(NhanceApplicationException e){
+			handleApplicationExceptionForJson(registrationDTO, e);
+			return signup(registrationDTO, request, response, map);
+		}
+		registrationDTO.setResponseMessage("User registration success");
+		return login(registrationDTO, request, response, map);
 	}
 
 	@RequestMapping("/enquiry.html")
-	public String enquiry(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String enquiry(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("enquiryPageActive", "active");
+		map.put("enquiryFormDTO", enquiryFormDTO);
 		return ViewConstants.ENQUIRY;
 	}
 
 	@RequestMapping("/processEnquiry.html")
-	public String processEnquiry(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		return ViewConstants.ENQUIRY;
+	public String processEnquiry(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			loginService.processEnquiry(enquiryFormDTO);
+			enquiryFormDTO.setMessage("Thank you. We will get back to you.");
+		}catch(NhanceApplicationException e){
+			handleApplicationExceptionForJson(enquiryFormDTO, e);
+		}
+		return enquiry(enquiryFormDTO, request, response, map);
 	}
 
 	@RequestMapping("/feedback.html")

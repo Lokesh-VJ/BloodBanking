@@ -10,16 +10,6 @@ public class EnquiryForm implements java.io.Serializable {
 	private String message;
 	private Date createdDate;
 
-	public EnquiryForm() {
-	}
-
-	public EnquiryForm(long inqId, StatusMst statusMst, String message, Date createdDate) {
-		this.inqId = inqId;
-		this.statusMst = statusMst;
-		this.message = message;
-		this.createdDate = createdDate;
-	}
-
 	public long getInqId() {
 		return this.inqId;
 	}

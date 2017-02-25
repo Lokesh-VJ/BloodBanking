@@ -6,13 +6,6 @@ public class BloodGroupMst implements java.io.Serializable {
 	private Integer bloodGroupId;
 	private String bloodGroupName;
 
-	public BloodGroupMst() {
-	}
-
-	public BloodGroupMst(String bloodGroupName) {
-		this.bloodGroupName = bloodGroupName;
-	}
-
 	public Integer getBloodGroupId() {
 		return this.bloodGroupId;
 	}

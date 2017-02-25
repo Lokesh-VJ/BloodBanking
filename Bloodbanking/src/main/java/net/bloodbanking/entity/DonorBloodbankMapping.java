@@ -9,15 +9,6 @@ public class DonorBloodbankMapping implements java.io.Serializable {
 	private int bloodUnits;
 	private Date createdDate;
 
-	public DonorBloodbankMapping() {
-	}
-
-	public DonorBloodbankMapping(DonorBloodbankMappingId id, int bloodUnits, Date createdDate) {
-		this.id = id;
-		this.bloodUnits = bloodUnits;
-		this.createdDate = createdDate;
-	}
-
 	public DonorBloodbankMappingId getId() {
 		return this.id;
 	}

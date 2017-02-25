@@ -10,18 +10,6 @@ public class UserTypeMst implements java.io.Serializable {
 	private String usertypeName;
 	private Set<UserTypeMapping> userTypeMappings = new HashSet<UserTypeMapping>(0);
 
-	public UserTypeMst() {
-	}
-
-	public UserTypeMst(String usertypeName) {
-		this.usertypeName = usertypeName;
-	}
-
-	public UserTypeMst(String usertypeName, Set<UserTypeMapping> userTypeMappings) {
-		this.usertypeName = usertypeName;
-		this.userTypeMappings = userTypeMappings;
-	}
-
 	public Integer getUsertypeId() {
 		return this.usertypeId;
 	}

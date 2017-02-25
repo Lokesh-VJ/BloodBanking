@@ -10,16 +10,6 @@ public class PatientBloodbankMapping implements java.io.Serializable {
 	private int status;
 	private Date createdDate;
 
-	public PatientBloodbankMapping() {
-	}
-
-	public PatientBloodbankMapping(PatientBloodbankMappingId id, int bloodUnits, int status, Date createdDate) {
-		this.id = id;
-		this.bloodUnits = bloodUnits;
-		this.status = status;
-		this.createdDate = createdDate;
-	}
-
 	public PatientBloodbankMappingId getId() {
 		return this.id;
 	}

@@ -12,6 +12,15 @@
 		<param-name>defaultHtmlEscape</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	<!-- CSRF Validation Filter -->
+	<filter>
+		<filter-name>CSRFValidationFilter</filter-name>
+		<filter-class>net.bloodbanking.security.CSRFValidationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CSRFValidationFilter</filter-name>
+		<url-pattern>*.htm</url-pattern>
+	</filter-mapping>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>	

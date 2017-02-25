@@ -1,97 +1,88 @@
-package net.bloodbanking.entity;
+package net.bloodbanking.dto;
 
-public class LocationAddress implements java.io.Serializable {
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
-	private static final long serialVersionUID = 8042773452739511687L;
+import net.bloodbanking.dto.EnquiryFormDTO.validateProcessEnquiry;
+import net.bloodbanking.dto.RegistrationDTO.validateProcessSignup;
+
+public class LocationAddressDTO extends BaseDTO {
 	private Long locationAddressId;
-	private int referenceType;
+	private Integer referenceType;
 	private String referenceId;
+	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class})
 	private String name;
+	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class})
 	private String mobileNumber;
+	@NotEmpty(groups = {validateProcessSignup.class, validateProcessEnquiry.class})
+	@Email
 	private String emailId;
+	@NotEmpty(groups = {validateProcessSignup.class})
 	private String address;
+	@NotEmpty(groups = {validateProcessSignup.class})
 	private String state;
+	@NotEmpty(groups = {validateProcessSignup.class})
 	private String city;
+	@NotEmpty(groups = {validateProcessSignup.class})
 	private String pincode;
-
 	public Long getLocationAddressId() {
-		return this.locationAddressId;
+		return locationAddressId;
 	}
-
 	public void setLocationAddressId(Long locationAddressId) {
 		this.locationAddressId = locationAddressId;
 	}
-
-	public int getReferenceType() {
-		return this.referenceType;
+	public Integer getReferenceType() {
+		return referenceType;
 	}
-
-	public void setReferenceType(int referenceType) {
+	public void setReferenceType(Integer referenceType) {
 		this.referenceType = referenceType;
 	}
-
 	public String getReferenceId() {
-		return this.referenceId;
+		return referenceId;
 	}
-
 	public void setReferenceId(String referenceId) {
 		this.referenceId = referenceId;
 	}
-
 	public String getName() {
-		return this.name;
+		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 	public String getMobileNumber() {
-		return this.mobileNumber;
+		return mobileNumber;
 	}
-
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
-
 	public String getEmailId() {
-		return this.emailId;
+		return emailId;
 	}
-
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
 	}
-
 	public String getAddress() {
-		return this.address;
+		return address;
 	}
-
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
 	public String getState() {
-		return this.state;
+		return state;
 	}
-
 	public void setState(String state) {
 		this.state = state;
 	}
-
 	public String getCity() {
-		return this.city;
+		return city;
 	}
-
 	public void setCity(String city) {
 		this.city = city;
 	}
-
 	public String getPincode() {
-		return this.pincode;
+		return pincode;
 	}
-
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
 	}
-
 }
