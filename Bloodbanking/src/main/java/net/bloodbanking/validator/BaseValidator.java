@@ -7,8 +7,8 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.groups.Default;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dto.BaseDTO;
@@ -55,7 +55,7 @@ public abstract class BaseValidator<T extends BaseDTO> implements Validator<T> {
 	}
 	
 	protected void throwExceptionOnValidation( List<NhanceApplicationMessage> messages ) throws NhanceApplicationException {
-		if( !CollectionUtils.isEmpty(messages) ) {
+		if( CollectionUtils.isNotEmpty(messages) ) {
 			throw new NhanceApplicationException(messages);
 		}
 	}

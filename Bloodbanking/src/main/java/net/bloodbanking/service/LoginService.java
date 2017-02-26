@@ -6,10 +6,12 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.exception.NhanceApplicationException;
 
 public interface LoginService {
@@ -24,7 +26,13 @@ public interface LoginService {
 	public Boolean verifySecurityQuestion(RegistrationDTO registrationDTO) throws NhanceApplicationException;
 	
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public List<UserTypeMstDTO> listUserTypes(UserTypeMstDTO userTypeMstDTO);
+	
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public List<SecurityQuestionDTO> listSecurityQuestions(SecurityQuestionDTO securityQuestionDTO);
+	
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public List<BloodGroupMstDTO> listBloodGroups(BloodGroupMstDTO bloodGroupMstDTO);
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public void processForgotPassword(RegistrationDTO registrationDTO) throws NhanceApplicationException; 
@@ -37,5 +45,4 @@ public interface LoginService {
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public void processFeedback(FeedbackDTO feedbackDTO) throws NhanceApplicationException;
-	
 }

@@ -4,11 +4,11 @@
 	<h4 class="loginPageHeadTitle text-center">Forgot password</h4>
 	<form method="post" action="verifySecurityQuestion.html" id="verifySecurityQuestionForm" name="verifySecurityQuestionForm">
 		<div class="marginBetweenFields loginPageFormContents_Div">
-			<label>Username<span class="fieldMandatory">*</span></label>
+			<label class="label_content">Username<span class="fieldMandatory">*</span></label>
 			<input type="text" name="userName" id="userName" value="" required />
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
-			<label>Security Question<span class="fieldMandatory">*</span></label>
+			<label class="label_content">Security Question<span class="fieldMandatory">*</span></label>
 			<select name="securityQue" id="securityQue" required >
 				<option value="">Select</option>
 				<c:forEach items="${securityQuestionList}" var="securityQuestion">
@@ -17,7 +17,7 @@
 			</select>
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
-			<label>Answer<span class="fieldMandatory">*</span></label>
+			<label class="label_content">Answer<span class="fieldMandatory">*</span></label>
 			<input type="text" name="answer" id="answer" value="" required />
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">

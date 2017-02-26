@@ -4,11 +4,11 @@
 	<h4 class="loginPageHeadTitle">&nbsp;</h4>
 	<form method="post" action="processLogin.html" id="loginForm" name="loginForm">
 		<div class="marginBetweenFields loginPageFormContents_Div">
-			<label>Username<span class="fieldMandatory">*</span></label>
+			<label class="label_content">Username<span class="fieldMandatory">*</span></label>
 			<input type="text" name="userName" id="userName" value="" required/>
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
-			<label>Password<span class="fieldMandatory">*</span></label>
+			<label class="label_content">Password<span class="fieldMandatory">*</span></label>
 			<input type="password" name="password" id="password" value="" required/>
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">

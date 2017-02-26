@@ -2,6 +2,7 @@ package net.bloodbanking.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -10,13 +11,16 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import net.bloodbanking.dao.LoginDao;
+import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.dto.UserTypeMstDTO;
+import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
+import net.bloodbanking.entity.UserTypeMst;
 
 /**
  * The Class LoginDaoImpl.
@@ -32,28 +36,39 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 			criteria.add(Restrictions.eq("userName", registrationDTO.getUserName()));
 		}
 		List<Registration> list = criteria.list();
-		return CollectionUtils.isEmpty(list) ? null : list.get(0);
+		return CollectionUtils.isNotEmpty(list) ? list.get(0) : null ;
+	}
+	
+	@Override
+	public List<UserTypeMst> listUserTypes(UserTypeMstDTO userTypeMstDTO){
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(UserTypeMst.class);
+		if(null != userTypeMstDTO.getUsertypeId()){
+			criteria.add(Restrictions.eq("usertypeId", userTypeMstDTO.getUsertypeId()));
+		}
+		// TODO, this condition to be added in creative way...
+		criteria.add(Restrictions.ne("usertypeName", "Admin"));
+		List<UserTypeMst> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list : null ;
 	}
 	
 	@Override
 	public List<SecurityQuestion> listSecurityQuestions(SecurityQuestionDTO securityQuestionDTO){
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT sq.security_question_id as securityQuestionId, sq.security_question as securityQuestion FROM security_question sq WHERE 1 = 1 ");
-
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(SecurityQuestion.class);
 		if(null != securityQuestionDTO.getSecurityQuestionId()){
-			sql.append(" AND sq.security_question_id=:securityQuestionId ");
+			criteria.add(Restrictions.eq("securityQuestionId", securityQuestionDTO.getSecurityQuestionId()));
 		}
+		List<SecurityQuestion> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list : null ;
+	}
 
-		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql.toString())
-				.addScalar("securityQuestionId", IntegerType.INSTANCE)
-				.addScalar("securityQuestion", StringType.INSTANCE)
-				.setResultTransformer(Transformers.aliasToBean(SecurityQuestion.class));
-		if(null != securityQuestionDTO.getSecurityQuestionId()){
-			query.setParameter("securityQuestionId", securityQuestionDTO.getSecurityQuestionId());
+	@Override
+	public List<BloodGroupMst> listBloodGroups(BloodGroupMstDTO bloodGroupMstDTO) {
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(BloodGroupMst.class);
+		if(null != bloodGroupMstDTO.getBloodGroupId()){
+			criteria.add(Restrictions.eq("bloodGroupId", bloodGroupMstDTO.getBloodGroupId()));
 		}
-		
-		List<SecurityQuestion> list = (List<SecurityQuestion>) query.list();
-		return CollectionUtils.isEmpty(list) ? null : list;
+		List<BloodGroupMst> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list : null ;
 	}
 
 }

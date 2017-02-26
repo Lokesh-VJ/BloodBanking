@@ -3,7 +3,7 @@ package net.bloodbanking.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
@@ -60,7 +60,7 @@ public abstract class BaseController {
 	protected BaseDTO handleApplicationExceptionForJson(BaseDTO baseDTO, final NhanceApplicationException e) {
 		baseDTO.setRequestFailed(true);
 		StringBuilder message = new StringBuilder();
-		if (!CollectionUtils.isEmpty(e.getMessages())) {
+		if (CollectionUtils.isNotEmpty(e.getMessages())) {
 			for (int i = 0; i < e.getMessages().size(); i++) {
 				String errorMessage = null;
 				if (e.getMessages().get(i).getKey().equals(ErrorConstants.VALIDATION_ERROR)) {

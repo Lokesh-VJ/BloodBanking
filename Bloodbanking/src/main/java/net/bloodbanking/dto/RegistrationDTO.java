@@ -1,22 +1,16 @@
 package net.bloodbanking.dto;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class RegistrationDTO extends BaseDTO {
 	private Long registrationId;
 	private StatusMstDTO statusMstDTO;
 	@NotNull(groups = {validateProcessSignup.class})
 	private Integer bloodGroup;
-	@DateTimeFormat(pattern="MM/dd/yyyy")
-    @NotNull(groups = {validateProcessSignup.class})
-    @Past
-	private Date birthDate;
+    @NotEmpty(groups = {validateProcessSignup.class})
+	private String birthDate;
 	@NotEmpty(groups = {validateProcessSignup.class})
 	private String gender;
 	@NotEmpty(groups = {validateLoadRegistration.class, validateProcessLogin.class, validateVerifySecurityQuestion.class, validateProcessSignup.class})
@@ -25,10 +19,10 @@ public class RegistrationDTO extends BaseDTO {
 	private String password;
 	@NotEmpty(groups = {validateProcessForgotPassword.class, validateProcessSignup.class})
 	private String confirmPassword;
-	@NotEmpty(groups = {validateProcessSignup.class})
+	@NotNull(groups = {validateProcessSignup.class})
 	private Long usertypeId;
-	@NotEmpty(groups = {validateVerifySecurityQuestion.class, validateProcessSignup.class})
-	private String securityQue;
+	@NotNull(groups = {validateVerifySecurityQuestion.class, validateProcessSignup.class})
+	private Integer securityQue;
 	@NotEmpty(groups = {validateVerifySecurityQuestion.class, validateProcessSignup.class})
 	private String answer;
 	@NotNull(groups = {validateProcessSignup.class})
@@ -51,10 +45,10 @@ public class RegistrationDTO extends BaseDTO {
 	public void setBloodGroup(Integer bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
-	public Date getBirthDate() {
+	public String getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
 	public String getGender() {
@@ -87,10 +81,10 @@ public class RegistrationDTO extends BaseDTO {
 	public void setUsertypeId(Long usertypeId) {
 		this.usertypeId = usertypeId;
 	}
-	public String getSecurityQue() {
+	public Integer getSecurityQue() {
 		return securityQue;
 	}
-	public void setSecurityQue(String securityQue) {
+	public void setSecurityQue(Integer securityQue) {
 		this.securityQue = securityQue;
 	}
 	public String getAnswer() {

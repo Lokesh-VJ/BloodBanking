@@ -4,26 +4,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.dao.LoginDao;
+import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.dto.StatusMstDTO;
+import net.bloodbanking.dto.UserTypeMstDTO;
+import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.EnquiryForm;
 import net.bloodbanking.entity.Feedback;
 import net.bloodbanking.entity.LocationAddress;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
 import net.bloodbanking.entity.StatusMst;
+import net.bloodbanking.entity.UserTypeMst;
 import net.bloodbanking.enums.ReferenceTypeEnum;
 import net.bloodbanking.exception.NhanceApplicationException;
 import net.bloodbanking.service.LoginService;
+import net.bloodbanking.utils.DateUtil;
 import net.bloodbanking.validator.EnquiryValidator;
 import net.bloodbanking.validator.FeedbackValidator;
 import net.bloodbanking.validator.LoginValidator;
@@ -53,7 +58,7 @@ public class LoginServiceImpl implements LoginService {
 		statusMstDTO.setDescription(registration.getStatusMst().getDescription());
 		registrationDTO.setStatusMstDTO(statusMstDTO);
 		registrationDTO.setBloodGroup(registration.getBloodGroup());
-		registrationDTO.setBirthDate(registration.getBirthDate());
+		registrationDTO.setBirthDate(DateUtil.convertDateToDateStr(registration.getBirthDate(), DateUtil.DATE_FORMAT_yyyy_MM_dd_SEP_HIPHEN));
 		registrationDTO.setGender(registration.getGender());
 		registrationDTO.setUserName(registration.getUserName());
 		registrationDTO.setUsertypeId(registration.getUsertypeId());
@@ -75,16 +80,51 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
+	public List<UserTypeMstDTO> listUserTypes(UserTypeMstDTO userTypeMstDTO) {
+		List<UserTypeMst> list = loginDao.listUserTypes(userTypeMstDTO);
+		List<UserTypeMstDTO> dtoList = null;
+		if(CollectionUtils.isNotEmpty(list)){
+			dtoList = new ArrayList<UserTypeMstDTO>();
+			UserTypeMstDTO dto = null;
+			for(UserTypeMst entity: list){
+				dto = new UserTypeMstDTO();
+				dto.setUsertypeId(entity.getUsertypeId());
+				dto.setUsertypeName(entity.getUsertypeName());
+				// TODO, entity.getUserTypeMappings()
+				dtoList.add(dto);
+			}
+		}
+		return dtoList;
+	}
+	
+	@Override
 	public List<SecurityQuestionDTO> listSecurityQuestions(SecurityQuestionDTO securityQuestionDTO) {
 		List<SecurityQuestion> list = loginDao.listSecurityQuestions(securityQuestionDTO);
 		List<SecurityQuestionDTO> dtoList = null;
-		if(!CollectionUtils.isEmpty(list)){
+		if(CollectionUtils.isNotEmpty(list)){
 			dtoList = new ArrayList<SecurityQuestionDTO>();
 			SecurityQuestionDTO dto = null;
 			for(SecurityQuestion entity: list){
 				dto = new SecurityQuestionDTO();
 				dto.setSecurityQuestionId(entity.getSecurityQuestionId());
 				dto.setSecurityQuestion(entity.getSecurityQuestion());
+				dtoList.add(dto);
+			}
+		}
+		return dtoList;
+	}
+
+	@Override
+	public List<BloodGroupMstDTO> listBloodGroups(BloodGroupMstDTO bloodGroupMstDTO) {
+		List<BloodGroupMst> list = loginDao.listBloodGroups(bloodGroupMstDTO);
+		List<BloodGroupMstDTO> dtoList = null;
+		if(CollectionUtils.isNotEmpty(list)){
+			dtoList = new ArrayList<BloodGroupMstDTO>();
+			BloodGroupMstDTO dto = null;
+			for(BloodGroupMst entity: list){
+				dto = new BloodGroupMstDTO();
+				dto.setBloodGroupId(entity.getBloodGroupId());
+				dto.setBloodGroupName(entity.getBloodGroupName());
 				dtoList.add(dto);
 			}
 		}
@@ -104,7 +144,7 @@ public class LoginServiceImpl implements LoginService {
 		loginValidator.validateProcessSignup(registrationDTO);
 		Registration registration = new Registration();
 		registration.setBloodGroup(registrationDTO.getBloodGroup());
-		registration.setBirthDate(registrationDTO.getBirthDate());
+		registration.setBirthDate(DateUtil.convertDateStrToDate(registrationDTO.getBirthDate(), DateUtil.DATE_FORMAT_dd_MM_yyyy_SEP_HIPHEN));
 		registration.setGender(registrationDTO.getGender());
 		registration.setUserName(registrationDTO.getUserName());
 		registration.setPassword(registrationDTO.getPassword());

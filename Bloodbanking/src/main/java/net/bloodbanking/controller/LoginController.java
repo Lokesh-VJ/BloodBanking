@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ViewConstants;
+import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.exception.NhanceApplicationException;
 import net.bloodbanking.service.LoginService;
 
@@ -27,7 +29,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("/login.html")
 	public String login(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("loginPageActive", "active");
-		map.put("registrationDTO", registrationDTO);
+		map.put("baseDTO", registrationDTO);
 		return ViewConstants.LOGIN;
 	}
 
@@ -49,7 +51,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("/forgotPassword.html")
 	public String forgotPassword(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("securityQuestionList", loginService.listSecurityQuestions(new SecurityQuestionDTO()));
-		map.put("registrationDTO", registrationDTO);
+		map.put("baseDTO", registrationDTO);
 		return ViewConstants.VERIFYSECURITYQUESTION;
 	}
 
@@ -61,7 +63,7 @@ public class LoginController extends BaseController {
 			handleApplicationExceptionForJson(registrationDTO, e);
 			return forgotPassword(new RegistrationDTO(), request, response, map);
 		}
-		map.put("registrationDTO", registrationDTO);
+		map.put("baseDTO", registrationDTO);
 		return ViewConstants.FORGOTPASSWORD;
 	}
 
@@ -71,7 +73,7 @@ public class LoginController extends BaseController {
 			loginService.processForgotPassword(registrationDTO);
 		}catch(NhanceApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
-			map.put("registrationDTO", registrationDTO);
+			map.put("baseDTO", registrationDTO);
 			return ViewConstants.FORGOTPASSWORD;
 		}
 		registrationDTO.setResponseMessage("Password reset success");
@@ -80,8 +82,11 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping("/signup.html")
 	public String signup(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		map.put("userTypeList", loginService.listUserTypes(new UserTypeMstDTO()));
+		map.put("bloodGroupList", loginService.listBloodGroups(new BloodGroupMstDTO()));
+		map.put("securityQuestionList", loginService.listSecurityQuestions(new SecurityQuestionDTO()));
 		map.put("signupPageActive", "active");
-		map.put("registrationDTO", registrationDTO);
+		map.put("baseDTO", registrationDTO);
 		return ViewConstants.SIGNUP;
 	}
 
@@ -100,7 +105,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("/enquiry.html")
 	public String enquiry(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("enquiryPageActive", "active");
-		map.put("enquiryFormDTO", enquiryFormDTO);
+		map.put("baseDTO", enquiryFormDTO);
 		return ViewConstants.ENQUIRY;
 	}
 
@@ -119,7 +124,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("/feedback.html")
 	public String feedback(FeedbackDTO feedbackDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		map.put("feedbackPageActive", "active");
-		map.put("feedbackDTO", feedbackDTO);
+		map.put("baseDTO", feedbackDTO);
 		return ViewConstants.FEEDBACK;
 	}
 

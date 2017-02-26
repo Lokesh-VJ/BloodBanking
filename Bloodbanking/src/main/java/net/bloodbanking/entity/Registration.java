@@ -13,7 +13,7 @@ public class Registration implements java.io.Serializable {
 	private String userName;
 	private String password;
 	private long usertypeId;
-	private String securityQue;
+	private int securityQue;
 	private String answer;
 
 	public Long getRegistrationId() {
@@ -80,11 +80,11 @@ public class Registration implements java.io.Serializable {
 		this.usertypeId = usertypeId;
 	}
 
-	public String getSecurityQue() {
+	public int getSecurityQue() {
 		return this.securityQue;
 	}
 
-	public void setSecurityQue(String securityQue) {
+	public void setSecurityQue(int securityQue) {
 		this.securityQue = securityQue;
 	}
 

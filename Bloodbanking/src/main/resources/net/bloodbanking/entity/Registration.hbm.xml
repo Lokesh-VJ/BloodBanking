@@ -43,8 +43,8 @@
                 <comment>reference of the user_id from usertype_mst</comment>
             </column>
         </property>
-        <property name="securityQue" type="string">
-            <column name="security_que" length="30" not-null="true">
+        <property name="securityQue" type="int">
+            <column name="security_que" length="2" not-null="true">
                 <comment>to store the security que</comment>
             </column>
         </property>

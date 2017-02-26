@@ -9,6 +9,14 @@ label, input, select, textarea{
 	width: 100%;
 }
 
+label.label_content{
+	font-weight: bold;
+}
+
+label+input, label+select, label+textarea{
+	margin-top: 5px;
+}
+
 input[type=submit] {
     cursor: pointer;
 }
@@ -36,7 +44,12 @@ input[type=submit] {
 }
 
 .loginPageFormContents label {
-	width: 30%;
+	width: auto;
+}
+
+.hidden {
+	display: none !important;
+	visibility: hidden !important;
 }
 
 .text-center {
@@ -116,4 +129,31 @@ ul#nonLoggedInUserNavigationBar li a.active {
 .signUp, .forgotPassword{
 	color: red;
 	text-decoration: none;
+}
+
+input[type=checkbox]:not(old),
+input[type=radio   ]:not(old){
+	width     : 2em;
+	margin    : 0;
+	padding   : 0;
+	font-size : 1em;
+}
+input[type=checkbox]:not(old) + label,
+input[type=radio   ]:not(old) + label{
+	display      : inline-block;
+	margin-left  : -0.5em;
+	line-height  : 1.5em;
+	vertical-align: bottom;
+}
+
+.columnLayoutContainer{
+	display: table;
+}
+
+.columnLayoutContainer .columnLayoutContainerCol{
+	display: table-cell;
+}
+
+.formRadioContents{
+	margin-top: 5px;
 }

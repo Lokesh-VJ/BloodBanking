@@ -2,7 +2,7 @@ package net.bloodbanking.dto;
 
 public class BaseDTO {
 	private String logginUserName;
-	private boolean isRequestFailed;
+	private boolean requestFailed;
 	private String responseMessage;
 	public String getLogginUserName() {
 		return logginUserName;
@@ -11,15 +11,15 @@ public class BaseDTO {
 		this.logginUserName = logginUserName;
 	}
 	public boolean isRequestFailed() {
-		return isRequestFailed;
+		return requestFailed;
 	}
-	public void setRequestFailed(boolean isRequestFailed) {
-		this.isRequestFailed = isRequestFailed;
+	public void setRequestFailed(boolean requestFailed) {
+		this.requestFailed = requestFailed;
 	}
 	public String getResponseMessage() {
 		return responseMessage;
 	}
 	public void setResponseMessage(String responseMessage) {
 		this.responseMessage = responseMessage;
-	}	
+	}
 }

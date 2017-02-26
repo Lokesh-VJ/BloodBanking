@@ -15,5 +15,6 @@
 				<tiles:insertAttribute name="foot" /><!-- footer page -->
 			</div>
 		</div>
+		<%@include file="messages.jsp"%>
 	</body>
 </html>

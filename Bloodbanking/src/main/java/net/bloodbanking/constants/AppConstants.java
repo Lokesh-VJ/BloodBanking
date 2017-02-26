@@ -9,4 +9,8 @@ public class AppConstants {
 	public final static String SESSION_TIMEOUT_PAGE = "/sessionTimeout.htm";
 
 	public static final Integer DELETED = 3;
+	
+	public static final String ADMIN_NAME = "Admin";
+	
+	public static final Integer ADMIN_ID = 1;
 }
