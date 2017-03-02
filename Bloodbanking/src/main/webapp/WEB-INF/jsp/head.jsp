@@ -1,10 +1,18 @@
 <%@include file="taglib.jsp"%>
 
 <!-- Header contents -->
-<div id="applicationHeaderSection" class="text-center">
-	<h2 class="appTitle ${(not empty sessionScope.userName)?'text-left': ''}">Blood Banking</h2>
-	<c:if test="${empty sessionScope.userName}">
-		<h3 class="appHelptext">Online Blood Bank Management Software</h3>
+<div id="applicationHeaderSection" class="text-center ${(not empty sessionScope.userName)?'applicationHeaderSectionClass': ''}">
+	<div id="applicationHeaderSectionAppName" class="${(not empty sessionScope.userName)?'applicationHeaderSectionAppNameClass': ''}">
+		<h2 class="appTitle ${(not empty sessionScope.userName)?'text-left appTitleMargin': ''}">Blood Banking</h2>
+		<c:if test="${empty sessionScope.userName}">
+			<h3 class="appHelptext">Online Blood Bank Management Software</h3>
+		</c:if>
+	</div>
+	<c:if test="${not empty sessionScope.userName}">
+		<div id="headerAdditionalDetails" class="text-right">
+			<h4 class="loggedUserDetailClass">Hi, <c:out value="${sessionScope.userName}" />(<c:out value="${sessionScope.userTypeName}" />)</h4>
+			<a class="logoutLinkClass" href="javascript:logout()">LOGOUT</a>
+		</div>
 	</c:if>
 </div>
 
@@ -20,9 +28,12 @@
 <!-- show login menu... -->
 <c:if test="${not empty sessionScope.userName}">
 	<ul id="loggedInUserNavigationBar">
-		<li><a class="active" href="#home">Home</a></li>
-		<li><a href="#news">News</a></li>
-		<li><a href="#contact">Contact</a></li>
-		<li><a href="#about">About</a></li>
+		<c:set var="ctr" value="0" />
+		<c:forEach items="${sessionScope.userPrivileges}" var="item">
+			<c:if test="${item.subMenuName eq subMenuView}">
+				<li><span class="loggedInUserNavigationBarItem ${(ctr == 0)?'active':''}" onclick="loadModuleViewAjaxPage(this, '${item.leftMenuName}')"><c:out value="${item.leftMenuDescription}" /></span></li>
+				<c:set var="ctr" value="${ctr+1}" />
+			</c:if>
+		</c:forEach>
 	</ul>
 </c:if>

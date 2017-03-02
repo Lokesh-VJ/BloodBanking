@@ -5,7 +5,9 @@
 		<title>Blood banking</title>
 		<link rel="icon" type="image/png" href="resources/image/favicon.png">
 		<link rel="stylesheet" type="text/css" href="resources/css/style.css" media="screen" /> 
-		<!-- <script src="resources/js/jquery.paginate.js" type="text/javascript"></script> -->
+		<c:if test="${not empty sessionScope.userName}">
+			<script src="resources/js/script.js" type="text/javascript"></script>
+		</c:if>
 	</head>
 	<body>
 		<div id="main-layout">

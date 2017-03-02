@@ -66,6 +66,7 @@ public class LoginController extends BaseController {
 			setValueInSession(request, AppConstants.USER_NAME, registrationDTO.getUserName());
 			setValueInSession(request, AppConstants.USER_PRIVILEGES, userPrivileges);
 			setValueInSession(request, AppConstants.USERTYPENAME, userTypeMstDTO.getUsertypeName());
+			setValueInSession(request, AppConstants.SUBMENUVIEWNAME, AppConstants.SUBMENUVIEW);
 		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
 			return login(registrationDTO, request, response, map);
@@ -237,5 +238,33 @@ public class LoginController extends BaseController {
 		response.addCookie(terminate);
 		SecurityContextHolder.clearContext();
 		return login(new RegistrationDTO(), request, response, map);
+	}
+	
+	@RequestMapping("/viewHome.html")
+	public String viewHome(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		setAjaxRelatedParams(map);
+		return ViewConstants.VIEWHOME;
+	}
+	
+	@RequestMapping("/viewProfile.html")
+	public String viewProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		setAjaxRelatedParams(map);
+		return ViewConstants.PROFILEDETAIL;
+	}
+	
+	@RequestMapping("/editProfile.html")
+	public String editProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		setAjaxRelatedParams(map);
+		return ViewConstants.PROFILEEDIT;
+	}
+	
+	@RequestMapping("/processEditProfile.html")
+	public String processEditProfile(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		setAjaxRelatedParams(map);
+		return ViewConstants.PROFILEDETAIL;
+	}
+	
+	private void setAjaxRelatedParams(Map<String, Object> map){
+		map.put(AppConstants.AJAXCONTENTFLAG, 1);
 	}
 }

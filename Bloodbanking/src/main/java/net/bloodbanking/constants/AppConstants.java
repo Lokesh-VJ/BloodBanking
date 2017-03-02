@@ -17,4 +17,10 @@ public class AppConstants {
 	public static final String USER_PRIVILEGES = "userPrivileges";
 	
 	public static final String USERTYPENAME = "userTypeName";
+	
+	public static final String AJAXCONTENTFLAG = "ajaxContentFlag";
+	
+	public static final String SUBMENUVIEW = "View";
+	
+	public static final String SUBMENUVIEWNAME = "subMenuView";
 }

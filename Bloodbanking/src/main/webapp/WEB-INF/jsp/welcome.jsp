@@ -1,5 +1,12 @@
 <%@include file="taglib.jsp"%>
 
-<div id="loggedInUserDisplayContainer">
-	<h3>Welcome to Bloodbanking application.</h3>
+<c:if test="${empty ajaxContentFlag}">
+	<div id="loggedInUserDisplayContainer">
+</c:if>
+<div id="welcomePageContents">
+	
 </div>
+<c:if test="${empty ajaxContentFlag}">		
+	</div>
+	<div id="loggedInUserDisplayContainerAjaxDiv" class="hidden"></div>
+</c:if>

@@ -1,6 +1,7 @@
 body {
 	font-family: Arial, sans-serif;
 	font-size: 12px;
+	margin: 0px auto;
 	/* background-size: cover;
    	background-image: url('../image/app_background.png'); */
 }
@@ -22,8 +23,11 @@ input[type=submit] {
 }
 
 .appTitle {
-	color: red;
-	font-size: 24px;
+	font-size: 20px;
+}
+
+.appTitleMargin {
+	margin: 3px 0px 0px -4px;
 }
 
 .appHelptext {
@@ -103,7 +107,7 @@ ul#nonLoggedInUserNavigationBar {
 
 ul#nonLoggedInUserNavigationBar li {
 	float: left;
-	width: 24.80%;
+	width: 24.91%;
 }
 
 ul#nonLoggedInUserNavigationBar li:not(:last-child ) {
@@ -165,29 +169,68 @@ ul#loggedInUserNavigationBar {
     width: 12%;
     background-color: #f1f1f1;
     position: fixed;
+    top: 30px;
     height: 100%;
     overflow: auto;
 }
 
-ul#loggedInUserNavigationBar li a {
+ul#loggedInUserNavigationBar li span {
     display: block;
     color: #000;
     padding: 8px 16px;
     text-decoration: none;
 }
 
-ul#loggedInUserNavigationBar li a.active {
+ul#loggedInUserNavigationBar li span.active {
     background-color: #4CAF50;
     color: white;
 }
 
-ul#loggedInUserNavigationBar li a:hover:not(.active) {
+ul#loggedInUserNavigationBar li span:hover:not(.active) {
     background-color: #555;
     color: white;
+    cursor: pointer;
 }
 
-div#loggedInUserDisplayContainer{
+div#loggedInUserDisplayContainer {
 	margin-left:12%;
+	margin-top: 20px;
 	padding:1px 16px;
 	height:auto;
+}
+
+div.applicationHeaderSectionAppNameClass {
+	position: relative;
+    top: 0;
+    left: 0;
+    width: 50%;
+    display: inline-block;
+}
+
+div.applicationHeaderSectionClass{
+	background-color: #37444e;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+}
+
+div#applicationHeaderSection div#headerAdditionalDetails {
+	position: relative;
+    top: -3px;
+    right: 5px;
+    width: 49%;
+    display: inline-block;
+}
+
+div#applicationHeaderSection div#headerAdditionalDetails .loggedUserDetailClass {
+	display: inline;
+    margin-right: 15px;
+}
+
+div#applicationHeaderSection div#headerAdditionalDetails .logoutLinkClass {
+	color: white;
+	font-size: 10px;
 }

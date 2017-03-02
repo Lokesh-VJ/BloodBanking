@@ -9,6 +9,10 @@
 		<put-attribute name="foot" value="/WEB-INF/jsp/foot.jsp" />
 	</definition>
 	
+	<definition name="base.ajaxTileDefinition" template="/WEB-INF/jsp/ajaxLayout.jsp">
+		<put-attribute name="body" value="" />
+	</definition>
+	
 	<definition name="login" extends="baseTile">
 		<put-attribute name="body" value="/WEB-INF/jsp/login.jsp" />
 	</definition>
@@ -37,7 +41,15 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/welcome.jsp" />
 	</definition>
 	
-	<definition name="changePassword" extends="baseTile">
+	<definition name="viewHome" extends="base.ajaxTileDefinition">
+		<put-attribute name="body" value="/WEB-INF/jsp/welcome.jsp" />
+	</definition>
+	
+	<definition name="profileDetail" extends="base.ajaxTileDefinition">
+		<put-attribute name="body" value="/WEB-INF/jsp/profileDetail.jsp" />
+	</definition>
+	
+	<definition name="changePassword" extends="base.ajaxTileDefinition">
 		<put-attribute name="body" value="/WEB-INF/jsp/changePassword.jsp" />
 	</definition>
 	

@@ -123,9 +123,6 @@ public class RegistrationDTO extends BaseDTO implements UserDetails{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority > list = new ArrayList<GrantedAuthority>();
 		list.add(new GrantedAuthorityImpl("ROLE"));
-		/*for (String privilege : privileges) {
-			list.add(new GrantedAuthorityImpl(privilege));
-		}*/
 		return list;
 	}
 

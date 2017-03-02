@@ -16,6 +16,12 @@ public class ViewConstants {
 	
 	public static final String WELCOME = "welcome";
 	
+	public static final String VIEWHOME = "viewHome";
+	
+	public static final String PROFILEDETAIL = "profileDetail";
+	
+	public static final String PROFILEEDIT = "profileEdit";
+	
 	public static final String CHANGEPASSWORD = "changePassword";
 	
 }
