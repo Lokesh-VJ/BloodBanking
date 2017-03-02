@@ -1,3 +1,5 @@
 <%@include file="taglib.jsp"%>
 
-<h3>Welcome to Bloodbanking application.</h3>
+<div id="loggedInUserDisplayContainer">
+	<h3>Welcome to Bloodbanking application.</h3>
+</div>

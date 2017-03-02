@@ -2,7 +2,7 @@ package net.bloodbanking.exception;
 
 import java.io.Serializable;
 
-public class NhanceApplicationMessage implements Serializable{
+public class ApplicationMessage implements Serializable{
 	
 	private static final long serialVersionUID = 8329518251567604229L;
 	
@@ -10,13 +10,13 @@ public class NhanceApplicationMessage implements Serializable{
 	
 	private Object[] parameters;
 	
-	public NhanceApplicationMessage(String key, Object... parameters){
+	public ApplicationMessage(String key, Object... parameters){
 		
 		this.key = key;
 		this.parameters = parameters;
 	}
 	
-	public NhanceApplicationMessage(String key){
+	public ApplicationMessage(String key){
 		this(key, (Object[])null);
 	}
 	

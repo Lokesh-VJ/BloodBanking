@@ -3,47 +3,47 @@ package net.bloodbanking.exception;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NhanceApplicationException extends Exception {
+public class ApplicationException extends Exception {
 
 	private static final long serialVersionUID = 7287740981822872554L;
 	
-	private List<NhanceApplicationMessage> messages = null;
+	private List<ApplicationMessage> messages = null;
 	
-	public NhanceApplicationException( List<NhanceApplicationMessage> messages ) {
+	public ApplicationException( List<ApplicationMessage> messages ) {
 		this.setMessages(messages);
 	}
 	
-	public NhanceApplicationException(String key, Object[] parameters,Throwable e){
+	public ApplicationException(String key, Object[] parameters,Throwable e){
 		super(e);
 		this.addMessage(key, parameters);
 	}
 	
-	public NhanceApplicationException(String key, Object[] parameters){
+	public ApplicationException(String key, Object[] parameters){
 		this.addMessage(key, parameters);
 	}
 	
-	public NhanceApplicationException(String key){
+	public ApplicationException(String key){
 		this.addMessage(key, null);
 	}
 
-	public List<NhanceApplicationMessage> getMessages() {
+	public List<ApplicationMessage> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(List<NhanceApplicationMessage> messages) {
+	public void setMessages(List<ApplicationMessage> messages) {
 		this.messages = messages;
 	}
 	
 	public void addMessage(String key, Object[] parameters){
 		if(messages == null){
-			messages = new ArrayList<NhanceApplicationMessage>();
+			messages = new ArrayList<ApplicationMessage>();
 		}
-		messages.add(new NhanceApplicationMessage(key, parameters));
+		messages.add(new ApplicationMessage(key, parameters));
 	}
 	
 	public void printErrors() {
 		if( messages != null ) {
-			for (NhanceApplicationMessage message : messages) {
+			for (ApplicationMessage message : messages) {
 				System.err.println(message.getKey() +  ": " + 
 						((message.getParameters() != null && message.getParameters().length > 0 ) ?
 								message.getParameters()[0] : ""));
@@ -53,7 +53,7 @@ public class NhanceApplicationException extends Exception {
 	
 	public boolean containsErrorCode( String errorCode ) {
 		if( messages != null ) {
-			for (NhanceApplicationMessage message : messages) {
+			for (ApplicationMessage message : messages) {
 				if( message.getKey().equals(errorCode)) {
 					return true;
 				}

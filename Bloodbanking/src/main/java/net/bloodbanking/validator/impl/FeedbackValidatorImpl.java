@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.FeedbackDTO.validateProcessFeedback;
-import net.bloodbanking.exception.NhanceApplicationException;
-import net.bloodbanking.exception.NhanceApplicationMessage;
+import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.validator.BaseValidator;
 import net.bloodbanking.validator.FeedbackValidator;
 
@@ -16,8 +16,8 @@ import net.bloodbanking.validator.FeedbackValidator;
 public class FeedbackValidatorImpl extends BaseValidator<FeedbackDTO> implements FeedbackValidator {
 	
 	@Override
-	public void validateProcessFeedback(FeedbackDTO feedbackDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+	public void validateProcessFeedback(FeedbackDTO feedbackDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		validateDTOGroups(feedbackDTO, false, validateProcessFeedback.class);
 		throwExceptionOnValidation(messages);
 	}

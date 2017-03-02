@@ -9,6 +9,7 @@ import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
+import net.bloodbanking.entity.UserTypeMapping;
 import net.bloodbanking.entity.UserTypeMst;
 
 public interface LoginDao extends BaseDao{
@@ -16,4 +17,6 @@ public interface LoginDao extends BaseDao{
 	public List<UserTypeMst> listUserTypes(UserTypeMstDTO userTypeMstDTO);
 	public List<SecurityQuestion> listSecurityQuestions(SecurityQuestionDTO securityQuestionDTO);
 	public List<BloodGroupMst> listBloodGroups(BloodGroupMstDTO bloodGroupMstDTO);
+	public UserTypeMst loadUserType(UserTypeMstDTO userTypeMstDTO);
+	public List<UserTypeMapping> listUserTypeMappings(UserTypeMstDTO userTypeMstDTO);
 }

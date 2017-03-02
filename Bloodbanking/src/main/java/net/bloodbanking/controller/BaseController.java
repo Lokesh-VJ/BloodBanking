@@ -8,14 +8,14 @@ import org.apache.commons.collections.CollectionUtils;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dto.BaseDTO;
-import net.bloodbanking.exception.NhanceApplicationException;
+import net.bloodbanking.exception.ApplicationException;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseController {
 
 	protected void setUserDetailsFromSession(HttpServletRequest request, final BaseDTO... dtoArray) {
 		for (BaseDTO baseDTO : dtoArray) {
-			baseDTO.setLogginUserName((String) getValueFromSession(request, AppConstants.USERNAME));
+			baseDTO.setLogginUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
 			// TODO, role to be enabled...
 			//baseUiDTO.setLoginUserRoleName(((LoginUserUiDTO) getValueFromSession(request, WebConstants.LOGIN_USER)).getRoleName());
 			// validateSuperUser(baseDTO, request);
@@ -57,7 +57,7 @@ public abstract class BaseController {
 		return false;
 	}*/
 	
-	protected BaseDTO handleApplicationExceptionForJson(BaseDTO baseDTO, final NhanceApplicationException e) {
+	protected BaseDTO handleApplicationExceptionForJson(BaseDTO baseDTO, final ApplicationException e) {
 		baseDTO.setRequestFailed(true);
 		StringBuilder message = new StringBuilder();
 		if (CollectionUtils.isNotEmpty(e.getMessages())) {

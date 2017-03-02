@@ -11,8 +11,8 @@ import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.EnquiryFormDTO.validateProcessEnquiry;
 import net.bloodbanking.entity.Registration;
-import net.bloodbanking.exception.NhanceApplicationException;
-import net.bloodbanking.exception.NhanceApplicationMessage;
+import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.validator.BaseValidator;
 import net.bloodbanking.validator.EnquiryValidator;
 
@@ -20,8 +20,8 @@ import net.bloodbanking.validator.EnquiryValidator;
 public class EnquiryValidatorImpl extends BaseValidator<EnquiryFormDTO> implements EnquiryValidator {
 	
 	@Override
-	public void validateProcessEnquiry(EnquiryFormDTO enquiryFormDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+	public void validateProcessEnquiry(EnquiryFormDTO enquiryFormDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		validateDTOGroups(enquiryFormDTO, false, validateProcessEnquiry.class);
 		throwExceptionOnValidation(messages);
 	}

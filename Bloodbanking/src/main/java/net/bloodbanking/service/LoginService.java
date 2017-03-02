@@ -11,19 +11,20 @@ import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.dto.UserTypeMappingDTO;
 import net.bloodbanking.dto.UserTypeMstDTO;
-import net.bloodbanking.exception.NhanceApplicationException;
+import net.bloodbanking.exception.ApplicationException;
 
 public interface LoginService {
 	
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public RegistrationDTO loadRegistration(RegistrationDTO registrationDTO) throws NhanceApplicationException; 
+	public RegistrationDTO loadRegistration(RegistrationDTO registrationDTO) throws ApplicationException; 
 	
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public RegistrationDTO processLogin(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	public RegistrationDTO preProcessLogin(RegistrationDTO registrationDTO) throws ApplicationException;
 	
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public Boolean verifySecurityQuestion(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	public Boolean verifySecurityQuestion(RegistrationDTO registrationDTO) throws ApplicationException;
 	
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public List<UserTypeMstDTO> listUserTypes(UserTypeMstDTO userTypeMstDTO);
@@ -35,14 +36,20 @@ public interface LoginService {
 	public List<BloodGroupMstDTO> listBloodGroups(BloodGroupMstDTO bloodGroupMstDTO);
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public void processForgotPassword(RegistrationDTO registrationDTO) throws NhanceApplicationException; 
+	public void processForgotPassword(RegistrationDTO registrationDTO) throws ApplicationException; 
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public void processSignup(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	public void processSignup(RegistrationDTO registrationDTO) throws ApplicationException;
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public void processEnquiry(EnquiryFormDTO enquiryFormDTO) throws NhanceApplicationException;
+	public void processEnquiry(EnquiryFormDTO enquiryFormDTO) throws ApplicationException;
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public void processFeedback(FeedbackDTO feedbackDTO) throws NhanceApplicationException;
+	public void processFeedback(FeedbackDTO feedbackDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public UserTypeMstDTO loadUserType(UserTypeMstDTO userTypeMstDTO);
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public List<UserTypeMappingDTO> loadPrivileges(UserTypeMstDTO userTypeMstDTO);
 }

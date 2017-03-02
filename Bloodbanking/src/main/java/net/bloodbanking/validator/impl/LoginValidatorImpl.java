@@ -12,12 +12,11 @@ import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.RegistrationDTO.validateLoadRegistration;
 import net.bloodbanking.dto.RegistrationDTO.validateProcessForgotPassword;
-import net.bloodbanking.dto.RegistrationDTO.validateProcessLogin;
 import net.bloodbanking.dto.RegistrationDTO.validateProcessSignup;
 import net.bloodbanking.dto.RegistrationDTO.validateVerifySecurityQuestion;
 import net.bloodbanking.entity.Registration;
-import net.bloodbanking.exception.NhanceApplicationException;
-import net.bloodbanking.exception.NhanceApplicationMessage;
+import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.validator.BaseValidator;
 import net.bloodbanking.validator.LoginValidator;
 
@@ -28,85 +27,81 @@ public class LoginValidatorImpl extends BaseValidator<RegistrationDTO> implement
 	private LoginDao loginDao;
 	
 	@Override
-	public void validateLoadRegistration(RegistrationDTO registrationDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+	public void validateLoadRegistration(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		validateDTOGroups(registrationDTO, false, validateLoadRegistration.class);
 		
 		if(null == loginDao.loadRegistration(registrationDTO)){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_USER));
+			messages.add(new ApplicationMessage(ErrorConstants.INVALID_USER));
 		}
 		
 		throwExceptionOnValidation(messages);
 	}
 	
 	@Override
-	public void validateProcessLogin(RegistrationDTO registrationDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
-		validateDTOGroups(registrationDTO, false, validateProcessLogin.class);
+	public void validatePreProcessLogin(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		
 		Registration registration = loginDao.loadRegistration(registrationDTO);
-		if(null == registration || !registration.getPassword().equals(registrationDTO.getPassword())){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_CREDENTIALS));
+		if(null == registration){
+			messages.add(new ApplicationMessage(ErrorConstants.INVALID_CREDENTIALS));
 		}  
-		if(null != registration && registration.getStatusMst().getStatus() != AppConstants.ACTIVE){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_NOT_ACTIVE));
-		}
 		
 		throwExceptionOnValidation(messages);
 	}
 	
 	@Override
-	public void validateVerifySecurityQuestion(RegistrationDTO registrationDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+	public void validateVerifySecurityQuestion(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		validateDTOGroups(registrationDTO, false, validateVerifySecurityQuestion.class);
 		
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		
 		if(null == registration || registration.getSecurityQue() != registrationDTO.getSecurityQue()
 				|| !registration.getAnswer().equals(registrationDTO.getAnswer())){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_SECURITY_DETAILS));
+			messages.add(new ApplicationMessage(ErrorConstants.INVALID_SECURITY_DETAILS));
 		}
 		
 		if(null != registration && registration.getStatusMst().getStatus().equals(AppConstants.DELETED)){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_DELETED));
+			messages.add(new ApplicationMessage(ErrorConstants.USER_DELETED));
 		}
 		
 		throwExceptionOnValidation(messages);
 	}
 	
 	@Override
-	public void validateProcessForgotPassword(RegistrationDTO registrationDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+	public void validateProcessForgotPassword(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		validateDTOGroups(registrationDTO, false, validateProcessForgotPassword.class);
 		
 		if(!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.PASSWORD_MISMATCH));
+			messages.add(new ApplicationMessage(ErrorConstants.PASSWORD_MISMATCH));
 		}
 		
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		if(null == registration){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.INVALID_USER));
+			messages.add(new ApplicationMessage(ErrorConstants.INVALID_USER));
 		}
 		
 		if(null != registration && registration.getStatusMst().getStatus() == AppConstants.DELETED){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_DELETED));
+			messages.add(new ApplicationMessage(ErrorConstants.USER_DELETED));
 		}
 		
 		throwExceptionOnValidation(messages);
 	}
 	
 	@Override
-	public void validateProcessSignup(RegistrationDTO registrationDTO) throws NhanceApplicationException {
-		List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+	public void validateProcessSignup(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 		validateDTOGroups(registrationDTO, false, validateProcessSignup.class);
 		
 		if(!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.PASSWORD_MISMATCH));
+			messages.add(new ApplicationMessage(ErrorConstants.PASSWORD_MISMATCH));
 		}
 		
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		if(null != registration){
-			messages.add(new NhanceApplicationMessage(ErrorConstants.USER_ALREADY_REGISTERED));
+			messages.add(new ApplicationMessage(ErrorConstants.USER_ALREADY_REGISTERED));
 		}
 		
 		throwExceptionOnValidation(messages);

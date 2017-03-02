@@ -1,23 +1,39 @@
 package net.bloodbanking.controller;
 
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.WebAttributes;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import net.bloodbanking.constants.AppConstants;
+import net.bloodbanking.constants.ErrorConstants;
+import net.bloodbanking.constants.SuccessConstants;
 import net.bloodbanking.constants.ViewConstants;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
+import net.bloodbanking.dto.UserTypeMappingDTO;
 import net.bloodbanking.dto.UserTypeMstDTO;
-import net.bloodbanking.exception.NhanceApplicationException;
+import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.service.LoginService;
 
 @Controller("loginController")
@@ -34,18 +50,27 @@ public class LoginController extends BaseController {
 	}
 
 	@RequestMapping("/processLogin.html")
-	public String processLogin(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String processLogin(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		RegistrationDTO registrationDTO = new RegistrationDTO();
 		try{
-			loginService.processLogin(registrationDTO);
-			// set the session values...
-			setValueInSession(request, AppConstants.USERNAME, registrationDTO.getUserName());
-			// TODO, role needs to be enabled...
-			// setValueInSession(request, AppConstants.USERTYPE, loadedRegistrationDTO.getUsertypeId());
-		}catch(NhanceApplicationException e){
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			registrationDTO.setUserName(authentication.getName());
+			registrationDTO = loginService.loadRegistration(registrationDTO);
+			if(null != registrationDTO && registrationDTO.getStatusMstDTO().getStatus() != AppConstants.ACTIVE){
+				throw new ApplicationException(ErrorConstants.USER_NOT_ACTIVE);
+			}
+			UserTypeMstDTO userTypeMstDTO = new UserTypeMstDTO();
+			userTypeMstDTO.setUsertypeId(registrationDTO.getUsertypeId().intValue());
+			userTypeMstDTO = loginService.loadUserType(userTypeMstDTO);
+			List<UserTypeMappingDTO> userPrivileges = loginService.loadPrivileges(userTypeMstDTO);
+			setValueInSession(request, AppConstants.USER_NAME, registrationDTO.getUserName());
+			setValueInSession(request, AppConstants.USER_PRIVILEGES, userPrivileges);
+			setValueInSession(request, AppConstants.USERTYPENAME, userTypeMstDTO.getUsertypeName());
+		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
 			return login(registrationDTO, request, response, map);
 		}
-		return welcome(request, response, map);
+		return "redirect:welcome.html";
 	}
 
 	@RequestMapping("/forgotPassword.html")
@@ -59,7 +84,7 @@ public class LoginController extends BaseController {
 	public String verifySecurityQuestion(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try{
 			loginService.verifySecurityQuestion(registrationDTO);
-		}catch(NhanceApplicationException e){
+		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
 			return forgotPassword(new RegistrationDTO(), request, response, map);
 		}
@@ -71,7 +96,7 @@ public class LoginController extends BaseController {
 	public String processForgotPassword(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try{
 			loginService.processForgotPassword(registrationDTO);
-		}catch(NhanceApplicationException e){
+		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
 			map.put("baseDTO", registrationDTO);
 			return ViewConstants.FORGOTPASSWORD;
@@ -94,7 +119,7 @@ public class LoginController extends BaseController {
 	public String processSignup(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try{
 			loginService.processSignup(registrationDTO);
-		}catch(NhanceApplicationException e){
+		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
 			return signup(registrationDTO, request, response, map);
 		}
@@ -115,7 +140,7 @@ public class LoginController extends BaseController {
 			loginService.processEnquiry(enquiryFormDTO);
 			enquiryFormDTO = new EnquiryFormDTO();
 			enquiryFormDTO.setResponseMessage("Thank you. We will get back to you.");
-		}catch(NhanceApplicationException e){
+		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(enquiryFormDTO, e);
 		}
 		return enquiry(enquiryFormDTO, request, response, map);
@@ -134,7 +159,7 @@ public class LoginController extends BaseController {
 			loginService.processFeedback(feedbackDTO);
 			feedbackDTO = new FeedbackDTO();
 			feedbackDTO.setResponseMessage("Thank you. We will get back to you.");
-		}catch(NhanceApplicationException e){
+		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(feedbackDTO, e);
 		}
 		return feedback(feedbackDTO, request, response, map);
@@ -155,5 +180,62 @@ public class LoginController extends BaseController {
 	@RequestMapping("/processChangePassword.html")
 	public String processChangePassword(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		return ViewConstants.CHANGEPASSWORD;
+	}
+	
+	@RequestMapping(value = "/passwordAttempts.html")
+	public String passwordAttempts(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+
+		ApplicationMessage message = null;
+		RegistrationDTO registrationDTO = new RegistrationDTO();
+		AuthenticationException authenticationException = (AuthenticationException) getValueFromSession(request,
+				WebAttributes.AUTHENTICATION_EXCEPTION);
+		if (authenticationException instanceof LockedException) {
+			message = new ApplicationMessage(ErrorConstants.ACCOUNT_LOCKED);
+		} else if (authenticationException instanceof CredentialsExpiredException) {
+			message = new ApplicationMessage(ErrorConstants.CREDENTIAL_EXPIRED);
+		} else if (authenticationException instanceof BadCredentialsException) {
+			message = new ApplicationMessage(ErrorConstants.INVALID_CREDENTIALS);
+		} else if (authenticationException instanceof DisabledException) {
+			message = new ApplicationMessage(ErrorConstants.USER_NOT_ACTIVE);
+		}else {
+			message = new ApplicationMessage(ErrorConstants.INVALID_CREDENTIALS);
+		}
+		registrationDTO.setRequestFailed(true);
+		registrationDTO.setResponseMessage(message.getKey());
+		return login(registrationDTO, request, response, map);
+	}
+	
+	@RequestMapping(value = "/accessDenied.html", method = RequestMethod.GET)
+	public String accessDenied(HttpServletRequest request, Map<String, Object> map, HttpServletResponse response) {
+		request.getSession().invalidate();
+		Cookie terminate = new Cookie(TokenBasedRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY, null);
+		terminate.setMaxAge(0);
+		response.addCookie(terminate);
+		SecurityContextHolder.clearContext();
+		return login(new RegistrationDTO(), request, response, map);
+	}
+	
+	@RequestMapping(value = "/sessionTimeout.html")
+	public String sessionTimeout(HttpServletRequest request, Map<String, Object> map, HttpServletResponse response) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (null != authentication) {
+			request.getSession().invalidate();
+			Cookie terminate = new Cookie(TokenBasedRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY, null);
+			terminate.setMaxAge(0);
+			response.addCookie(terminate);
+			SecurityContextHolder.clearContext();
+		}
+		SecurityContextHolder.clearContext();
+		return login(new RegistrationDTO(), request, response, map);
+	}
+	
+	@RequestMapping(value = "/logout.html")
+	public String logout(Map<String, Object> map, HttpServletRequest request, HttpServletResponse response) {
+		request.getSession().invalidate();
+		Cookie terminate = new Cookie(TokenBasedRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY, null);
+		terminate.setMaxAge(0);
+		response.addCookie(terminate);
+		SecurityContextHolder.clearContext();
+		return login(new RegistrationDTO(), request, response, map);
 	}
 }

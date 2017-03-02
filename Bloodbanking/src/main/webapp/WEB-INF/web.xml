@@ -6,21 +6,30 @@
 	<display-name>Blood banking</display-name>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>WEB-INF/dispatcher-servlet.xml, classpath*:*Context.xml</param-value>
+		<param-value>WEB-INF/config/*.xml, WEB-INF/dispatcher-servlet.xml, classpath*:*Context.xml</param-value>
 	</context-param>
 	<context-param>
 		<param-name>defaultHtmlEscape</param-name>
 		<param-value>true</param-value>
 	</context-param>
-	<!-- CSRF Validation Filter -->
+	<!-- Spring Security -->
 	<filter>
+		<filter-name>filterChainProxy</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>filterChainProxy</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- CSRF Validation Filter -->
+	<!-- <filter>
 		<filter-name>CSRFValidationFilter</filter-name>
 		<filter-class>net.bloodbanking.security.CSRFValidationFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>CSRFValidationFilter</filter-name>
-		<url-pattern>*.htm</url-pattern>
-	</filter-mapping>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping> -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>	

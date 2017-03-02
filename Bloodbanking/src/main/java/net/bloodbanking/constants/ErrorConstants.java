@@ -2,6 +2,10 @@ package net.bloodbanking.constants;
 
 public class ErrorConstants {
 
+	public static final String ACCOUNT_LOCKED = "Account locked";
+	
+	public static final String CREDENTIAL_EXPIRED = "Credentials expired";
+	
 	public static final String VALIDATION_ERROR = "Validation error";
 	
 	public static final String INVALID_USER = "Invalid user";

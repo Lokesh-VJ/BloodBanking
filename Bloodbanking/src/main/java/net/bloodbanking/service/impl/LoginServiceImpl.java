@@ -16,6 +16,7 @@ import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.dto.StatusMstDTO;
+import net.bloodbanking.dto.UserTypeMappingDTO;
 import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.EnquiryForm;
@@ -24,9 +25,10 @@ import net.bloodbanking.entity.LocationAddress;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
 import net.bloodbanking.entity.StatusMst;
+import net.bloodbanking.entity.UserTypeMapping;
 import net.bloodbanking.entity.UserTypeMst;
 import net.bloodbanking.enums.ReferenceTypeEnum;
-import net.bloodbanking.exception.NhanceApplicationException;
+import net.bloodbanking.exception.ApplicationException;
 import net.bloodbanking.service.LoginService;
 import net.bloodbanking.utils.DateUtil;
 import net.bloodbanking.validator.EnquiryValidator;
@@ -49,7 +51,7 @@ public class LoginServiceImpl implements LoginService {
 	private FeedbackValidator feedbackValidator;
 	
 	@Override
-	public RegistrationDTO loadRegistration(RegistrationDTO registrationDTO) throws NhanceApplicationException{
+	public RegistrationDTO loadRegistration(RegistrationDTO registrationDTO) throws ApplicationException{
 		loginValidator.validateLoadRegistration(registrationDTO);
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		registrationDTO.setRegistrationId(registration.getRegistrationId());
@@ -61,6 +63,7 @@ public class LoginServiceImpl implements LoginService {
 		registrationDTO.setBirthDate(DateUtil.convertDateToDateStr(registration.getBirthDate(), DateUtil.DATE_FORMAT_yyyy_MM_dd_SEP_HIPHEN));
 		registrationDTO.setGender(registration.getGender());
 		registrationDTO.setUserName(registration.getUserName());
+		registrationDTO.setPassword(registration.getPassword());
 		registrationDTO.setUsertypeId(registration.getUsertypeId());
 		registrationDTO.setSecurityQue(registration.getSecurityQue());
 		registrationDTO.setAnswer(registration.getAnswer());
@@ -68,13 +71,13 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public RegistrationDTO processLogin(RegistrationDTO registrationDTO) throws NhanceApplicationException{
-		loginValidator.validateProcessLogin(registrationDTO);
+	public RegistrationDTO preProcessLogin(RegistrationDTO registrationDTO) throws ApplicationException{
+		loginValidator.validatePreProcessLogin(registrationDTO);
 		return this.loadRegistration(registrationDTO);
 	}
 	
 	@Override
-	public Boolean verifySecurityQuestion(RegistrationDTO registrationDTO) throws NhanceApplicationException{
+	public Boolean verifySecurityQuestion(RegistrationDTO registrationDTO) throws ApplicationException{
 		loginValidator.validateVerifySecurityQuestion(registrationDTO);
 		return true;
 	}
@@ -90,7 +93,6 @@ public class LoginServiceImpl implements LoginService {
 				dto = new UserTypeMstDTO();
 				dto.setUsertypeId(entity.getUsertypeId());
 				dto.setUsertypeName(entity.getUsertypeName());
-				// TODO, entity.getUserTypeMappings()
 				dtoList.add(dto);
 			}
 		}
@@ -132,7 +134,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public void processForgotPassword(RegistrationDTO registrationDTO) throws NhanceApplicationException{
+	public void processForgotPassword(RegistrationDTO registrationDTO) throws ApplicationException{
 		loginValidator.validateProcessForgotPassword(registrationDTO);
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		registration.setPassword(registrationDTO.getPassword());
@@ -140,7 +142,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public void processSignup(RegistrationDTO registrationDTO) throws NhanceApplicationException{
+	public void processSignup(RegistrationDTO registrationDTO) throws ApplicationException{
 		loginValidator.validateProcessSignup(registrationDTO);
 		Registration registration = new Registration();
 		registration.setBloodGroup(registrationDTO.getBloodGroup());
@@ -170,7 +172,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public void processEnquiry(EnquiryFormDTO enquiryFormDTO) throws NhanceApplicationException{
+	public void processEnquiry(EnquiryFormDTO enquiryFormDTO) throws ApplicationException{
 		enquiryValidator.validateProcessEnquiry(enquiryFormDTO);
 		EnquiryForm enquiryForm = new EnquiryForm();
 		enquiryForm.setMessage(enquiryFormDTO.getMessage());
@@ -190,7 +192,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
-	public void processFeedback(FeedbackDTO feedbackDTO) throws NhanceApplicationException{
+	public void processFeedback(FeedbackDTO feedbackDTO) throws ApplicationException{
 		feedbackValidator.validateProcessFeedback(feedbackDTO);
 		
 		Feedback feedback = new Feedback();
@@ -203,5 +205,31 @@ public class LoginServiceImpl implements LoginService {
 		locationAddress.setName(feedbackDTO.getLocationAddressDTO().getName());
 		locationAddress.setEmailId(feedbackDTO.getLocationAddressDTO().getEmailId());
 		loginDao.save(locationAddress);
+	}
+	
+	@Override
+	public UserTypeMstDTO loadUserType(UserTypeMstDTO userTypeMstDTO) {
+		// TODO, place validation for userTypeId here...
+		UserTypeMst userTypeMst = loginDao.loadUserType(userTypeMstDTO);
+		userTypeMstDTO.setUsertypeName(userTypeMst.getUsertypeName());
+		return userTypeMstDTO;
+	}
+	
+	@Override
+	public List<UserTypeMappingDTO> loadPrivileges(UserTypeMstDTO userTypeMstDTO){
+		List<UserTypeMapping> list = loginDao.listUserTypeMappings(userTypeMstDTO);
+		List<UserTypeMappingDTO> dtoList = null;
+		if(CollectionUtils.isNotEmpty(list)){
+			dtoList = new ArrayList<UserTypeMappingDTO>();
+			UserTypeMappingDTO dto = null;
+			for(UserTypeMapping entity: list){
+				dto = new UserTypeMappingDTO();
+				dto.setLeftMenuName(entity.getUserLeftMenu().getLeftMenuName());
+				dto.setLeftMenuDescription(entity.getUserLeftMenu().getLeftMenuDescription());
+				dto.setSubMenuName(entity.getUserSubMenu().getSubMenuName());
+				dtoList.add(dto);
+			}
+		}
+		return dtoList;
 	}
 }

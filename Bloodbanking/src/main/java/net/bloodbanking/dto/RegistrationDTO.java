@@ -1,21 +1,29 @@
 package net.bloodbanking.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class RegistrationDTO extends BaseDTO {
+public class RegistrationDTO extends BaseDTO implements UserDetails{
+	private static final long serialVersionUID = 2220043525853280045L;
 	private Long registrationId;
 	private StatusMstDTO statusMstDTO;
 	@NotNull(groups = {validateProcessSignup.class})
 	private Integer bloodGroup;
-    @NotEmpty(groups = {validateProcessSignup.class})
+	@NotEmpty(groups = {validateProcessSignup.class})
 	private String birthDate;
 	@NotEmpty(groups = {validateProcessSignup.class})
 	private String gender;
-	@NotEmpty(groups = {validateLoadRegistration.class, validateProcessLogin.class, validateVerifySecurityQuestion.class, validateProcessSignup.class})
+	@NotEmpty(groups = {validateLoadRegistration.class, validateVerifySecurityQuestion.class, validateProcessSignup.class})
 	private String userName;
-	@NotEmpty(groups = {validateProcessLogin.class, validateProcessForgotPassword.class, validateProcessSignup.class})
+	@NotEmpty(groups = {validateProcessForgotPassword.class, validateProcessSignup.class})
 	private String password;
 	@NotEmpty(groups = {validateProcessForgotPassword.class, validateProcessSignup.class})
 	private String confirmPassword;
@@ -27,6 +35,7 @@ public class RegistrationDTO extends BaseDTO {
 	private String answer;
 	@NotNull(groups = {validateProcessSignup.class})
 	private LocationAddressDTO locationAddressDTO;
+	private List<String> privileges;
 	public Long getRegistrationId() {
 		return registrationId;
 	}
@@ -102,12 +111,52 @@ public class RegistrationDTO extends BaseDTO {
 	}
 
 	public interface validateLoadRegistration{}
-	
-	public interface validateProcessLogin{}
-	
+
 	public interface validateVerifySecurityQuestion{}
-	
+
 	public interface validateProcessForgotPassword{}
-	
+
 	public interface validateProcessSignup{}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority > list = new ArrayList<GrantedAuthority>();
+		list.add(new GrantedAuthorityImpl("ROLE"));
+		/*for (String privilege : privileges) {
+			list.add(new GrantedAuthorityImpl(privilege));
+		}*/
+		return list;
+	}
+
+	@Override
+	public String getUsername() {
+		return userName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	public List<String> getPrivileges() {
+		return privileges;
+	}
+	public void setPrivileges(List<String> privileges) {
+		this.privileges = privileges;
+	}
 }

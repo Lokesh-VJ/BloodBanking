@@ -1,18 +1,18 @@
 package net.bloodbanking.validator;
 
 import net.bloodbanking.dto.RegistrationDTO;
-import net.bloodbanking.exception.NhanceApplicationException;
+import net.bloodbanking.exception.ApplicationException;
 
 public interface LoginValidator extends Validator<RegistrationDTO> {
 
-	void validateLoadRegistration(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	void validateLoadRegistration(RegistrationDTO registrationDTO) throws ApplicationException;
 	
-	void validateProcessLogin(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	void validatePreProcessLogin(RegistrationDTO registrationDTO) throws ApplicationException;
 	
-	void validateVerifySecurityQuestion(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	void validateVerifySecurityQuestion(RegistrationDTO registrationDTO) throws ApplicationException;
 	
-	void validateProcessForgotPassword(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	void validateProcessForgotPassword(RegistrationDTO registrationDTO) throws ApplicationException;
 	
-	void validateProcessSignup(RegistrationDTO registrationDTO) throws NhanceApplicationException;
+	void validateProcessSignup(RegistrationDTO registrationDTO) throws ApplicationException;
 	
 }

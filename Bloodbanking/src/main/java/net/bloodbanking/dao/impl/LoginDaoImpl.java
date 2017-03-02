@@ -20,6 +20,7 @@ import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
+import net.bloodbanking.entity.UserTypeMapping;
 import net.bloodbanking.entity.UserTypeMst;
 
 /**
@@ -71,4 +72,23 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 		return CollectionUtils.isNotEmpty(list) ? list : null ;
 	}
 
+	@Override
+	public UserTypeMst loadUserType(UserTypeMstDTO userTypeMstDTO) {
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(UserTypeMst.class);
+		if(null != userTypeMstDTO.getUsertypeId()){
+			criteria.add(Restrictions.eq("usertypeId", userTypeMstDTO.getUsertypeId()));
+		}
+		List<UserTypeMst> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list.get(0) : null ;
+	}
+
+	@Override
+	public List<UserTypeMapping> listUserTypeMappings(UserTypeMstDTO userTypeMstDTO){
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(UserTypeMapping.class);
+		if(null != userTypeMstDTO.getUsertypeId()){
+			criteria.add(Restrictions.eq("userTypeMst.usertypeId", userTypeMstDTO.getUsertypeId()));
+		}
+		List<UserTypeMapping> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list : null ;
+	}
 }

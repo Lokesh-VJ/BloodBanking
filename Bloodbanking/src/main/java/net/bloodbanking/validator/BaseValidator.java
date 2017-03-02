@@ -12,25 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dto.BaseDTO;
-import net.bloodbanking.exception.NhanceApplicationException;
-import net.bloodbanking.exception.NhanceApplicationMessage;
+import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.exception.ApplicationMessage;
 
 public abstract class BaseValidator<T extends BaseDTO> implements Validator<T> {
 
 	@Autowired
 	private javax.validation.Validator validator;
 	
-	protected void validateDTO( T dto ) throws NhanceApplicationException {
+	protected void validateDTO( T dto ) throws ApplicationException {
 		throwExceptionOnConstraintViolation(validator.validate( dto ));
 	}
 	
-	protected void validateDTOPartial( T dto, String... values ) throws NhanceApplicationException {
+	protected void validateDTOPartial( T dto, String... values ) throws ApplicationException {
 		for (String string : values) {
 			throwExceptionOnConstraintViolation(validator.validateProperty( dto, string ));
 		}
 	}
 	
-	protected void validateDTOGroups( T dto, boolean includeDefault, Class<?>... groups ) throws NhanceApplicationException {
+	protected void validateDTOGroups( T dto, boolean includeDefault, Class<?>... groups ) throws ApplicationException {
 		if( includeDefault ) {
 			Class<?>[] tempGroups = new Class[groups.length + 1];
 			for (int i = 0; i < groups.length; i++) {
@@ -43,20 +43,20 @@ public abstract class BaseValidator<T extends BaseDTO> implements Validator<T> {
 		throwExceptionOnConstraintViolation(validator.validate( dto, groups ));
 	}
 	
-	private void throwExceptionOnConstraintViolation( Set<ConstraintViolation<T>> violations ) throws NhanceApplicationException {
+	private void throwExceptionOnConstraintViolation( Set<ConstraintViolation<T>> violations ) throws ApplicationException {
 		if(!violations.isEmpty()) {
-			List<NhanceApplicationMessage> messages = new ArrayList<NhanceApplicationMessage>();
+			List<ApplicationMessage> messages = new ArrayList<ApplicationMessage>();
 			for (ConstraintViolation<T> violation : violations) {
-				messages.add(new NhanceApplicationMessage(ErrorConstants.VALIDATION_ERROR, 
+				messages.add(new ApplicationMessage(ErrorConstants.VALIDATION_ERROR, 
 						violation.getPropertyPath() + " " + violation.getMessage()));
 			}
 			throwExceptionOnValidation(messages);
 		}
 	}
 	
-	protected void throwExceptionOnValidation( List<NhanceApplicationMessage> messages ) throws NhanceApplicationException {
+	protected void throwExceptionOnValidation( List<ApplicationMessage> messages ) throws ApplicationException {
 		if( CollectionUtils.isNotEmpty(messages) ) {
-			throw new NhanceApplicationException(messages);
+			throw new ApplicationException(messages);
 		}
 	}
 }
