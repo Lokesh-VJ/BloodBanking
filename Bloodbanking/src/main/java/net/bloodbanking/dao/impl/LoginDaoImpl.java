@@ -14,10 +14,12 @@ import org.springframework.stereotype.Repository;
 
 import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.BloodGroupMstDTO;
+import net.bloodbanking.dto.LocationAddressDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.entity.BloodGroupMst;
+import net.bloodbanking.entity.LocationAddress;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
 import net.bloodbanking.entity.UserTypeMapping;
@@ -90,5 +92,28 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 		}
 		List<UserTypeMapping> list = criteria.list();
 		return CollectionUtils.isNotEmpty(list) ? list : null ;
+	}
+
+	@Override
+	public BloodGroupMst loadBloodGroup(BloodGroupMstDTO bloodGroupMstDTO) {
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(BloodGroupMst.class);
+		if(null != bloodGroupMstDTO.getBloodGroupId()){
+			criteria.add(Restrictions.eq("bloodGroupId", bloodGroupMstDTO.getBloodGroupId()));
+		}
+		List<BloodGroupMst> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list.get(0) : null ;
+	}
+
+	@Override
+	public LocationAddress loadLocationAddress(LocationAddressDTO locationAddressDTO) {
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(LocationAddress.class);
+		if(null != locationAddressDTO.getReferenceId()){
+			criteria.add(Restrictions.eq("referenceId", locationAddressDTO.getReferenceId()));
+		}
+		if(null != locationAddressDTO.getReferenceType()){
+			criteria.add(Restrictions.eq("referenceType", locationAddressDTO.getReferenceType()));
+		}
+		List<LocationAddress> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list.get(0) : null ;
 	}
 }

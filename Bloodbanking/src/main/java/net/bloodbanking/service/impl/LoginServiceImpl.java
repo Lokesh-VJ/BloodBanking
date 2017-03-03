@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.bloodbanking.constants.AppConstants;
+import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
+import net.bloodbanking.dto.LocationAddressDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.dto.StatusMstDTO;
@@ -29,6 +31,7 @@ import net.bloodbanking.entity.UserTypeMapping;
 import net.bloodbanking.entity.UserTypeMst;
 import net.bloodbanking.enums.ReferenceTypeEnum;
 import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.service.LoginService;
 import net.bloodbanking.utils.DateUtil;
 import net.bloodbanking.validator.EnquiryValidator;
@@ -55,18 +58,34 @@ public class LoginServiceImpl implements LoginService {
 		loginValidator.validateLoadRegistration(registrationDTO);
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		registrationDTO.setRegistrationId(registration.getRegistrationId());
-		StatusMstDTO statusMstDTO = new StatusMstDTO();
-		statusMstDTO.setStatus(registration.getStatusMst().getStatus());
-		statusMstDTO.setDescription(registration.getStatusMst().getDescription());
-		registrationDTO.setStatusMstDTO(statusMstDTO);
 		registrationDTO.setBloodGroup(registration.getBloodGroup());
-		registrationDTO.setBirthDate(DateUtil.convertDateToDateStr(registration.getBirthDate(), DateUtil.DATE_FORMAT_yyyy_MM_dd_SEP_HIPHEN));
+		registrationDTO.setBirthDate(DateUtil.convertDateToDateStr(registration.getBirthDate(), DateUtil.DATE_FORMAT_dd_MM_yyyy_SEP_HIPHEN));
 		registrationDTO.setGender(registration.getGender());
 		registrationDTO.setUserName(registration.getUserName());
 		registrationDTO.setPassword(registration.getPassword());
 		registrationDTO.setUsertypeId(registration.getUsertypeId());
 		registrationDTO.setSecurityQue(registration.getSecurityQue());
 		registrationDTO.setAnswer(registration.getAnswer());
+		
+		StatusMstDTO statusMstDTO = new StatusMstDTO();
+		statusMstDTO.setStatus(registration.getStatusMst().getStatus());
+		statusMstDTO.setDescription(registration.getStatusMst().getDescription());
+		registrationDTO.setStatusMstDTO(statusMstDTO);
+		
+		LocationAddressDTO locationAddressDTO = new LocationAddressDTO();
+		locationAddressDTO.setReferenceId(registrationDTO.getRegistrationId().toString());
+		locationAddressDTO.setReferenceType(ReferenceTypeEnum.USER.getCode());
+		registrationDTO.setLocationAddressDTO(this.loadLocationAddress(locationAddressDTO));
+		
+		UserTypeMstDTO userTypeMstDTO = new UserTypeMstDTO();
+		userTypeMstDTO.setUsertypeId(registrationDTO.getUsertypeId().intValue());
+		userTypeMstDTO = this.loadUserType(userTypeMstDTO);
+		registrationDTO.setUsertypeName(userTypeMstDTO.getUsertypeName());
+		
+		BloodGroupMstDTO bloodGroupMstDTO = new BloodGroupMstDTO();
+		bloodGroupMstDTO.setBloodGroupId(registrationDTO.getBloodGroup());
+		bloodGroupMstDTO = this.loadBloodGroup(bloodGroupMstDTO);
+		registrationDTO.setBloodGroupName(bloodGroupMstDTO.getBloodGroupName());
 		return registrationDTO;
 	}
 	
@@ -216,6 +235,29 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
+	public BloodGroupMstDTO loadBloodGroup(BloodGroupMstDTO bloodGroupMstDTO) {
+		// TODO, place validation...
+		BloodGroupMst bloodGroupMst = loginDao.loadBloodGroup(bloodGroupMstDTO);
+		bloodGroupMstDTO.setBloodGroupName(bloodGroupMst.getBloodGroupName());
+		return bloodGroupMstDTO;
+	}
+	
+	@Override
+	public LocationAddressDTO loadLocationAddress(LocationAddressDTO locationAddressDTO) {
+		// TODO, place validation...
+		LocationAddress locationAddress = loginDao.loadLocationAddress(locationAddressDTO);
+		locationAddressDTO.setLocationAddressId(locationAddress.getLocationAddressId());
+		locationAddressDTO.setName(locationAddress.getName());
+		locationAddressDTO.setMobileNumber(locationAddress.getMobileNumber());
+		locationAddressDTO.setEmailId(locationAddress.getEmailId());
+		locationAddressDTO.setAddress(locationAddress.getAddress());
+		locationAddressDTO.setState(locationAddress.getState());
+		locationAddressDTO.setCity(locationAddress.getCity());
+		locationAddressDTO.setPincode(locationAddress.getPincode());
+		return locationAddressDTO;
+	}
+	
+	@Override
 	public List<UserTypeMappingDTO> loadPrivileges(UserTypeMstDTO userTypeMstDTO){
 		List<UserTypeMapping> list = loginDao.listUserTypeMappings(userTypeMstDTO);
 		List<UserTypeMappingDTO> dtoList = null;
@@ -231,5 +273,25 @@ public class LoginServiceImpl implements LoginService {
 			}
 		}
 		return dtoList;
+	}
+	
+	@Override
+	public void processEditProfile(RegistrationDTO registrationDTO) throws ApplicationException{
+		// TODO, place validation here...
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		if(null == registration){
+			throw new ApplicationException(ErrorConstants.INVALID_USER);
+		}
+		LocationAddress locationAddress = new LocationAddress();
+		locationAddress.setReferenceId(String.valueOf(registration.getRegistrationId()));
+		locationAddress.setReferenceType(ReferenceTypeEnum.USER.getCode());
+		locationAddress.setName(registrationDTO.getLocationAddressDTO().getName());
+		locationAddress.setMobileNumber(registrationDTO.getLocationAddressDTO().getMobileNumber());
+		locationAddress.setEmailId(registrationDTO.getLocationAddressDTO().getEmailId());
+		locationAddress.setAddress(registrationDTO.getLocationAddressDTO().getAddress());
+		locationAddress.setState(registrationDTO.getLocationAddressDTO().getState());
+		locationAddress.setCity(registrationDTO.getLocationAddressDTO().getCity());
+		locationAddress.setPincode(registrationDTO.getLocationAddressDTO().getPincode());
+		loginDao.save(locationAddress);
 	}
 }

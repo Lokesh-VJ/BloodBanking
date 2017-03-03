@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
-import net.bloodbanking.constants.SuccessConstants;
 import net.bloodbanking.constants.ViewConstants;
+import net.bloodbanking.dto.BaseDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
@@ -64,6 +64,7 @@ public class LoginController extends BaseController {
 			userTypeMstDTO = loginService.loadUserType(userTypeMstDTO);
 			List<UserTypeMappingDTO> userPrivileges = loginService.loadPrivileges(userTypeMstDTO);
 			setValueInSession(request, AppConstants.USER_NAME, registrationDTO.getUserName());
+			setValueInSession(request, AppConstants.NAME, registrationDTO.getLocationAddressDTO().getName());
 			setValueInSession(request, AppConstants.USER_PRIVILEGES, userPrivileges);
 			setValueInSession(request, AppConstants.USERTYPENAME, userTypeMstDTO.getUsertypeName());
 			setValueInSession(request, AppConstants.SUBMENUVIEWNAME, AppConstants.SUBMENUVIEW);
@@ -242,29 +243,37 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping("/viewHome.html")
 	public String viewHome(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		setAjaxRelatedParams(map);
+		setAjaxRelatedParams(map, null);
 		return ViewConstants.VIEWHOME;
 	}
 	
 	@RequestMapping("/viewProfile.html")
 	public String viewProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		setAjaxRelatedParams(map);
+		RegistrationDTO registrationDTO = new RegistrationDTO();
+		try {
+			registrationDTO.setUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
+			registrationDTO = loginService.loadRegistration(registrationDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		setAjaxRelatedParams(map, registrationDTO);
 		return ViewConstants.PROFILEDETAIL;
 	}
 	
 	@RequestMapping("/editProfile.html")
 	public String editProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		setAjaxRelatedParams(map);
+		viewProfile(request, response, map);
 		return ViewConstants.PROFILEEDIT;
 	}
 	
 	@RequestMapping("/processEditProfile.html")
 	public String processEditProfile(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		setAjaxRelatedParams(map);
-		return ViewConstants.PROFILEDETAIL;
+		
+		return viewProfile(request, response, map);
 	}
 	
-	private void setAjaxRelatedParams(Map<String, Object> map){
+	private <T extends BaseDTO> void setAjaxRelatedParams(Map<String, Object> map, T baseDTO){
 		map.put(AppConstants.AJAXCONTENTFLAG, 1);
+		map.put("baseDTO", baseDTO);
 	}
 }

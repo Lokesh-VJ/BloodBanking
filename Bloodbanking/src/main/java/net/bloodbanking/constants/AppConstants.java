@@ -6,6 +6,8 @@ public class AppConstants {
 	
 	public static final String USER_NAME = "userName";
 	
+	public static final String NAME = "name";
+	
 	public final static String SESSION_TIMEOUT_PAGE = "/sessionTimeout.htm";
 
 	public static final Integer DELETED = 3;

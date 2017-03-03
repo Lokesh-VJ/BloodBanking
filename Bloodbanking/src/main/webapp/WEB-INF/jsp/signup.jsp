@@ -15,11 +15,11 @@
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Name<span class="fieldMandatory">*</span></label>
-					 <input type="text" name="locationAddressDTO.name" id="locationAddressDTO.name" value="${baseDTO.locationAddressDTO.name}" required />
+					<input type="text" name="locationAddressDTO.name" id="locationAddressDTO.name" value="${baseDTO.locationAddressDTO.name}" required />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Contact Number<span class="fieldMandatory">*</span></label>
-					 <input type="text" name="locationAddressDTO.mobileNumber" id="locationAddressDTO.mobileNumber" value="${baseDTO.locationAddressDTO.mobileNumber}" required pattern="\d{10,11}" maxlength="11" />
+					<input type="text" name="locationAddressDTO.mobileNumber" id="locationAddressDTO.mobileNumber" value="${baseDTO.locationAddressDTO.mobileNumber}" required pattern="\d{10,11}" maxlength="11" />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Email Id<span class="fieldMandatory">*</span></label>

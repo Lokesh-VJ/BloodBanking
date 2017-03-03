@@ -174,19 +174,19 @@ ul#loggedInUserNavigationBar {
     overflow: auto;
 }
 
-ul#loggedInUserNavigationBar li span {
+ul#loggedInUserNavigationBar li a {
     display: block;
     color: #000;
     padding: 8px 16px;
     text-decoration: none;
 }
 
-ul#loggedInUserNavigationBar li span.active {
+ul#loggedInUserNavigationBar li a.active {
     background-color: #4CAF50;
     color: white;
 }
 
-ul#loggedInUserNavigationBar li span:hover:not(.active) {
+ul#loggedInUserNavigationBar li a:hover:not(.active) {
     background-color: #555;
     color: white;
     cursor: pointer;
@@ -233,4 +233,10 @@ div#applicationHeaderSection div#headerAdditionalDetails .loggedUserDetailClass 
 div#applicationHeaderSection div#headerAdditionalDetails .logoutLinkClass {
 	color: white;
 	font-size: 10px;
+}
+.loggedUserModuleTitle{
+	padding-left: 20px;
+}
+#moduleDetailDivContainer{
+	
 }

@@ -10,7 +10,7 @@
 	</div>
 	<c:if test="${not empty sessionScope.userName}">
 		<div id="headerAdditionalDetails" class="text-right">
-			<h4 class="loggedUserDetailClass">Hi, <c:out value="${sessionScope.userName}" />(<c:out value="${sessionScope.userTypeName}" />)</h4>
+			<h4 class="loggedUserDetailClass">Hi, <c:out value="${sessionScope.name}" /> (<c:out value="${sessionScope.userTypeName}" />)</h4>
 			<a class="logoutLinkClass" href="javascript:logout()">LOGOUT</a>
 		</div>
 	</c:if>
@@ -31,7 +31,7 @@
 		<c:set var="ctr" value="0" />
 		<c:forEach items="${sessionScope.userPrivileges}" var="item">
 			<c:if test="${item.subMenuName eq subMenuView}">
-				<li><span class="loggedInUserNavigationBarItem ${(ctr == 0)?'active':''}" onclick="loadModuleViewAjaxPage(this, '${item.leftMenuName}')"><c:out value="${item.leftMenuDescription}" /></span></li>
+				<li><a class="loggedInUserNavigationBarItem ${(ctr == 0)?'active':''}" onclick="loadModuleViewAjaxPage(this, '${item.leftMenuName}')"><c:out value="${item.leftMenuDescription}" /></a></li>
 				<c:set var="ctr" value="${ctr+1}" />
 			</c:if>
 		</c:forEach>

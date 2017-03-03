@@ -36,6 +36,8 @@ public class RegistrationDTO extends BaseDTO implements UserDetails{
 	@NotNull(groups = {validateProcessSignup.class})
 	private LocationAddressDTO locationAddressDTO;
 	private List<String> privileges;
+	private String usertypeName;
+	private String bloodGroupName;
 	public Long getRegistrationId() {
 		return registrationId;
 	}
@@ -155,5 +157,17 @@ public class RegistrationDTO extends BaseDTO implements UserDetails{
 	}
 	public void setPrivileges(List<String> privileges) {
 		this.privileges = privileges;
+	}
+	public String getUsertypeName() {
+		return usertypeName;
+	}
+	public void setUsertypeName(String usertypeName) {
+		this.usertypeName = usertypeName;
+	}
+	public String getBloodGroupName() {
+		return bloodGroupName;
+	}
+	public void setBloodGroupName(String bloodGroupName) {
+		this.bloodGroupName = bloodGroupName;
 	}
 }

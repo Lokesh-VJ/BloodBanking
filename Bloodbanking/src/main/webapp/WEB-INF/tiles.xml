@@ -49,6 +49,10 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/profileDetail.jsp" />
 	</definition>
 	
+	<definition name="profileEdit" extends="base.ajaxTileDefinition">
+		<put-attribute name="body" value="/WEB-INF/jsp/profileEdit.jsp" />
+	</definition>
+	
 	<definition name="changePassword" extends="base.ajaxTileDefinition">
 		<put-attribute name="body" value="/WEB-INF/jsp/changePassword.jsp" />
 	</definition>

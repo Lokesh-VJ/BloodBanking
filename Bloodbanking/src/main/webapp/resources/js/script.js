@@ -9,9 +9,17 @@ function logoutLink(){
 }
 function blockAppUI(flag){
 	if(flag){
-		// TODO, block ui...
+		$.blockUI({ css: { 
+            border: 'none', 
+            padding: '15px', 
+            backgroundColor: '#000', 
+            '-webkit-border-radius': '10px', 
+            '-moz-border-radius': '10px', 
+            opacity: .5, 
+            color: '#fff' 
+        } }); 
 	} else {
-		// TODO, unblock ui...
+		$.unblockUI();
 	}
 }
 function getChildElementFromParent(parentId, childId){
@@ -70,5 +78,28 @@ function loadModuleViewAjaxPage(curLink, menuName){
 	}
 }
 function loadModuleViewAjaxPageCallback() {
-	
+	$('#moduleForm').ajaxForm({
+		beforeSubmit: function(formData, jqForm, options){
+			blockAppUI(true);
+			return true; 
+		},
+		success: function(responseText, statusText, xhr, $form){
+			document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML = responseText;
+			if(null == getChildElementFromParent("loggedInUserDisplayContainerAjaxDiv", "sessionTimeoutCheckFlag")){
+				alert("Session timeout");
+				window.location.href = logoutLink();
+			}
+			document.getElementById(destElement).innerHTML = document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML;
+			document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML = "";
+			if(typeof callback === "function"){
+				callback();
+			}
+			blockAppUI();
+			
+		},
+		error: function(){
+			alert("Server error, try again");
+			blockAppUI();
+		}
+	});
 }
