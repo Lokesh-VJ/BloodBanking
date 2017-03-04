@@ -1,105 +1,52 @@
 function logout(){
 	if(confirm("Do you want to logout?")){
-		blockAppUI(true);
+		blockAppUI();
 		window.location.href = logoutLink();
 	}
 }
 function logoutLink(){
 	return "logout.html";
 }
-function blockAppUI(flag){
-	if(flag){
-		$.blockUI({ css: { 
-            border: 'none', 
-            padding: '15px', 
-            backgroundColor: '#000', 
-            '-webkit-border-radius': '10px', 
-            '-moz-border-radius': '10px', 
-            opacity: .5, 
-            color: '#fff' 
-        } }); 
-	} else {
-		$.unblockUI();
-	}
+function blockAppUI(){
+	document.getElementById("blockUIContainer").style.display = "block";
 }
-function getChildElementFromParent(parentId, childId){
-	if(null == document.getElementById(parentId) || document.getElementById(parentId).children.length == 0){
-		return null;
-	}
-	var childElement = null;
-	for(var i = 0; i < document.getElementById("loggedInUserDisplayContainerAjaxDiv").children.length; i++){
-		var elem = document.getElementById("loggedInUserDisplayContainerAjaxDiv").children[i];
-		if(elem.getAttribute("id") == childId){
-			childElement = elem;		
-		}
-	}
-	return childElement;
+function setPageNumber(pageNumber){
+	document.getElementById("pageNumber").value = pageNumber;
+	document.getElementById("moduleForm").submit();
 }
-function makeAjaxCall(url, postData, type, destElement, callback) {
-	blockAppUI(true);
-	var xhttp;
-	if (window.XMLHttpRequest) {
-		xhttp = new XMLHttpRequest();
-	} else {
-		xhttp = new ActiveXObject("Microsoft.XMLHTTP"); // code for IE6, IE5
-	}
-	xhttp.onreadystatechange = function() {
-		if (this.readyState == 4) {
-			if(this.status == 200){
-				document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML = this.responseText;
-				if(null == getChildElementFromParent("loggedInUserDisplayContainerAjaxDiv", "sessionTimeoutCheckFlag")){
-					alert("Session timeout");
-					window.location.href = logoutLink();
-				}
-				document.getElementById(destElement).innerHTML = document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML;
-				document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML = "";
-				if(typeof callback === "function"){
-					callback();
-				}
-				blockAppUI();
-			} else {
-				alert("Server responded with error");
-				window.location.href = logoutLink();
-			}
-		}
-	};
-	xhttp.open(type, url);
-	xhttp.send(postData);
-}
-function loadModuleViewAjaxPage(curLink, menuName){
-	if(!/\bactive\b/.test(curLink.className)){
-		for(var i = 0; i < document.getElementsByClassName("loggedInUserNavigationBarItem").length; i++){
-			if(/\bactive\b/.test(document.getElementsByClassName("loggedInUserNavigationBarItem")[i].className)){
-				document.getElementsByClassName("loggedInUserNavigationBarItem")[i].classList.remove("active");
-			}
-		}
-		curLink.classList.add("active");
-		makeAjaxCall("view"+menuName+".html", null, "POST", "loggedInUserDisplayContainer", loadModuleViewAjaxPageCallback);
-	}
-}
-function loadModuleViewAjaxPageCallback() {
-	$('#moduleForm').ajaxForm({
-		beforeSubmit: function(formData, jqForm, options){
-			blockAppUI(true);
-			return true; 
-		},
-		success: function(responseText, statusText, xhr, $form){
-			document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML = responseText;
-			if(null == getChildElementFromParent("loggedInUserDisplayContainerAjaxDiv", "sessionTimeoutCheckFlag")){
-				alert("Session timeout");
-				window.location.href = logoutLink();
-			}
-			document.getElementById(destElement).innerHTML = document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML;
-			document.getElementById("loggedInUserDisplayContainerAjaxDiv").innerHTML = "";
-			if(typeof callback === "function"){
-				callback();
-			}
-			blockAppUI();
-			
-		},
-		error: function(){
-			alert("Server error, try again");
-			blockAppUI();
-		}
-	});
-}
+document.addEventListener('DOMContentLoaded', function () {
+	// messages section...
+    if(document.getElementById("successMessageDiv") != null){
+    	alert(document.getElementById("successMessageDiv").innerHTML);
+		document.getElementById("successMessageDiv").remove();
+    }
+    if(document.getElementById("failureMessageDiv") != null){
+    	alert(document.getElementById("failureMessageDiv").innerHTML);
+		document.getElementById("failureMessageDiv").remove();
+    }
+    // module form on submit... 
+    if(document.getElementById("moduleForm") != null){
+    	document.getElementById("moduleForm").onsubmit = function(){
+    		if(document.getElementById("moduleForm").checkValidity()){
+    			blockAppUI();
+    			return true;
+    		}
+    	};
+    }
+    
+    // password mismatch validation
+    if(document.getElementById("password") != null && document.getElementById("confirmPassword") != null){
+        var password = document.getElementById("password");
+    	var confirmPassword = document.getElementById("confirmPassword");
+    	
+    	function validatePassword(){
+    		if(password.value != confirmPassword.value) {
+    			confirmPassword.setCustomValidity("Passwords Don't Match");
+    		} else {
+    			confirmPassword.setCustomValidity('');
+    		}
+    	}
+    	password.onchange = validatePassword;
+    	confirmPassword.onkeyup = validatePassword;
+    }
+});

@@ -1,18 +1,17 @@
 package net.bloodbanking.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.StringType;
 import org.springframework.stereotype.Repository;
 
+import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.dao.LoginDao;
+import net.bloodbanking.dto.BaseDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.LocationAddressDTO;
 import net.bloodbanking.dto.RegistrationDTO;
@@ -115,5 +114,24 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 		}
 		List<LocationAddress> list = criteria.list();
 		return CollectionUtils.isNotEmpty(list) ? list.get(0) : null ;
+	}
+
+	@Override
+	public List<Registration> viewUser(RegistrationDTO registrationDTO) {
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(Registration.class);
+		return viewList(registrationDTO, criteria);
+	}
+	
+	private <T> List<T> viewList(BaseDTO baseDTO, Criteria criteria) {
+		List<T> resultList = criteria.list();
+		List<T> returnResultList = new ArrayList<T>();
+		baseDTO.setTotalSize(resultList.size());
+		int loopStart = baseDTO.getQueryPageNumber() * AppConstants.RESULTSPERPAGE;
+		int loopEnd = loopStart + AppConstants.RESULTSPERPAGE;
+		if (loopEnd > resultList.size()) loopEnd = resultList.size();
+		for (int i = loopStart; i < loopEnd; i++) {
+			returnResultList.add(resultList	.get(i));
+		}
+		return CollectionUtils.isNotEmpty(returnResultList) ? returnResultList : null;
 	}
 }

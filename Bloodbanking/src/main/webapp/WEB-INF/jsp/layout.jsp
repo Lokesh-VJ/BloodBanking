@@ -13,13 +13,22 @@
 		</c:if>
 	</head>
 	<body>
+		<%@include file="messages.jsp"%>
 		<div id="main-layout">
 			<div id="container-box">
 				<tiles:insertAttribute name="head" /><!-- header page -->
-				<tiles:insertAttribute name="body" /><!-- page body -->
+				<div ${not empty sessionScope.userName ? 'id="loggedInUserDisplayContainer"':''}>
+					<tiles:insertAttribute name="body" /><!-- page body -->
+				</div>
 				<tiles:insertAttribute name="foot" /><!-- footer page -->
 			</div>
 		</div>
-		<%@include file="messages.jsp"%>
+		<c:if test="${not empty sessionScope.userName}">
+			<div id="blockUIContainer" style="display: none;">
+				<div class="blockUI" style="display:none"></div>
+				<div class="blockUI blockOverlay"></div>
+				<div class="blockUI blockMsg blockPage"><h1>Please wait...</h1></div>
+			</div>
+		</c:if>
 	</body>
 </html>

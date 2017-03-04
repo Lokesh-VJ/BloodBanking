@@ -31,7 +31,7 @@
 		<c:set var="ctr" value="0" />
 		<c:forEach items="${sessionScope.userPrivileges}" var="item">
 			<c:if test="${item.subMenuName eq subMenuView}">
-				<li><a class="loggedInUserNavigationBarItem ${(ctr == 0)?'active':''}" onclick="loadModuleViewAjaxPage(this, '${item.leftMenuName}')"><c:out value="${item.leftMenuDescription}" /></a></li>
+				<li><a href="view${item.leftMenuName}.html" class="loggedInUserNavigationBarItem ${((empty selectedLeftMenu && ctr == 0) || (not empty selectedLeftMenu && selectedLeftMenu eq item.leftMenuName))?'active':''}"><c:out value="${item.leftMenuDescription}" /></a></li>
 				<c:set var="ctr" value="${ctr+1}" />
 			</c:if>
 		</c:forEach>

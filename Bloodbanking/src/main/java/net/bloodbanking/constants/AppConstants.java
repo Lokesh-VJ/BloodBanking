@@ -20,9 +20,17 @@ public class AppConstants {
 	
 	public static final String USERTYPENAME = "userTypeName";
 	
-	public static final String AJAXCONTENTFLAG = "ajaxContentFlag";
+	public static final String USERTYPEID = "userTypeId";
 	
 	public static final String SUBMENUVIEW = "View";
 	
 	public static final String SUBMENUVIEWNAME = "subMenuView";
+	
+	public static final String SELECTEDLEFTMENU = "selectedLeftMenu";
+	
+	public static final String SUPERUSER = "superUser";
+	
+	public static final String SEARCHRESULT = "searchResult";
+	
+	public static final Integer RESULTSPERPAGE = 1; // TODO, revert later, 10;
 }

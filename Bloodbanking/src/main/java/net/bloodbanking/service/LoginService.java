@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
+import net.bloodbanking.dto.ListDTO;
 import net.bloodbanking.dto.LocationAddressDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
@@ -62,4 +63,10 @@ public interface LoginService {
 	
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public void processEditProfile(RegistrationDTO registrationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void processChangePassword(RegistrationDTO registrationDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<RegistrationDTO> viewUser(RegistrationDTO registrationDTO) throws ApplicationException;
 }

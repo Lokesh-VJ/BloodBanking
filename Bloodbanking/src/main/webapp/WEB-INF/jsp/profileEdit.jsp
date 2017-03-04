@@ -26,6 +26,7 @@
 					<label class="label_content">Blood Group<span class="colorSeparator">:</span></label>
 					<span class="elementData"><c:out value="${baseDTO.bloodGroupName}" /></span>
 				</div>
+				<br /><br /><br /><br /><br />
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<input type="submit" name="submit" id="submit" value="Update" />
 				</div>
@@ -43,6 +44,8 @@
 					<label class="label_content">Email Id<span class="colorSeparator">:</span></label>
 					<input type="email" name="locationAddressDTO.emailId" id="locationAddressDTO.emailId" value="${baseDTO.locationAddressDTO.emailId}" required />
 				</div>
+			</div>
+			<div class="marginBetweenFields loginPageFormContents text-left margin-center columnLayoutContainerCol">
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Address<span class="colorSeparator">:</span></label>
 					<input type="text" name="locationAddressDTO.address" id="locationAddressDTO.address" value="${baseDTO.locationAddressDTO.address}" required />

@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -28,6 +29,7 @@ import net.bloodbanking.dto.BaseDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
+import net.bloodbanking.dto.ListDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
 import net.bloodbanking.dto.UserTypeMappingDTO;
@@ -35,6 +37,7 @@ import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.exception.ApplicationException;
 import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.service.LoginService;
+import net.bloodbanking.utils.PaginationHelper;
 
 @Controller("loginController")
 public class LoginController extends BaseController {
@@ -67,7 +70,11 @@ public class LoginController extends BaseController {
 			setValueInSession(request, AppConstants.NAME, registrationDTO.getLocationAddressDTO().getName());
 			setValueInSession(request, AppConstants.USER_PRIVILEGES, userPrivileges);
 			setValueInSession(request, AppConstants.USERTYPENAME, userTypeMstDTO.getUsertypeName());
+			setValueInSession(request, AppConstants.USERTYPEID, userTypeMstDTO.getUsertypeId());
 			setValueInSession(request, AppConstants.SUBMENUVIEWNAME, AppConstants.SUBMENUVIEW);
+			if(AppConstants.ADMIN_NAME.equals(userTypeMstDTO.getUsertypeName())){
+				setValueInSession(request, AppConstants.SUPERUSER, "1");
+			}
 		}catch(ApplicationException e){
 			handleApplicationExceptionForJson(registrationDTO, e);
 			return login(registrationDTO, request, response, map);
@@ -172,17 +179,6 @@ public class LoginController extends BaseController {
 		map.put("welcomePageActive", "active");
 		return ViewConstants.WELCOME;
 	}
-
-	@RequestMapping("/changePassword.html")
-	public String changePassword(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		map.put("changePasswordPageActive", "active");
-		return ViewConstants.CHANGEPASSWORD;
-	}
-
-	@RequestMapping("/processChangePassword.html")
-	public String processChangePassword(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		return ViewConstants.CHANGEPASSWORD;
-	}
 	
 	@RequestMapping(value = "/passwordAttempts.html")
 	public String passwordAttempts(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
@@ -243,37 +239,91 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping("/viewHome.html")
 	public String viewHome(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		setAjaxRelatedParams(map, null);
+		setLoginRelatedParams(map, "Home", null);
 		return ViewConstants.VIEWHOME;
 	}
 	
 	@RequestMapping("/viewProfile.html")
-	public String viewProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		RegistrationDTO registrationDTO = new RegistrationDTO();
+	public String viewProfile(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try {
 			registrationDTO.setUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
 			registrationDTO = loginService.loadRegistration(registrationDTO);
 		} catch (ApplicationException e) {
 			handleApplicationExceptionForJson(registrationDTO, e);
 		}
-		setAjaxRelatedParams(map, registrationDTO);
+		setLoginRelatedParams(map, "Profile", registrationDTO);
 		return ViewConstants.PROFILEDETAIL;
 	}
 	
 	@RequestMapping("/editProfile.html")
-	public String editProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		viewProfile(request, response, map);
+	public String editProfile(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		viewProfile(registrationDTO, request, response, map);
 		return ViewConstants.PROFILEEDIT;
 	}
 	
 	@RequestMapping("/processEditProfile.html")
 	public String processEditProfile(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
-		
-		return viewProfile(request, response, map);
+		try {
+			registrationDTO.setUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
+			loginService.processEditProfile(registrationDTO);
+			setValueInSession(request, AppConstants.NAME, registrationDTO.getLocationAddressDTO().getName());
+			registrationDTO.setResponseMessage("Profile update success");
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+			editProfile(registrationDTO, request, response, map);
+		}
+		return viewProfile(registrationDTO, request, response, map);
+	}
+
+	@RequestMapping("/viewChangePassword.html")
+	public String viewChangePassword(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		setLoginRelatedParams(map, "ChangePassword", registrationDTO);
+		return ViewConstants.CHANGEPASSWORD;
+	}
+
+	@RequestMapping("/processChangePassword.html")
+	public String processChangePassword(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			registrationDTO.setUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
+			loginService.processChangePassword(registrationDTO);
+			registrationDTO.setResponseMessage("Change password success");
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		return viewChangePassword(registrationDTO, request, response, map);
 	}
 	
-	private <T extends BaseDTO> void setAjaxRelatedParams(Map<String, Object> map, T baseDTO){
-		map.put(AppConstants.AJAXCONTENTFLAG, 1);
+	@RequestMapping("/viewUser.html")
+	public String viewUser(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			if(null == registrationDTO.getUsertypeId() && !isSuperUserLogin(request)){
+				registrationDTO.setUsertypeId((Long)getValueFromSession(request, AppConstants.USERTYPEID));
+			}
+			ListDTO<RegistrationDTO> listDTO = loginService.viewUser(registrationDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, registrationDTO.getQueryPageNumber(), AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		setLoginRelatedParams(map, "User", registrationDTO);
+		return ViewConstants.USERVIEW;
+	}
+	
+	private <T extends BaseDTO> void setLoginRelatedParams(Map<String, Object> map, String selectedLeftMenu, T baseDTO){
+		map.put(AppConstants.SELECTEDLEFTMENU, selectedLeftMenu);
 		map.put("baseDTO", baseDTO);
+	}
+	
+	private boolean isSuperUserLogin(HttpServletRequest request){
+		return (null != getValueFromSession(request, AppConstants.SUPERUSER))?true:false;
+	}
+	
+	private void applyPagination(ListDTO<? extends BaseDTO> listDTO, Integer pageNumber, Integer resultPerPage) {
+		if (null != listDTO && null != listDTO.getList()) {
+			listDTO.setPageNumber(pageNumber);
+			listDTO.setPage(PaginationHelper.getPage(listDTO, resultPerPage, pageNumber));
+		}
 	}
 }

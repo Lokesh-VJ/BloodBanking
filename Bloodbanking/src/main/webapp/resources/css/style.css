@@ -1,5 +1,5 @@
 body {
-	font-family: Arial, sans-serif;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0px auto;
 	/* background-size: cover;
@@ -239,4 +239,48 @@ div#applicationHeaderSection div#headerAdditionalDetails .logoutLinkClass {
 }
 #moduleDetailDivContainer{
 	
+}
+
+div#blockUIContainer div.blockUI.blockOverlay{
+	z-index: 1000; border: none; margin: 0px; padding: 0px; width: 100%; height: 100%; top: 0px; left: 0px; background-color: rgb(0, 0, 0); opacity: 0.6; cursor: wait; position: fixed;
+}
+
+div#blockUIContainer div.blockUI.blockMsg.blockPage{
+	z-index: 1011; position: fixed; padding: 15px; margin: 0px; width: 30%; top: 40%; left: 35%; text-align: center; color: rgb(255, 255, 255); border: none; background-color: rgb(0, 0, 0); cursor: wait; border-radius: 10px; opacity: 0.5;
+}
+
+div#tableLayoutContainer .pagination {
+	list-style: none; 
+	padding: 0px;
+} 
+div#tableLayoutContainer .pagination li {
+	display: inline;
+} 
+div#tableLayoutContainer .pagination li a {
+	display: inline;
+	border-radius: 50% !important;
+	margin: 0 6px; 
+} 
+div#tableLayoutContainer .pagination pagination-sm{
+	width:50%
+}
+
+table#viewResultsTable {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+table#viewResultsTable th {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background-color: #4CAF50;
+    color: white;
+}
+table#viewResultsTable td, table#viewResultsTable th {
+    border: 1px solid #ddd;
+    text-align: left;
+    padding: 8px;
+}
+table#viewResultsTable tr:nth-child(even) {
+    background-color: #f2f2f2;
 }

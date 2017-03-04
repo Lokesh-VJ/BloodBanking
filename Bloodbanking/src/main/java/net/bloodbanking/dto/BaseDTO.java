@@ -4,6 +4,8 @@ public class BaseDTO {
 	private String logginUserName;
 	private boolean requestFailed;
 	private String responseMessage;
+	private Integer totalSize;
+	private Integer pageNumber;
 	public String getLogginUserName() {
 		return logginUserName;
 	}
@@ -21,5 +23,21 @@ public class BaseDTO {
 	}
 	public void setResponseMessage(String responseMessage) {
 		this.responseMessage = responseMessage;
+	}
+	public Integer getTotalSize() {
+		return totalSize;
+	}
+	public void setTotalSize(Integer totalSize) {
+		this.totalSize = totalSize;
+	}
+	public Integer getPageNumber() {
+		return pageNumber;
+	}
+	public void setPageNumber(Integer pageNumber) {
+		this.pageNumber = pageNumber;
+	}
+	public Integer getQueryPageNumber() {
+		if(null == pageNumber) return 0;
+		return pageNumber - 1;
 	}
 }

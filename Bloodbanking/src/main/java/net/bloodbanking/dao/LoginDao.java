@@ -23,4 +23,5 @@ public interface LoginDao extends BaseDao{
 	public List<UserTypeMapping> listUserTypeMappings(UserTypeMstDTO userTypeMstDTO);
 	public BloodGroupMst loadBloodGroup(BloodGroupMstDTO bloodGroupMstDTO);
 	public LocationAddress loadLocationAddress(LocationAddressDTO locationAddressDTO);
+	public List<Registration> viewUser(RegistrationDTO registrationDTO);
 }

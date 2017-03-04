@@ -22,6 +22,8 @@ public class ViewConstants {
 	
 	public static final String PROFILEEDIT = "profileEdit";
 	
+	public static final String USERVIEW = "userView";
+	
 	public static final String CHANGEPASSWORD = "changePassword";
 	
 }

@@ -21,4 +21,6 @@ public class ErrorConstants {
 	public static final String PASSWORD_MISMATCH = "Passwords mismatch, try again";
 	
 	public static final String USER_ALREADY_REGISTERED = "User already registered";
+	
+	public static final String USER_ADDRESS_NOT_AVAILABLE = "User address not available";
 }

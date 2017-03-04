@@ -14,6 +14,7 @@ import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
+import net.bloodbanking.dto.ListDTO;
 import net.bloodbanking.dto.LocationAddressDTO;
 import net.bloodbanking.dto.RegistrationDTO;
 import net.bloodbanking.dto.SecurityQuestionDTO;
@@ -31,7 +32,6 @@ import net.bloodbanking.entity.UserTypeMapping;
 import net.bloodbanking.entity.UserTypeMst;
 import net.bloodbanking.enums.ReferenceTypeEnum;
 import net.bloodbanking.exception.ApplicationException;
-import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.service.LoginService;
 import net.bloodbanking.utils.DateUtil;
 import net.bloodbanking.validator.EnquiryValidator;
@@ -282,9 +282,13 @@ public class LoginServiceImpl implements LoginService {
 		if(null == registration){
 			throw new ApplicationException(ErrorConstants.INVALID_USER);
 		}
-		LocationAddress locationAddress = new LocationAddress();
-		locationAddress.setReferenceId(String.valueOf(registration.getRegistrationId()));
-		locationAddress.setReferenceType(ReferenceTypeEnum.USER.getCode());
+		LocationAddressDTO locationAddressDTO = new LocationAddressDTO();
+		locationAddressDTO.setReferenceId(registration.getRegistrationId().toString());
+		locationAddressDTO.setReferenceType(ReferenceTypeEnum.USER.getCode());
+		LocationAddress locationAddress = loginDao.loadLocationAddress(locationAddressDTO);
+		if(null == locationAddress){
+			throw new ApplicationException(ErrorConstants.USER_ADDRESS_NOT_AVAILABLE);
+		}
 		locationAddress.setName(registrationDTO.getLocationAddressDTO().getName());
 		locationAddress.setMobileNumber(registrationDTO.getLocationAddressDTO().getMobileNumber());
 		locationAddress.setEmailId(registrationDTO.getLocationAddressDTO().getEmailId());
@@ -292,6 +296,39 @@ public class LoginServiceImpl implements LoginService {
 		locationAddress.setState(registrationDTO.getLocationAddressDTO().getState());
 		locationAddress.setCity(registrationDTO.getLocationAddressDTO().getCity());
 		locationAddress.setPincode(registrationDTO.getLocationAddressDTO().getPincode());
-		loginDao.save(locationAddress);
+		loginDao.update(locationAddress);
+	}
+
+	@Override
+	public void processChangePassword(RegistrationDTO registrationDTO) throws ApplicationException {
+		// TODO, place validation here...
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		if(null == registration){
+			throw new ApplicationException(ErrorConstants.INVALID_USER);
+		}
+		if(!registrationDTO.getPassword().equals(registrationDTO.getConfirmPassword())){
+			throw new ApplicationException(ErrorConstants.PASSWORD_MISMATCH);
+		}
+		// TODO, enable security question & answer update...
+		registration.setPassword(registrationDTO.getPassword());
+		loginDao.update(registration);
+	}
+
+	@Override
+	public ListDTO<RegistrationDTO> viewUser(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<Registration> list = loginDao.viewUser(registrationDTO);
+		ListDTO<RegistrationDTO> listDTO = new ListDTO<RegistrationDTO>();
+		List<RegistrationDTO> registrationDTOs = new ArrayList<RegistrationDTO>();
+		RegistrationDTO dto = null;
+		if(list != null){
+			for(Registration registration: list){
+				dto = new RegistrationDTO();
+				dto.setUserName(registration.getUserName());
+				registrationDTOs.add(this.loadRegistration(dto));
+			}
+		}
+		listDTO.setList(registrationDTOs);
+		listDTO.setTotalSize(registrationDTO.getTotalSize());
+		return listDTO;
 	}
 }

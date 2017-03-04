@@ -1,7 +1,6 @@
 <%@include file="taglib.jsp"%>
 
 <h2 class="loggedUserModuleTitle">Profile information</h2>
-
 <form method="post" action="editProfile.html" id="moduleForm" name="moduleForm">
 	 <div id="moduleDetailDivContainer" class="marginBetweenFields">
 		<div class="columnLayoutContainer">
@@ -25,6 +24,7 @@
 					<label class="label_content">Blood Group<span class="colorSeparator">:</span></label>
 					<span class="elementData"><c:out value="${baseDTO.bloodGroupName}" /></span>
 				</div>
+				<br /><br /><br />
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<input type="submit" name="submit" id="submit" value="Edit" />
 				</div>
