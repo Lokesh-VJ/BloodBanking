@@ -1,7 +1,7 @@
 <%@include file="taglib.jsp"%>
 
 <h2 class="loggedUserModuleTitle">User</h2>
-<form method="post" action="editProfile.html" id="moduleForm" name="moduleForm">
+<form method="post" action="viewUser.html" id="moduleForm" name="moduleForm">
 	 <div id="moduleDetailDivContainer" class="marginBetweenFields">
 		<div id="tableLayoutContainer">
 			<table id="viewResultsTable">
@@ -14,6 +14,7 @@
 						<th>Blood group</th>
 						<th>User name</th>
 						<th>Address</th>
+						<th>Action</th>
 					</tr>
 					<c:if test="${null == searchResult.list}">
 						<tr class="noResults">
@@ -31,6 +32,20 @@
 							<td><c:out value="${item.bloodGroupName}" /></td>
 							<td><c:out value="${item.userName}" /></td>
 							<td><c:out value="${item.locationAddressDTO.address} ${item.locationAddressDTO.city} ${item.locationAddressDTO.state} ${item.locationAddressDTO.pincode}" /></td>
+							<td>
+								<a href="javascript:doModuleAction('detailUser.html', 'userNameAMF', '${item.userName}')">View</a>
+								<a href="javascript:doModuleAction('detailUser.html', 'userNameAMF', '${item.userName}')">Edit</a>
+								<c:if test="${item.statusMstDTO.status == inactiveFlag}">
+									<a href="javascript:doModuleAction('activateUser.html', 'userNameAMF', '${item.userName}')">
+										Activate
+									</a>
+								</c:if>
+								<c:if test="${item.statusMstDTO.status == activeFlag}">
+									<a href="javascript:doModuleAction('deactivateUser.html', 'userNameAMF', '${item.userName}')">
+										Deactivate
+									</a>
+								</c:if>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -38,4 +53,7 @@
 			<%@include file="pagination.jsp"%>
 		</div>
 	</div>
+</form>
+<form method="post" id="additionalModuleForm" name="additionalModuleForm">
+	<input type="hidden" id="userNameAMF" name="userName" />
 </form>

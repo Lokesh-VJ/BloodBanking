@@ -112,9 +112,7 @@ CREATE TABLE `location_address` (
 
 insert  into `location_address`(`location_address_id`,`reference_type`,`reference_id`,`name`,`mobile_number`,`email_id`,`address`,`state`,`city`,`pincode`) values 
 
-(1,1,'1','Super Admin 1','9480242101','joebalan7@gmail.com','K.P. Agrahara','Karnataka','Bangalore','560023'),
-
-(2,1,'2','Athisayaraj','9449977092','athisayaraj@gmail.com','#366','Karanataka','Bengaluru','560026');
+(1,1,'1','Super Admin','9480242101','joebalan7@gmail.com','K.P. Agrahara','Karnataka','Bangalore','560023');
 
 /*Table structure for table `patient_bloodbank_mapping` */
 
@@ -156,9 +154,7 @@ CREATE TABLE `registration` (
 
 insert  into `registration`(`registration_id`,`blood_group`,`birth_date`,`gender`,`user_name`,`password`,`usertype_id`,`security_que`,`answer`,`status`) values 
 
-(1,3,'1989-11-09','Male','SuperAdmin','super@123',1,4,'1960',1),
-
-(2,3,'1960-05-11','Male','athisayaraj','athisayaraj@123',3,5,'joe',1);
+(1,3,'1989-11-09','Male','SuperAdmin','super@123',1,4,'1960',1);
 
 /*Table structure for table `security_question` */
 

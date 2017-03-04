@@ -14,6 +14,11 @@ function setPageNumber(pageNumber){
 	document.getElementById("pageNumber").value = pageNumber;
 	document.getElementById("moduleForm").submit();
 }
+function doModuleAction(url, pKId, pKValue){
+	document.getElementById("additionalModuleForm").setAttribute("action", url);
+	document.getElementById(pKId).value = pKValue;
+	document.getElementById("additionalModuleForm").submit();
+}
 document.addEventListener('DOMContentLoaded', function () {
 	// messages section...
     if(document.getElementById("successMessageDiv") != null){

@@ -1,5 +1,7 @@
 package net.bloodbanking.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -8,7 +10,9 @@ import org.apache.commons.collections.CollectionUtils;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dto.BaseDTO;
+import net.bloodbanking.dto.ListDTO;
 import net.bloodbanking.exception.ApplicationException;
+import net.bloodbanking.utils.PaginationHelper;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseController {
@@ -76,5 +80,23 @@ public abstract class BaseController {
 			}
 		}
 		return baseDTO;
+	}
+	
+	protected <T extends BaseDTO> void setLoginRelatedParams(Map<String, Object> map, String selectedLeftMenu, T baseDTO){
+		map.put(AppConstants.SELECTEDLEFTMENU, selectedLeftMenu);
+		map.put("activeFlag", AppConstants.ACTIVE);
+		map.put("inactiveFlag", AppConstants.INACTIVE);
+		map.put("baseDTO", baseDTO);
+	}
+	
+	protected boolean isSuperUserLogin(HttpServletRequest request){
+		return (null != getValueFromSession(request, AppConstants.SUPERUSER))?true:false;
+	}
+	
+	protected <T extends BaseDTO> void applyPagination(ListDTO<T> listDTO, T baseDTO, Integer resultPerPage) {
+		if (null != listDTO && null != listDTO.getList()) {
+			listDTO.setPageNumber(baseDTO.getPageNumber());
+			listDTO.setPage(PaginationHelper.getPage(listDTO, resultPerPage, baseDTO.getPageNumber()));
+		}
 	}
 }

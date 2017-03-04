@@ -4,6 +4,8 @@ public class AppConstants {
 	
 	public static final Integer ACTIVE = 1;
 	
+	public static final Integer INACTIVE = 2;
+	
 	public static final String USER_NAME = "userName";
 	
 	public static final String NAME = "name";
@@ -32,5 +34,5 @@ public class AppConstants {
 	
 	public static final String SEARCHRESULT = "searchResult";
 	
-	public static final Integer RESULTSPERPAGE = 1; // TODO, revert later, 10;
+	public static final Integer RESULTSPERPAGE = 10;
 }

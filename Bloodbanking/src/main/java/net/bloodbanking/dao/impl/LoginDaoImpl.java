@@ -119,6 +119,7 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 	@Override
 	public List<Registration> viewUser(RegistrationDTO registrationDTO) {
 		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(Registration.class);
+		criteria.add(Restrictions.ne("usertypeId", AppConstants.ADMIN_ID.longValue()));
 		return viewList(registrationDTO, criteria);
 	}
 	

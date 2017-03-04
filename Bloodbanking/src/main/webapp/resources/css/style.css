@@ -250,19 +250,28 @@ div#blockUIContainer div.blockUI.blockMsg.blockPage{
 }
 
 div#tableLayoutContainer .pagination {
-	list-style: none; 
-	padding: 0px;
-} 
-div#tableLayoutContainer .pagination li {
-	display: inline;
-} 
-div#tableLayoutContainer .pagination li a {
-	display: inline;
-	border-radius: 50% !important;
-	margin: 0 6px; 
-} 
-div#tableLayoutContainer .pagination pagination-sm{
-	width:50%
+	margin-top: 5px; 
+    display: inline-block;
+}
+
+div#tableLayoutContainer .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+div#tableLayoutContainer .pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+    cursor: not-allowed;
+}
+
+div#tableLayoutContainer .pagination a:hover:not(.active) {
+	background-color: #ddd;
 }
 
 table#viewResultsTable {

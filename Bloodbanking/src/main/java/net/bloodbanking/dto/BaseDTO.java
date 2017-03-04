@@ -31,6 +31,7 @@ public class BaseDTO {
 		this.totalSize = totalSize;
 	}
 	public Integer getPageNumber() {
+		if(null == pageNumber) return 1;
 		return pageNumber;
 	}
 	public void setPageNumber(Integer pageNumber) {

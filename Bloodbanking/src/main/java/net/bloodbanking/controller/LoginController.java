@@ -301,7 +301,7 @@ public class LoginController extends BaseController {
 			}
 			ListDTO<RegistrationDTO> listDTO = loginService.viewUser(registrationDTO);
 			if(CollectionUtils.isNotEmpty(listDTO.getList())){
-				applyPagination(listDTO, registrationDTO.getQueryPageNumber(), AppConstants.RESULTSPERPAGE);
+				applyPagination(listDTO, registrationDTO, AppConstants.RESULTSPERPAGE);
 			}
 			map.put(AppConstants.SEARCHRESULT, listDTO);
 		} catch (ApplicationException e) {
@@ -309,21 +309,5 @@ public class LoginController extends BaseController {
 		}
 		setLoginRelatedParams(map, "User", registrationDTO);
 		return ViewConstants.USERVIEW;
-	}
-	
-	private <T extends BaseDTO> void setLoginRelatedParams(Map<String, Object> map, String selectedLeftMenu, T baseDTO){
-		map.put(AppConstants.SELECTEDLEFTMENU, selectedLeftMenu);
-		map.put("baseDTO", baseDTO);
-	}
-	
-	private boolean isSuperUserLogin(HttpServletRequest request){
-		return (null != getValueFromSession(request, AppConstants.SUPERUSER))?true:false;
-	}
-	
-	private void applyPagination(ListDTO<? extends BaseDTO> listDTO, Integer pageNumber, Integer resultPerPage) {
-		if (null != listDTO && null != listDTO.getList()) {
-			listDTO.setPageNumber(pageNumber);
-			listDTO.setPage(PaginationHelper.getPage(listDTO, resultPerPage, pageNumber));
-		}
 	}
 }

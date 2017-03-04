@@ -48,7 +48,12 @@
 			<filter-security-metadata-source>
 				<!-- Login Logout Management -->
 				<intercept-url pattern="/welcome.html" access="IS_AUTHENTICATED_FULLY" />
-				<intercept-url pattern="/changePassword.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewHome.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewProfile.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/editProfile.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processEditProfile.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewUser.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewChangePassword.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/processChangePassword.html" access="IS_AUTHENTICATED_FULLY" />
 			</filter-security-metadata-source>
 		</beans:property>
