@@ -16,10 +16,29 @@ function setPageNumber(pageNumber){
 }
 function doModuleAction(url, pKId, pKValue){
 	document.getElementById("additionalModuleForm").setAttribute("action", url);
-	document.getElementById(pKId).value = pKValue;
+	if(document.getElementById(pKId) != null){
+		document.getElementById(pKId).value = pKValue;
+	}
 	document.getElementById("additionalModuleForm").submit();
 }
-document.addEventListener('DOMContentLoaded', function () {
+function doModuleActionWithConfirmation(url, confirmMessage, pKId, pKValue){
+	if(confirm(confirmMessage)){
+		document.getElementById("additionalModuleForm").setAttribute("action", url);
+		if(document.getElementById(pKId) != null){
+			document.getElementById(pKId).value = pKValue;
+		}
+		document.getElementById("additionalModuleForm").submit();
+	}
+}
+function goBackModuleFormFunc(url, pKName, pKValue){
+	document.getElementById("goBackModuleForm").setAttribute("action", url);
+	if(document.getElementById("goBackParam") != null){
+		document.getElementById("goBackParam").setAttribute("name", pKName);
+		document.getElementById("goBackParam").value = pKValue;
+	}
+	document.getElementById("goBackModuleForm").submit();
+}
+function onPageLoadFunction(){
 	// messages section...
     if(document.getElementById("successMessageDiv") != null){
     	alert(document.getElementById("successMessageDiv").innerHTML);
@@ -54,4 +73,5 @@ document.addEventListener('DOMContentLoaded', function () {
     	password.onchange = validatePassword;
     	confirmPassword.onkeyup = validatePassword;
     }
-});
+}
+document.addEventListener( "DOMContentLoaded", onPageLoadFunction, false );

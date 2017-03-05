@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
@@ -69,4 +70,22 @@ public interface LoginService {
 	
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public ListDTO<RegistrationDTO> viewUser(RegistrationDTO registrationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void activateUser(RegistrationDTO registrationDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void deactivateUser(RegistrationDTO registrationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<FeedbackDTO> viewFeedback(FeedbackDTO feedbackDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<EnquiryFormDTO> viewEnquiry(EnquiryFormDTO enquiryFormDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void processBloodDonation(BloodDonationDTO bloodDonationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO) throws ApplicationException;
 }

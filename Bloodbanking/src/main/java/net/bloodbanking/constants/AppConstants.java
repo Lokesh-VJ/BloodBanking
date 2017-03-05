@@ -18,6 +18,8 @@ public class AppConstants {
 	
 	public static final Integer ADMIN_ID = 1;
 	
+	public static final Integer BLOODBANK_ID = 2;
+	
 	public static final String USER_PRIVILEGES = "userPrivileges";
 	
 	public static final String USERTYPENAME = "userTypeName";

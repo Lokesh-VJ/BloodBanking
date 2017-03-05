@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.constants.ViewConstants;
-import net.bloodbanking.dto.BaseDTO;
+import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
@@ -37,7 +37,6 @@ import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.exception.ApplicationException;
 import net.bloodbanking.exception.ApplicationMessage;
 import net.bloodbanking.service.LoginService;
-import net.bloodbanking.utils.PaginationHelper;
 
 @Controller("loginController")
 public class LoginController extends BaseController {
@@ -309,5 +308,125 @@ public class LoginController extends BaseController {
 		}
 		setLoginRelatedParams(map, "User", registrationDTO);
 		return ViewConstants.USERVIEW;
+	}
+	
+	@RequestMapping("/detailUser.html")
+	public String detailUser(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			registrationDTO = loginService.loadRegistration(registrationDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+			return viewUser(registrationDTO, request, response, map);
+		}
+		setLoginRelatedParams(map, "User", registrationDTO);
+		return ViewConstants.USERDETAIL;
+	}
+	
+	@RequestMapping("/activateUser.html")
+	public String activateUser(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			loginService.activateUser(registrationDTO);
+			registrationDTO.setResponseMessage("User activation success");
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		return viewUser(registrationDTO, request, response, map);
+	}
+	
+	@RequestMapping("/deactivateUser.html")
+	public String deactivateUser(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			loginService.deactivateUser(registrationDTO);
+			registrationDTO.setResponseMessage("User deactivation success");
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		return viewUser(registrationDTO, request, response, map);
+	}
+	
+	@RequestMapping("/viewFeedback.html")
+	public String viewFeedback(FeedbackDTO feedbackDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			ListDTO<FeedbackDTO> listDTO = loginService.viewFeedback(feedbackDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, feedbackDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(feedbackDTO, e);
+		}
+		setLoginRelatedParams(map, "Feedback", feedbackDTO);
+		return ViewConstants.FEEDBACKVIEW;
+	}
+	
+	@RequestMapping("/viewEnquiry.html")
+	public String viewEnquiry(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			ListDTO<EnquiryFormDTO> listDTO = loginService.viewEnquiry(enquiryFormDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, enquiryFormDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(enquiryFormDTO, e);
+		}
+		setLoginRelatedParams(map, "Enquiry", enquiryFormDTO);
+		return ViewConstants.ENQUIRYVIEW;
+	}
+	
+	@RequestMapping("/addBloodDonation.html")
+	public String addBloodDonation(BloodDonationDTO bloodDonationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			RegistrationDTO registrationDTO = new RegistrationDTO();
+			registrationDTO.setUsertypeId(AppConstants.BLOODBANK_ID.longValue());
+			map.put("bloodBankList", loginService.viewUser(registrationDTO).getList());
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(bloodDonationDTO, e);
+		}
+		setLoginRelatedParams(map, "BloodDonation", bloodDonationDTO);
+		return ViewConstants.BLOODDONATIONADD;
+	}
+
+	@RequestMapping("/processBloodDonation.html")
+	public String processBloodDonation(BloodDonationDTO bloodDonationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			bloodDonationDTO.setDonorUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
+			loginService.processBloodDonation(bloodDonationDTO);
+		}catch(ApplicationException e){
+			handleApplicationExceptionForJson(bloodDonationDTO, e);
+			return addBloodDonation(bloodDonationDTO, request, response, map);
+		}
+		bloodDonationDTO.setResponseMessage("Added blood donation");
+		return viewBloodDonation(bloodDonationDTO, request, response, map);
+	}
+	
+	@RequestMapping("/viewBloodDonation.html")
+	public String viewBloodDonation(BloodDonationDTO bloodDonationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			ListDTO<BloodDonationDTO> listDTO = loginService.viewBloodDonation(bloodDonationDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, bloodDonationDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(bloodDonationDTO, e);
+		}
+		setLoginRelatedParams(map, "BloodDonation", bloodDonationDTO);
+		return ViewConstants.BLOODDONATIONVIEW;
+	}
+	
+	@RequestMapping("/viewBloodAvailability.html")
+	public String viewBloodAvailability(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			ListDTO<EnquiryFormDTO> listDTO = loginService.viewEnquiry(enquiryFormDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, enquiryFormDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(enquiryFormDTO, e);
+		}
+		setLoginRelatedParams(map, "Enquiry", enquiryFormDTO);
+		return ViewConstants.BLOODAVAILABILITYVIEW;
 	}
 }

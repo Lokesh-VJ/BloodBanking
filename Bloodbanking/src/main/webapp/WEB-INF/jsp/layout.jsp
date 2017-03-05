@@ -5,9 +5,6 @@
 		<title>Blood banking</title>
 		<link rel="icon" type="image/png" href="resources/image/favicon.png">
 		<link rel="stylesheet" type="text/css" href="resources/css/style.css" media="screen" /> 
-		<c:if test="${not empty sessionScope.userName}">
-			<script src="resources/js/script.js" type="text/javascript"></script>
-		</c:if>
 	</head>
 	<body>
 		<%@include file="messages.jsp"%>
@@ -27,5 +24,6 @@
 				<div class="blockUI blockMsg blockPage"><h1>Please wait...</h1></div>
 			</div>
 		</c:if>
+		<script src="resources/js/script.js" type="text/javascript"></script>
 	</body>
 </html>

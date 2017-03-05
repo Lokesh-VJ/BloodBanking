@@ -57,4 +57,28 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/userView.jsp" />
 	</definition>
 	
+	<definition name="userDetail" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/userDetail.jsp" />
+	</definition>
+	
+	<definition name="feedbackView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/feedbackView.jsp" />
+	</definition>
+	
+	<definition name="enquiryView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/enquiryView.jsp" />
+	</definition>
+	
+	<definition name="blooddonationAdd" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/blooddonationAdd.jsp" />
+	</definition>
+	
+	<definition name="blooddonationView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/blooddonationView.jsp" />
+	</definition>
+	
+	<definition name="bloodavailabilityView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/bloodavailabilityView.jsp" />
+	</definition>
+	
 </tiles-definitions>

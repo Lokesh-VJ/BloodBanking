@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dao.LoginDao;
+import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
@@ -22,6 +23,8 @@ import net.bloodbanking.dto.StatusMstDTO;
 import net.bloodbanking.dto.UserTypeMappingDTO;
 import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.entity.BloodGroupMst;
+import net.bloodbanking.entity.DonorBloodbankMapping;
+import net.bloodbanking.entity.DonorBloodbankMappingId;
 import net.bloodbanking.entity.EnquiryForm;
 import net.bloodbanking.entity.Feedback;
 import net.bloodbanking.entity.LocationAddress;
@@ -91,7 +94,10 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Override
 	public RegistrationDTO preProcessLogin(RegistrationDTO registrationDTO) throws ApplicationException{
-		loginValidator.validatePreProcessLogin(registrationDTO);
+		// loginValidator.validatePreProcessLogin(registrationDTO);	// TODO, Enable validation later...
+		if(null == loginDao.loadRegistration(registrationDTO)){
+			return registrationDTO;
+		}
 		return this.loadRegistration(registrationDTO);
 	}
 	
@@ -329,6 +335,100 @@ public class LoginServiceImpl implements LoginService {
 		}
 		listDTO.setList(registrationDTOs);
 		listDTO.setTotalSize(registrationDTO.getTotalSize());
+		return listDTO;
+	}
+
+	@Override
+	public void activateUser(RegistrationDTO registrationDTO) throws ApplicationException {
+		// TODO, place validation here...
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		if(null == registration){
+			throw new ApplicationException(ErrorConstants.INVALID_USER);
+		}
+		StatusMst statusMst = new StatusMst();
+		statusMst.setStatus(AppConstants.ACTIVE);
+		registration.setStatusMst(statusMst);
+		loginDao.update(registration);
+	}
+
+	@Override
+	public void deactivateUser(RegistrationDTO registrationDTO) throws ApplicationException {
+		// TODO, place validation here...
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		if(null == registration){
+			throw new ApplicationException(ErrorConstants.INVALID_USER);
+		}
+		StatusMst statusMst = new StatusMst();
+		statusMst.setStatus(AppConstants.INACTIVE);
+		registration.setStatusMst(statusMst);
+		loginDao.update(registration);
+	}
+
+	@Override
+	public ListDTO<FeedbackDTO> viewFeedback(FeedbackDTO feedbackDTO) throws ApplicationException {
+		List<Feedback> list = loginDao.viewFeedback(feedbackDTO);
+		ListDTO<FeedbackDTO> listDTO = new ListDTO<FeedbackDTO>();
+		List<FeedbackDTO> feedbackDTOs = new ArrayList<FeedbackDTO>();
+		FeedbackDTO dto = null;
+		if(list != null){
+			for(Feedback feedback: list){
+				dto = new FeedbackDTO();
+				dto.setFeedback(feedback.getFeedback());
+				LocationAddressDTO locationAddressDTO = new LocationAddressDTO();
+				locationAddressDTO.setReferenceId(String.valueOf(feedback.getFid()));
+				locationAddressDTO.setReferenceType(ReferenceTypeEnum.FEEDBACK.getCode());
+				dto.setLocationAddressDTO(this.loadLocationAddress(locationAddressDTO));
+				feedbackDTOs.add(dto);
+			}
+		}
+		listDTO.setList(feedbackDTOs);
+		listDTO.setTotalSize(feedbackDTO.getTotalSize());
+		return listDTO;
+	}
+
+	@Override
+	public ListDTO<EnquiryFormDTO> viewEnquiry(EnquiryFormDTO enquiryFormDTO) throws ApplicationException {
+		List<EnquiryForm> list = loginDao.viewEnquiry(enquiryFormDTO);
+		ListDTO<EnquiryFormDTO> listDTO = new ListDTO<EnquiryFormDTO>();
+		List<EnquiryFormDTO> enquiryFormDTOs = new ArrayList<EnquiryFormDTO>();
+		EnquiryFormDTO dto = null;
+		if(list != null){
+			for(EnquiryForm enquiryForm: list){
+				dto = new EnquiryFormDTO();
+				dto.setMessage(enquiryForm.getMessage());
+				LocationAddressDTO locationAddressDTO = new LocationAddressDTO();
+				locationAddressDTO.setReferenceId(String.valueOf(enquiryForm.getInqId()));
+				locationAddressDTO.setReferenceType(ReferenceTypeEnum.ENQUIRY.getCode());
+				dto.setLocationAddressDTO(this.loadLocationAddress(locationAddressDTO));
+				enquiryFormDTOs.add(dto);
+			}
+		}
+		listDTO.setList(enquiryFormDTOs);
+		listDTO.setTotalSize(enquiryFormDTO.getTotalSize());
+		return listDTO;
+	}
+	
+	@Override
+	public void processBloodDonation(BloodDonationDTO bloodDonationDTO) throws ApplicationException{
+		// TODO, place validation here...
+		RegistrationDTO registrationDTO = new RegistrationDTO();
+		registrationDTO.setUserName(bloodDonationDTO.getDonorUserName());
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		DonorBloodbankMappingId donorBloodbankMappingId = new DonorBloodbankMappingId();
+		donorBloodbankMappingId.setDonorId(registration.getRegistrationId());
+		donorBloodbankMappingId.setBloodbankId(bloodDonationDTO.getBloodBankId());
+		DonorBloodbankMapping donorBloodbankMapping = new DonorBloodbankMapping();
+		donorBloodbankMapping.setId(donorBloodbankMappingId);
+		donorBloodbankMapping.setBloodUnits(bloodDonationDTO.getBloodUnits());
+		donorBloodbankMapping.setCreatedDate(new Date());
+		loginDao.save(donorBloodbankMapping);
+	}
+
+	@Override
+	public ListDTO<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO) throws ApplicationException {
+		ListDTO<BloodDonationDTO> listDTO = new ListDTO<BloodDonationDTO>();
+		listDTO.setList(loginDao.viewBloodDonation(bloodDonationDTO));
+		listDTO.setTotalSize(bloodDonationDTO.getTotalSize());
 		return listDTO;
 	}
 }

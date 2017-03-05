@@ -18,7 +18,7 @@ label+input, label+select, label+textarea{
 	margin-top: 5px;
 }
 
-input[type=submit] {
+input[type=submit], input[type=button] {
     cursor: pointer;
 }
 

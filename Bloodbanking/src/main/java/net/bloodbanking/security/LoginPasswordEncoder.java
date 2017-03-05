@@ -1,5 +1,6 @@
 package net.bloodbanking.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -16,7 +17,7 @@ public class LoginPasswordEncoder implements PasswordEncoder , SaltSource {
 
 	@Override
 	public boolean isPasswordValid(String encPass, String rawPass, Object salt) throws DataAccessException {
-		if(encPass.equals(rawPass)){
+		if(StringUtils.isNotEmpty(encPass) && encPass.equals(rawPass)){
 			return true;
 		}
 		return false;
