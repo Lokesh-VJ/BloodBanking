@@ -235,7 +235,7 @@ div#applicationHeaderSection div#headerAdditionalDetails .logoutLinkClass {
 	font-size: 10px;
 }
 .loggedUserModuleTitle{
-	padding-left: 20px;
+	padding-left: 10px;
 }
 #moduleDetailDivContainer{
 	
@@ -292,4 +292,7 @@ table#viewResultsTable td, table#viewResultsTable th {
 }
 table#viewResultsTable tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+div#viewResultsSearchCriteria{
+	margin-bottom: 5px;
 }

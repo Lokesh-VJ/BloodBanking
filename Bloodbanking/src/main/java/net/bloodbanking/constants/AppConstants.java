@@ -6,19 +6,27 @@ public class AppConstants {
 	
 	public static final Integer INACTIVE = 2;
 	
+	public static final Integer DELETED = 3;
+	
+	public static final Integer SUPPLIED = 4;
+	
+	public static final Integer REJECTED = 5;
+	
 	public static final String USER_NAME = "userName";
 	
 	public static final String NAME = "name";
 	
 	public final static String SESSION_TIMEOUT_PAGE = "/sessionTimeout.htm";
-
-	public static final Integer DELETED = 3;
 	
 	public static final String ADMIN_NAME = "Admin";
 	
 	public static final Integer ADMIN_ID = 1;
 	
 	public static final Integer BLOODBANK_ID = 2;
+	
+	public static final Integer DONOR_ID = 3;
+	
+	public static final Integer PATIENT_ID = 4;
 	
 	public static final String USER_PRIVILEGES = "userPrivileges";
 	

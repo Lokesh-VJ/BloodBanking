@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
+import net.bloodbanking.dto.BloodRequestDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.ListDTO;
@@ -88,4 +89,19 @@ public interface LoginService {
 
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public ListDTO<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void processBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void supplyBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public void rejectBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException;
 }

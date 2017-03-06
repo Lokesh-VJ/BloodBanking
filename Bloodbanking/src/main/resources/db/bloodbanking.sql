@@ -52,14 +52,13 @@ insert  into `blood_group_mst`(`blood_group_id`,`blood_group_name`) values
 DROP TABLE IF EXISTS `donor_bloodbank_mapping`;
 
 CREATE TABLE `donor_bloodbank_mapping` (
+  `donor_bloodbank_mapping_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'mapping pk id',
   `donor_id` bigint(4) NOT NULL COMMENT 'donor registration id',
   `bloodbank_id` bigint(4) NOT NULL COMMENT 'bloodbank registration id',
   `blood_units` int(11) NOT NULL COMMENT 'blood units donated',
   `created_date` datetime NOT NULL,
-  PRIMARY KEY (`donor_id`,`bloodbank_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `donor_bloodbank_mapping` */
+  PRIMARY KEY (`donor_bloodbank_mapping_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `enquiry_form` */
 
@@ -73,9 +72,7 @@ CREATE TABLE `enquiry_form` (
   PRIMARY KEY (`inq_id`),
   KEY `INQUIRY_FORM_STATUS_FK` (`status`),
   CONSTRAINT `INQUIRY_FORM_STATUS_FK` FOREIGN KEY (`status`) REFERENCES `status_mst` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `enquiry_form` */
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `feedback` */
 
@@ -85,9 +82,7 @@ CREATE TABLE `feedback` (
   `fid` bigint(4) NOT NULL AUTO_INCREMENT COMMENT 'to store the id',
   `feedback` varchar(255) NOT NULL COMMENT 'to store the feedback',
   PRIMARY KEY (`fid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `feedback` */
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `location_address` */
 
@@ -106,28 +101,27 @@ CREATE TABLE `location_address` (
   `pincode` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`location_address_id`),
   KEY `FK_ADDRESS_STATE` (`state`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `location_address` */
 
 insert  into `location_address`(`location_address_id`,`reference_type`,`reference_id`,`name`,`mobile_number`,`email_id`,`address`,`state`,`city`,`pincode`) values 
 
-(1,1,'1','Super Admin','9480242101','joebalan7@gmail.com','K.P. Agrahara','Karnataka','Bangalore','560023');
+(1,1,'1','Admin','9480242101','joebalan7@gmail.com','K.P. Agrahara','Karnataka','Bangalore','560023');
 
 /*Table structure for table `patient_bloodbank_mapping` */
 
 DROP TABLE IF EXISTS `patient_bloodbank_mapping`;
 
 CREATE TABLE `patient_bloodbank_mapping` (
+  `patient_bloodbank_mapping_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'mapping pk id',
   `patient_id` bigint(4) NOT NULL COMMENT 'patient registration id',
   `bloodbank_id` bigint(4) NOT NULL COMMENT 'bloodbank registration id',
   `blood_units` int(11) NOT NULL COMMENT 'blood units requested',
   `status` int(1) NOT NULL COMMENT 'status - supplied/not supplied',
   `created_date` datetime NOT NULL,
-  PRIMARY KEY (`patient_id`,`bloodbank_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `patient_bloodbank_mapping` */
+  PRIMARY KEY (`patient_bloodbank_mapping_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `registration` */
 
@@ -148,7 +142,7 @@ CREATE TABLE `registration` (
   KEY `u_id_fk` (`usertype_id`),
   KEY `REGISTRATION_STATUS_FK` (`status`),
   CONSTRAINT `REGISTRATION_STATUS_FK` FOREIGN KEY (`status`) REFERENCES `status_mst` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Data for the table `registration` */
 
@@ -204,7 +198,7 @@ insert  into `status_mst`(`status`,`description`) values
 
 (4,'Supplied'),
 
-(5,'Not supplied');
+(5,'Rejected');
 
 /*Table structure for table `user_left_menu` */
 
@@ -215,7 +209,7 @@ CREATE TABLE `user_left_menu` (
   `left_menu_name` varchar(100) NOT NULL,
   `left_menu_description` varchar(255) NOT NULL,
   PRIMARY KEY (`left_menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user_left_menu` */
 
@@ -247,7 +241,9 @@ insert  into `user_left_menu`(`left_menu_id`,`left_menu_name`,`left_menu_descrip
 
 (13,'Report','Report'),
 
-(14,'ChangePassword','Change Password');
+(14,'ChangePassword','Change password'),
+
+(15,'BloodAvailability','Blood availability');
 
 /*Table structure for table `user_sub_menu` */
 
@@ -293,7 +289,7 @@ CREATE TABLE `user_type_mapping` (
   CONSTRAINT `left_menu_id` FOREIGN KEY (`left_menu_id`) REFERENCES `user_left_menu` (`left_menu_id`),
   CONSTRAINT `sub_menu_id` FOREIGN KEY (`sub_menu_id`) REFERENCES `user_sub_menu` (`sub_menu_id`),
   CONSTRAINT `user_type_id` FOREIGN KEY (`user_type_id`) REFERENCES `user_type_mst` (`usertype_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user_type_mapping` */
 
@@ -431,7 +427,9 @@ insert  into `user_type_mapping`(`privilege_id`,`user_type_id`,`left_menu_id`,`s
 
 (71,4,14,4),
 
-(72,4,14,2);
+(72,4,14,2),
+
+(73,4,15,4);
 
 /*Table structure for table `user_type_mst` */
 

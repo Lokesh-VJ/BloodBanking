@@ -81,4 +81,12 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/bloodavailabilityView.jsp" />
 	</definition>
 	
+	<definition name="bloodrequestAdd" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/bloodrequestAdd.jsp" />
+	</definition>
+	
+	<definition name="bloodrequestView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/bloodrequestView.jsp" />
+	</definition>
+	
 </tiles-definitions>

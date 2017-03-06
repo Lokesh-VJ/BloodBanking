@@ -27,6 +27,7 @@ import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.constants.ViewConstants;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
+import net.bloodbanking.dto.BloodRequestDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.ListDTO;
@@ -411,22 +412,92 @@ public class LoginController extends BaseController {
 		} catch (ApplicationException e) {
 			handleApplicationExceptionForJson(bloodDonationDTO, e);
 		}
+		if(AppConstants.DONOR_ID.equals((Integer) getValueFromSession(request, AppConstants.USERTYPEID))){
+			map.put("isDonor", true);
+		}
 		setLoginRelatedParams(map, "BloodDonation", bloodDonationDTO);
 		return ViewConstants.BLOODDONATIONVIEW;
 	}
 	
 	@RequestMapping("/viewBloodAvailability.html")
-	public String viewBloodAvailability(EnquiryFormDTO enquiryFormDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+	public String viewBloodAvailability(BloodDonationDTO bloodDonationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try {
-			ListDTO<EnquiryFormDTO> listDTO = loginService.viewEnquiry(enquiryFormDTO);
+			ListDTO<BloodDonationDTO> listDTO = loginService.viewBloodAvailability(bloodDonationDTO);
 			if(CollectionUtils.isNotEmpty(listDTO.getList())){
-				applyPagination(listDTO, enquiryFormDTO, AppConstants.RESULTSPERPAGE);
+				applyPagination(listDTO, bloodDonationDTO, AppConstants.RESULTSPERPAGE);
 			}
 			map.put(AppConstants.SEARCHRESULT, listDTO);
 		} catch (ApplicationException e) {
-			handleApplicationExceptionForJson(enquiryFormDTO, e);
+			handleApplicationExceptionForJson(bloodDonationDTO, e);
 		}
-		setLoginRelatedParams(map, "Enquiry", enquiryFormDTO);
+		map.put("bloodGroupList", loginService.listBloodGroups(new BloodGroupMstDTO()));
+		setLoginRelatedParams(map, "BloodAvailability", bloodDonationDTO);
 		return ViewConstants.BLOODAVAILABILITYVIEW;
+	}
+	
+	@RequestMapping("/addBloodRequest.html")
+	public String addBloodRequest(BloodRequestDTO bloodRequestDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			RegistrationDTO registrationDTO = new RegistrationDTO();
+			registrationDTO.setUsertypeId(AppConstants.BLOODBANK_ID.longValue());
+			map.put("bloodBankList", loginService.viewUser(registrationDTO).getList());
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(bloodRequestDTO, e);
+		}
+		setLoginRelatedParams(map, "BloodRequest", bloodRequestDTO);
+		return ViewConstants.BLOODREQUESTADD;
+	}
+
+	@RequestMapping("/processBloodRequest.html")
+	public String processBloodRequest(BloodRequestDTO bloodRequestDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try{
+			bloodRequestDTO.setPatientUserName((String) getValueFromSession(request, AppConstants.USER_NAME));
+			loginService.processBloodRequest(bloodRequestDTO);
+		}catch(ApplicationException e){
+			handleApplicationExceptionForJson(bloodRequestDTO, e);
+			return addBloodRequest(bloodRequestDTO, request, response, map);
+		}
+		bloodRequestDTO.setResponseMessage("Added blood request");
+		return viewBloodRequest(bloodRequestDTO, request, response, map);
+	}
+	
+	@RequestMapping("/viewBloodRequest.html")
+	public String viewBloodRequest(BloodRequestDTO bloodRequestDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			ListDTO<BloodRequestDTO> listDTO = loginService.viewBloodRequest(bloodRequestDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, bloodRequestDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(bloodRequestDTO, e);
+		}
+		if(AppConstants.PATIENT_ID.equals((Integer) getValueFromSession(request, AppConstants.USERTYPEID))){
+			map.put("isPatient", true);
+		}
+		setLoginRelatedParams(map, "BloodRequest", bloodRequestDTO);
+		return ViewConstants.BLOODREQUESTVIEW;
+	}
+	
+	@RequestMapping("/supplyBloodRequest.html")
+	public String supplyBloodRequest(BloodRequestDTO bloodRequestDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			loginService.supplyBloodRequest(bloodRequestDTO);
+			bloodRequestDTO.setResponseMessage("Blood request supply success");
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(bloodRequestDTO, e);
+		}
+		return viewBloodRequest(bloodRequestDTO, request, response, map);
+	}
+	
+	@RequestMapping("/rejectBloodRequest.html")
+	public String rejectBloodRequest(BloodRequestDTO bloodRequestDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			loginService.rejectBloodRequest(bloodRequestDTO);
+			bloodRequestDTO.setResponseMessage("Reject blood request success");
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(bloodRequestDTO, e);
+		}
+		return viewBloodRequest(bloodRequestDTO, request, response, map);
 	}
 }

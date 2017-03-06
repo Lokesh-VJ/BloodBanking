@@ -4,14 +4,16 @@
 <!-- Generated 17 Feb, 2017 11:55:07 PM by Hibernate Tools 5.1.0.Alpha1 -->
 <hibernate-mapping>
     <class name="net.bloodbanking.entity.PatientBloodbankMapping" table="patient_bloodbank_mapping" catalog="blood_banking" optimistic-lock="version">
-        <composite-id name="id" class="net.bloodbanking.entity.PatientBloodbankMappingId">
-            <key-property name="patientId" type="long">
-                <column name="patient_id" />
-            </key-property>
-            <key-property name="bloodbankId" type="long">
-                <column name="bloodbank_id" />
-            </key-property>
-        </composite-id>
+    	<id name="patientBloodbankMappingId" type="long">
+            <column name="patient_bloodbank_mapping_id" />
+            <generator class="identity" />
+        </id>
+        <property name="patientId" type="long">
+            <column name="patient_id" not-null="true" />
+        </property>
+        <property name="bloodbankId" type="long">
+            <column name="bloodbank_id" not-null="true" />
+        </property>
         <property name="bloodUnits" type="int">
             <column name="blood_units" not-null="true">
                 <comment>blood units requested</comment>

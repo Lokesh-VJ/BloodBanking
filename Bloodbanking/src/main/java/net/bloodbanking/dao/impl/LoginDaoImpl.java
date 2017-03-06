@@ -17,6 +17,7 @@ import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
+import net.bloodbanking.dto.BloodRequestDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.LocationAddressDTO;
@@ -27,10 +28,12 @@ import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.EnquiryForm;
 import net.bloodbanking.entity.Feedback;
 import net.bloodbanking.entity.LocationAddress;
+import net.bloodbanking.entity.PatientBloodbankMapping;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
 import net.bloodbanking.entity.UserTypeMapping;
 import net.bloodbanking.entity.UserTypeMst;
+import net.bloodbanking.enums.ReferenceTypeEnum;
 
 /**
  * The Class LoginDaoImpl.
@@ -149,20 +152,92 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 	@Override
 	public List<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO) {
 		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
-				+ " dbm.donor_id AS donorId, rla.name AS donorName, dbm.bloodbank_id AS bloodBankId, bbla.name AS bloodBankName, r.blood_group AS bloodGroupName,"
-				+ " dbm.blood_units AS bloodUnits "
+				+ " dbm.donor_bloodbank_mapping_id AS donorBloodbankMappingId, dbm.donor_id AS donorId, rla.name AS donorName, dbm.bloodbank_id AS bloodBankId, bbla.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName,"
+				+ " dbm.blood_units AS bloodUnits, CONCAT(bbla.address, ' ', bbla.city, ' ', bbla.state, ' ', bbla.pincode) as bloodBankAddress, "
+				+ " CONCAT(rla.address, ' ', rla.city, ' ', rla.state, ' ', rla.pincode) as donorAddress "
 				+ " FROM donor_bloodbank_mapping dbm "
 				+ " JOIN registration r ON r.registration_id = dbm.donor_id "
-				+ " JOIN location_address rla ON rla.reference_id = r.registration_id AND rla.reference_type = 1 "
+				+ " JOIN location_address rla ON rla.reference_id = r.registration_id AND rla.reference_type =:referenceTypeUser "
+				+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=r.blood_group "
 				+ " JOIN registration rbb ON rbb.registration_id = dbm.bloodbank_id "
-				+ " JOIN location_address bbla ON bbla.reference_id = rbb.registration_id AND bbla.reference_type = 1")
+				+ " JOIN location_address bbla ON bbla.reference_id = rbb.registration_id AND bbla.reference_type =:referenceTypeUser")
+			.addScalar("donorBloodbankMappingId", LongType.INSTANCE)
 			.addScalar("donorId", LongType.INSTANCE)
 			.addScalar("donorName", StringType.INSTANCE)
 			.addScalar("bloodBankId", LongType.INSTANCE)
 			.addScalar("bloodBankName", StringType.INSTANCE)
 			.addScalar("bloodGroupName", StringType.INSTANCE)
 			.addScalar("bloodUnits", IntegerType.INSTANCE)
+			.addScalar("bloodBankAddress", StringType.INSTANCE)
+			.addScalar("donorAddress", StringType.INSTANCE)
+			.setParameter("referenceTypeUser", ReferenceTypeEnum.USER.getCode())
 			.setResultTransformer( Transformers.aliasToBean(BloodDonationDTO.class));
 		return viewList(bloodDonationDTO, query);
+	}
+
+	@Override
+	public List<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO) {
+		String bloodGroupSearch = "";
+		if(null != bloodDonationDTO.getBloodGroupId()){
+			bloodGroupSearch = "AND r.blood_group = "+bloodDonationDTO.getBloodGroupId()+" ";
+		}
+		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
+				+ "	dbm.bloodbank_id AS bloodBankId, bbla.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName, "
+				+ " SUM(dbm.blood_units) AS bloodUnits, CONCAT(bbla.address, ' ', bbla.city, ' ', bbla.state, ' ', bbla.pincode) as bloodBankAddress "
+				+ " FROM donor_bloodbank_mapping dbm "
+				+ " JOIN registration r ON r.registration_id = dbm.donor_id "
+				+ " JOIN location_address rla ON rla.reference_id = r.registration_id AND rla.reference_type =:referenceTypeUser "
+				+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=r.blood_group "+bloodGroupSearch
+				+ " JOIN registration rbb ON rbb.registration_id = dbm.bloodbank_id "
+				+ " JOIN location_address bbla ON bbla.reference_id = rbb.registration_id AND bbla.reference_type =:referenceTypeUser "
+				+ " GROUP BY bloodBankId, bloodGroupName "
+				+ " HAVING bloodUnits > 0 ")
+			.addScalar("bloodBankId", LongType.INSTANCE)
+			.addScalar("bloodBankName", StringType.INSTANCE)
+			.addScalar("bloodGroupName", StringType.INSTANCE)
+			.addScalar("bloodUnits", IntegerType.INSTANCE)
+			.addScalar("bloodBankAddress", StringType.INSTANCE)
+			.setParameter("referenceTypeUser", ReferenceTypeEnum.USER.getCode())
+			.setResultTransformer( Transformers.aliasToBean(BloodDonationDTO.class));
+		return viewList(bloodDonationDTO, query);
+	}
+
+	@Override
+	public List<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO) {
+		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
+				+ " pbm.patient_bloodbank_mapping_id AS patientBloodbankMappingId, pbm.patient_id AS patientId, rla.name AS patientName, "
+				+ " pbm.bloodbank_id AS bloodBankId, bbla.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName,"
+				+ " pbm.blood_units AS bloodUnits, CONCAT(bbla.address, ' ', bbla.city, ' ', bbla.state, ' ', bbla.pincode) as bloodBankAddress,"
+				+ " CONCAT(rla.address, ' ', rla.city, ' ', rla.state, ' ', rla.pincode) as patientAddress,"
+				+ " pbm.status AS status, sm.description AS statusStr "
+				+ " FROM patient_bloodbank_mapping pbm "
+				+ " JOIN registration r ON r.registration_id = pbm.patient_id "
+				+ " JOIN location_address rla ON rla.reference_id = r.registration_id AND rla.reference_type =:referenceTypeUser "
+				+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=r.blood_group "
+				+ " JOIN status_mst sm ON sm.status=pbm.status "
+				+ " JOIN registration rbb ON rbb.registration_id = pbm.bloodbank_id "
+				+ " JOIN location_address bbla ON bbla.reference_id = rbb.registration_id AND bbla.reference_type =:referenceTypeUser")
+			.addScalar("patientBloodbankMappingId", LongType.INSTANCE)
+			.addScalar("patientId", LongType.INSTANCE)
+			.addScalar("patientName", StringType.INSTANCE)
+			.addScalar("bloodBankId", LongType.INSTANCE)
+			.addScalar("bloodBankName", StringType.INSTANCE)
+			.addScalar("bloodGroupName", StringType.INSTANCE)
+			.addScalar("bloodUnits", IntegerType.INSTANCE)
+			.addScalar("bloodBankAddress", StringType.INSTANCE)
+			.addScalar("patientAddress", StringType.INSTANCE)
+			.addScalar("status", IntegerType.INSTANCE)
+			.addScalar("statusStr", StringType.INSTANCE)
+			.setParameter("referenceTypeUser", ReferenceTypeEnum.USER.getCode())
+			.setResultTransformer( Transformers.aliasToBean(BloodRequestDTO.class));
+		return viewList(bloodRequestDTO, query);
+	}
+
+	@Override
+	public PatientBloodbankMapping loadPatientBloodMapping(BloodRequestDTO bloodRequestDTO) {
+		Criteria criteria = getHibernateTemplate().getSessionFactory().getCurrentSession().createCriteria(PatientBloodbankMapping.class);
+		criteria.add(Restrictions.eq("patientBloodbankMappingId", bloodRequestDTO.getPatientBloodbankMappingId()));
+		List<PatientBloodbankMapping> list = criteria.list();
+		return CollectionUtils.isNotEmpty(list) ? list.get(0) : null ;
 	}
 }

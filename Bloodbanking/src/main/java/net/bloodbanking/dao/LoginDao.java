@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
+import net.bloodbanking.dto.BloodRequestDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.LocationAddressDTO;
@@ -14,6 +15,7 @@ import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.EnquiryForm;
 import net.bloodbanking.entity.Feedback;
 import net.bloodbanking.entity.LocationAddress;
+import net.bloodbanking.entity.PatientBloodbankMapping;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
 import net.bloodbanking.entity.UserTypeMapping;
@@ -32,4 +34,7 @@ public interface LoginDao extends BaseDao{
 	public List<Feedback> viewFeedback(FeedbackDTO feedbackDTO);
 	public List<EnquiryForm> viewEnquiry(EnquiryFormDTO enquiryFormDTO);
 	public List<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO);
+	public List<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO);
+	public List<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO);
+	public PatientBloodbankMapping loadPatientBloodMapping(BloodRequestDTO bloodRequestDTO);
 }

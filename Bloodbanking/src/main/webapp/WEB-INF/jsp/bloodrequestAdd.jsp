@@ -1,7 +1,7 @@
 <%@include file="taglib.jsp"%>
 
-<h2 class="loggedUserModuleTitle">Blood donation</h2>
-<form method="post" action="processBloodDonation.html" id="moduleForm" name="moduleForm">
+<h2 class="loggedUserModuleTitle">Blood request</h2>
+<form method="post" action="processBloodRequest.html" id="moduleForm" name="moduleForm">
 	 <div id="moduleDetailDivContainer" class="marginBetweenFields">
 		<div class="columnLayoutContainer">
 			 <div class="marginBetweenFields loginPageFormContents text-left margin-center columnLayoutContainerCol">
@@ -19,7 +19,7 @@
 					<input type="text" name="bloodUnits" id="bloodUnits" value="${baseDTO.bloodUnits}" required />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
-					<input type="button" name="backBtn" id="backBtn" value="Back" onclick="goBackModuleFormFunc('viewBloodDonation.html');" style="width: 48%" />
+					<input type="button" name="backBtn" id="backBtn" value="Back" onclick="goBackModuleFormFunc('viewBloodRequest.html');" style="width: 48%" />
 					<input type="submit" name="submit" id="submit" value="Submit" style="width: 48%" />
 				</div>
 			</div>

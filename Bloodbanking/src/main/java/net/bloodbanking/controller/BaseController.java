@@ -86,6 +86,9 @@ public abstract class BaseController {
 		map.put(AppConstants.SELECTEDLEFTMENU, selectedLeftMenu);
 		map.put("activeFlag", AppConstants.ACTIVE);
 		map.put("inactiveFlag", AppConstants.INACTIVE);
+		map.put("deletedFlag", AppConstants.DELETED);
+		map.put("supplyFlag", AppConstants.SUPPLIED);
+		map.put("rejectFlag", AppConstants.REJECTED);
 		map.put("baseDTO", baseDTO);
 	}
 	

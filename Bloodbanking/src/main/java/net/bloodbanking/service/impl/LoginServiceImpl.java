@@ -13,6 +13,7 @@ import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dao.LoginDao;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
+import net.bloodbanking.dto.BloodRequestDTO;
 import net.bloodbanking.dto.EnquiryFormDTO;
 import net.bloodbanking.dto.FeedbackDTO;
 import net.bloodbanking.dto.ListDTO;
@@ -24,10 +25,10 @@ import net.bloodbanking.dto.UserTypeMappingDTO;
 import net.bloodbanking.dto.UserTypeMstDTO;
 import net.bloodbanking.entity.BloodGroupMst;
 import net.bloodbanking.entity.DonorBloodbankMapping;
-import net.bloodbanking.entity.DonorBloodbankMappingId;
 import net.bloodbanking.entity.EnquiryForm;
 import net.bloodbanking.entity.Feedback;
 import net.bloodbanking.entity.LocationAddress;
+import net.bloodbanking.entity.PatientBloodbankMapping;
 import net.bloodbanking.entity.Registration;
 import net.bloodbanking.entity.SecurityQuestion;
 import net.bloodbanking.entity.StatusMst;
@@ -414,11 +415,9 @@ public class LoginServiceImpl implements LoginService {
 		RegistrationDTO registrationDTO = new RegistrationDTO();
 		registrationDTO.setUserName(bloodDonationDTO.getDonorUserName());
 		Registration registration = loginDao.loadRegistration(registrationDTO);
-		DonorBloodbankMappingId donorBloodbankMappingId = new DonorBloodbankMappingId();
-		donorBloodbankMappingId.setDonorId(registration.getRegistrationId());
-		donorBloodbankMappingId.setBloodbankId(bloodDonationDTO.getBloodBankId());
 		DonorBloodbankMapping donorBloodbankMapping = new DonorBloodbankMapping();
-		donorBloodbankMapping.setId(donorBloodbankMappingId);
+		donorBloodbankMapping.setDonorId(registration.getRegistrationId());
+		donorBloodbankMapping.setBloodbankId(bloodDonationDTO.getBloodBankId());
 		donorBloodbankMapping.setBloodUnits(bloodDonationDTO.getBloodUnits());
 		donorBloodbankMapping.setCreatedDate(new Date());
 		loginDao.save(donorBloodbankMapping);
@@ -429,6 +428,59 @@ public class LoginServiceImpl implements LoginService {
 		ListDTO<BloodDonationDTO> listDTO = new ListDTO<BloodDonationDTO>();
 		listDTO.setList(loginDao.viewBloodDonation(bloodDonationDTO));
 		listDTO.setTotalSize(bloodDonationDTO.getTotalSize());
+		return listDTO;
+	}
+
+	@Override
+	public ListDTO<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO) throws ApplicationException {
+		ListDTO<BloodDonationDTO> listDTO = new ListDTO<BloodDonationDTO>();
+		listDTO.setList(loginDao.viewBloodAvailability(bloodDonationDTO));
+		listDTO.setTotalSize(bloodDonationDTO.getTotalSize());
+		return listDTO;
+	}
+
+	@Override
+	public void processBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException {
+		// TODO, place validation here...
+		RegistrationDTO registrationDTO = new RegistrationDTO();
+		registrationDTO.setUserName(bloodRequestDTO.getPatientUserName());
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		PatientBloodbankMapping patientBloodbankMapping = new PatientBloodbankMapping();
+		patientBloodbankMapping.setPatientId(registration.getRegistrationId());
+		patientBloodbankMapping.setBloodbankId(bloodRequestDTO.getBloodBankId());
+		patientBloodbankMapping.setBloodUnits(bloodRequestDTO.getBloodUnits());
+		patientBloodbankMapping.setStatus(AppConstants.ACTIVE);
+		patientBloodbankMapping.setCreatedDate(new Date());
+		loginDao.save(patientBloodbankMapping);
+	}
+
+	@Override
+	public void supplyBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException {
+		// TODO, place validation here...
+		PatientBloodbankMapping patientBloodbankMapping = loginDao.loadPatientBloodMapping(bloodRequestDTO);
+		if(null == patientBloodbankMapping){
+			throw new ApplicationException(ErrorConstants.INVALID_BLOOD_REQUEST);
+		}
+		patientBloodbankMapping.setStatus(AppConstants.SUPPLIED);
+		loginDao.update(patientBloodbankMapping);
+	}
+
+	@Override
+	public void rejectBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException {
+		// TODO, place validation here...
+		PatientBloodbankMapping patientBloodbankMapping = loginDao.loadPatientBloodMapping(bloodRequestDTO);
+		if(null == patientBloodbankMapping){
+			throw new ApplicationException(ErrorConstants.INVALID_BLOOD_REQUEST);
+		}
+		patientBloodbankMapping.setStatus(AppConstants.REJECTED);
+		loginDao.update(patientBloodbankMapping);
+	}
+
+	@Override
+	public ListDTO<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException {
+		ListDTO<BloodRequestDTO> listDTO = new ListDTO<BloodRequestDTO>();
+		listDTO.setList(loginDao.viewBloodRequest(bloodRequestDTO));
+		listDTO.setTotalSize(bloodRequestDTO.getTotalSize());
 		return listDTO;
 	}
 }

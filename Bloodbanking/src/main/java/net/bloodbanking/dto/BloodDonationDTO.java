@@ -1,13 +1,17 @@
 package net.bloodbanking.dto;
 
 public class BloodDonationDTO extends BaseDTO{
+	private Long donorBloodbankMappingId;
 	private Long donorId;
 	private String donorUserName;
 	private String donorName;
+	private String donorAddress;
 	private Long bloodBankId;
 	private String bloodBankName;
+	private Integer bloodGroupId;
 	private String bloodGroupName;
 	private Integer bloodUnits;
+	private String bloodBankAddress;
 	private String donatedDate;
 	public Long getDonorId() {
 		return donorId;
@@ -56,5 +60,29 @@ public class BloodDonationDTO extends BaseDTO{
 	}
 	public void setDonorUserName(String donorUserName) {
 		this.donorUserName = donorUserName;
+	}
+	public String getBloodBankAddress() {
+		return bloodBankAddress;
+	}
+	public void setBloodBankAddress(String bloodBankAddress) {
+		this.bloodBankAddress = bloodBankAddress;
+	}
+	public Integer getBloodGroupId() {
+		return bloodGroupId;
+	}
+	public void setBloodGroupId(Integer bloodGroupId) {
+		this.bloodGroupId = bloodGroupId;
+	}
+	public Long getDonorBloodbankMappingId() {
+		return donorBloodbankMappingId;
+	}
+	public void setDonorBloodbankMappingId(Long donorBloodbankMappingId) {
+		this.donorBloodbankMappingId = donorBloodbankMappingId;
+	}
+	public String getDonorAddress() {
+		return donorAddress;
+	}
+	public void setDonorAddress(String donorAddress) {
+		this.donorAddress = donorAddress;
 	}
 }
