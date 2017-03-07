@@ -30,21 +30,13 @@ CREATE TABLE `blood_group_mst` (
 /*Data for the table `blood_group_mst` */
 
 insert  into `blood_group_mst`(`blood_group_id`,`blood_group_name`) values 
-
 (1,'A+'),
-
 (2,'A-'),
-
 (3,'B+'),
-
 (4,'B-'),
-
 (5,'AB+'),
-
 (6,'AB-'),
-
 (7,'O+'),
-
 (8,'O-');
 
 /*Table structure for table `donor_bloodbank_mapping` */
@@ -58,7 +50,7 @@ CREATE TABLE `donor_bloodbank_mapping` (
   `blood_units` int(11) NOT NULL COMMENT 'blood units donated',
   `created_date` datetime NOT NULL,
   PRIMARY KEY (`donor_bloodbank_mapping_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `enquiry_form` */
 
@@ -163,17 +155,11 @@ CREATE TABLE `security_question` (
 /*Data for the table `security_question` */
 
 insert  into `security_question`(`security_question_id`,`security_question`) values 
-
 (1,'What was the name of your primary school?'),
-
 (2,'In what city or town does your nearest sibling live?'),
-
 (3,'What time of the day were you born? (hh:mm)'),
-
 (4,'In what year was your father born?'),
-
 (5,'What is your favorite person?'),
-
 (6,'What is your pet name?');
 
 /*Table structure for table `status_mst` */
@@ -343,25 +329,11 @@ insert  into `user_type_mapping`(`privilege_id`,`user_type_id`,`left_menu_id`,`s
 
 (29,1,11,5),
 
-(30,1,13,4),
-
-(31,1,13,7),
-
 (32,2,1,4),
 
 (33,2,2,2),
 
 (34,2,2,4),
-
-(35,2,5,1),
-
-(36,2,5,2),
-
-(37,2,5,3),
-
-(38,2,5,4),
-
-(39,2,5,5),
 
 (40,2,6,1),
 
