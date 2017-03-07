@@ -5,14 +5,12 @@
 	 <div id="moduleDetailDivContainer" class="marginBetweenFields">
 		<div id="tableLayoutContainer">
 			<div id="viewResultsSearchCriteria">
-				<c:if test="${not empty isAdmin}">
-					<select name="registrationId" id="registrationId" style="width: 150px;" >
-						<option value="">Select</option>
-						<c:forEach items="${bloodBankList}" var="bloodBank">
-							<option value="${bloodBank.registrationId}" ${(bloodBank.registrationId == baseDTO.registrationId)?'selected':''}>${bloodBank.locationAddressDTO.name}</option>
-						</c:forEach>
-					</select>
-				</c:if>
+				<select name="registrationId" id="registrationId" style="width: 150px;" >
+					<option value="">Select</option>
+					<c:forEach items="${bloodBankList}" var="bloodBank">
+						<option value="${bloodBank.registrationId}" ${(bloodBank.registrationId == baseDTO.registrationId)?'selected':''}>${bloodBank.locationAddressDTO.name}</option>
+					</c:forEach>
+				</select>
 				<select name="bloodGroup" id="bloodGroup" style="width: 150px;">
 					<option value="">Select blood group</option>
 					<c:forEach items="${bloodGroupList}" var="bloodGroup">
@@ -25,9 +23,7 @@
 				<tbody>
 					<tr>
 						<th>Sl. No.</th>
-						<c:if test="${not empty isAdmin}">
-							<th>Blood bank name</th>
-						</c:if>
+						<th>Blood bank name</th>
 						<th>Blood group</th>
 						<th>Donated Blood Unit(s)</th>
 						<th>Supplied Blood Unit(s)</th>
@@ -37,7 +33,7 @@
 					</tr>
 					<c:if test="${fn:length(searchResult.list) == 0}">
 						<tr class="noResults">
-							<td colspan="${not empty isAdmin?'8':'7'}">No Data</td>
+							<td colspan="8">No Data</td>
 						</tr>
 					</c:if>
 					<c:set var="slNO" value="${ (searchResult.page.currentPage - 1) * searchResult.page.resultsPerPage}" />
@@ -45,9 +41,7 @@
 						<c:set value="${ slNO + 1}" var="slNO" />
 						<tr>
 							<td><c:out value="${slNO}" /></td>
-							<c:if test="${not empty isAdmin}">
-								<td><c:out value="${item.bloodBankName}" /></td>
-							</c:if>
+							<td><c:out value="${item.bloodBankName}" /></td>
 							<td><c:out value="${item.bloodGroupName}" /></td>
 							<td><c:out value="${item.donotedBloodUnits}" /></td>
 							<td><c:out value="${item.suppliedBloodUnits}" /></td>

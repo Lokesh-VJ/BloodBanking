@@ -155,15 +155,23 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 
 	@Override
 	public List<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO) {
+		String donorFilter = "";
+		if(null != bloodDonationDTO.getDonorId()){
+			donorFilter = " and dbm.donor_id="+bloodDonationDTO.getDonorId()+" ";
+		}
+		String bloodbankFilter = "";
+		if(null != bloodDonationDTO.getBloodBankId()){
+			bloodbankFilter = " and dbm.bloodbank_id="+bloodDonationDTO.getBloodBankId()+" ";
+		}
 		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
 				+ " dbm.donor_bloodbank_mapping_id AS donorBloodbankMappingId, dbm.donor_id AS donorId, rla.name AS donorName, dbm.bloodbank_id AS bloodBankId, bbla.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName,"
 				+ " dbm.blood_units AS bloodUnits, CONCAT(bbla.address, ' ', bbla.city, ' ', bbla.state, ' ', bbla.pincode) as bloodBankAddress, "
 				+ " CONCAT(rla.address, ' ', rla.city, ' ', rla.state, ' ', rla.pincode) as donorAddress "
 				+ " FROM donor_bloodbank_mapping dbm "
-				+ " JOIN registration r ON r.registration_id = dbm.donor_id "
+				+ " JOIN registration r ON r.registration_id = dbm.donor_id "+donorFilter+" "
 				+ " JOIN location_address rla ON rla.reference_id = r.registration_id AND rla.reference_type =:referenceTypeUser "
 				+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=r.blood_group "
-				+ " JOIN registration rbb ON rbb.registration_id = dbm.bloodbank_id "
+				+ " JOIN registration rbb ON rbb.registration_id = dbm.bloodbank_id "+bloodbankFilter+" "
 				+ " JOIN location_address bbla ON bbla.reference_id = rbb.registration_id AND bbla.reference_type =:referenceTypeUser")
 			.addScalar("donorBloodbankMappingId", LongType.INSTANCE)
 			.addScalar("donorId", LongType.INSTANCE)
@@ -181,6 +189,14 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 
 	@Override
 	public List<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO) {
+		String patientFilter = "";
+		if(null != bloodRequestDTO.getPatientId()){
+			patientFilter = " and pbm.patient_id="+bloodRequestDTO.getPatientId()+" ";
+		}
+		String bloodbankFilter = "";
+		if(null != bloodRequestDTO.getBloodBankId()){
+			bloodbankFilter = " and pbm.bloodbank_id="+bloodRequestDTO.getBloodBankId()+" ";
+		}
 		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
 				+ " pbm.patient_bloodbank_mapping_id AS patientBloodbankMappingId, pbm.patient_id AS patientId, rla.name AS patientName, "
 				+ " pbm.bloodbank_id AS bloodBankId, bbla.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName,"
@@ -188,11 +204,11 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 				+ " CONCAT(rla.address, ' ', rla.city, ' ', rla.state, ' ', rla.pincode) as patientAddress,"
 				+ " pbm.status AS status, sm.description AS statusStr "
 				+ " FROM patient_bloodbank_mapping pbm "
-				+ " JOIN registration r ON r.registration_id = pbm.patient_id "
+				+ " JOIN registration r ON r.registration_id = pbm.patient_id "+patientFilter+" "
 				+ " JOIN location_address rla ON rla.reference_id = r.registration_id AND rla.reference_type =:referenceTypeUser "
 				+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=r.blood_group "
 				+ " JOIN status_mst sm ON sm.status=pbm.status "
-				+ " JOIN registration rbb ON rbb.registration_id = pbm.bloodbank_id "
+				+ " JOIN registration rbb ON rbb.registration_id = pbm.bloodbank_id "+bloodbankFilter+" "
 				+ " JOIN location_address bbla ON bbla.reference_id = rbb.registration_id AND bbla.reference_type =:referenceTypeUser")
 			.addScalar("patientBloodbankMappingId", LongType.INSTANCE)
 			.addScalar("patientId", LongType.INSTANCE)
@@ -259,8 +275,8 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 			patientBloodBankFilter = " AND pbm.bloodbank_id="+registrationDTO.getRegistrationId()+" ";
 		}
 		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(
-			"SELECT labb.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName, t1.bloodUnits AS donotedBloodUnits, t2.bloodUnits AS suppliedBloodUnits, "
-			+ " t3.bloodUnits AS rejectedBloodUnits, t4.bloodUnits AS pendingBloodUnits, (t1.bloodUnits-t2.bloodUnits) AS totalAvailableBloodUnits "
+			"SELECT labb.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName, t1.bloodUnits AS donotedBloodUnits, IFNULL(t2.bloodUnits, 0) AS suppliedBloodUnits, "
+			+ " IFNULL(t3.bloodUnits, 0) AS rejectedBloodUnits, IFNULL(t4.bloodUnits, 0) AS pendingBloodUnits, (IFNULL(t1.bloodUnits, 0)-IFNULL(t2.bloodUnits, 0)) AS totalAvailableBloodUnits "
 			+ " FROM (SELECT dbm.bloodbank_id AS bloodBankId, r.blood_group AS bloodGroup, SUM(dbm.blood_units) AS bloodUnits "
 			+ "	FROM `donor_bloodbank_mapping` dbm "
 			+ " JOIN registration r ON r.registration_id=dbm.donor_id "+donorBloodBankFilter+" "+bloodGroupFilter+" "

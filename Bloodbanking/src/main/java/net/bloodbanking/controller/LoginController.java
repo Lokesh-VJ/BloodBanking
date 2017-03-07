@@ -411,6 +411,12 @@ public class LoginController extends BaseController {
 	@RequestMapping("/viewBloodDonation.html")
 	public String viewBloodDonation(BloodDonationDTO bloodDonationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try {
+			if(!isSuperUserLogin(request) && !(AppConstants.BLOODBANK_ID.equals((Integer) getValueFromSession(request, AppConstants.USERTYPEID)))){
+				bloodDonationDTO.setDonorId((Long)getValueFromSession(request, AppConstants.USER_ID));
+			}
+			if(AppConstants.BLOODBANK_ID.equals((Integer) getValueFromSession(request, AppConstants.USERTYPEID))){
+				bloodDonationDTO.setBloodBankId((Long)getValueFromSession(request, AppConstants.USER_ID));
+			}
 			ListDTO<BloodDonationDTO> listDTO = loginService.viewBloodDonation(bloodDonationDTO);
 			if(CollectionUtils.isNotEmpty(listDTO.getList())){
 				applyPagination(listDTO, bloodDonationDTO, AppConstants.RESULTSPERPAGE);
@@ -455,6 +461,12 @@ public class LoginController extends BaseController {
 	@RequestMapping("/viewBloodRequest.html")
 	public String viewBloodRequest(BloodRequestDTO bloodRequestDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try {
+			if(!isSuperUserLogin(request) && !(AppConstants.BLOODBANK_ID.equals((Integer) getValueFromSession(request, AppConstants.USERTYPEID)))){
+				bloodRequestDTO.setPatientId((Long)getValueFromSession(request, AppConstants.USER_ID));
+			}
+			if(AppConstants.BLOODBANK_ID.equals((Integer) getValueFromSession(request, AppConstants.USERTYPEID))){
+				bloodRequestDTO.setBloodBankId((Long)getValueFromSession(request, AppConstants.USER_ID));
+			}
 			ListDTO<BloodRequestDTO> listDTO = loginService.viewBloodRequest(bloodRequestDTO);
 			if(CollectionUtils.isNotEmpty(listDTO.getList())){
 				applyPagination(listDTO, bloodRequestDTO, AppConstants.RESULTSPERPAGE);
@@ -531,21 +543,14 @@ public class LoginController extends BaseController {
 	@RequestMapping("/viewBloodBankStock.html")
 	public String viewBloodBankStock(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
 		try {
-			if(null == registrationDTO.getRegistrationId() && !isSuperUserLogin(request)){
-				registrationDTO.setRegistrationId((Long)getValueFromSession(request, AppConstants.USER_ID));
-			}
 			ListDTO<BloodBankStockDTO> listDTO = loginService.viewBloodBankStock(registrationDTO);
 			if(CollectionUtils.isNotEmpty(listDTO.getList())){
 				applyPagination(listDTO, registrationDTO, AppConstants.RESULTSPERPAGE);
 			}
 			map.put(AppConstants.SEARCHRESULT, listDTO);
-			
-			if(isSuperUserLogin(request)){
-				map.put("isAdmin", true);
-				RegistrationDTO bloodbankRegistrationDTO = new RegistrationDTO();
-				bloodbankRegistrationDTO.setUsertypeId(AppConstants.BLOODBANK_ID.longValue());
-				map.put("bloodBankList", loginService.viewUser(bloodbankRegistrationDTO).getList());
-			}
+			RegistrationDTO bloodbankRegistrationDTO = new RegistrationDTO();
+			bloodbankRegistrationDTO.setUsertypeId(AppConstants.BLOODBANK_ID.longValue());
+			map.put("bloodBankList", loginService.viewUser(bloodbankRegistrationDTO).getList());
 		} catch (ApplicationException e) {
 			handleApplicationExceptionForJson(registrationDTO, e);
 		}
