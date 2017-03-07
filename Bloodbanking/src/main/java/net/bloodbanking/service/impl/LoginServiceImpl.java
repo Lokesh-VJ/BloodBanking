@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,9 @@ public class LoginServiceImpl implements LoginService {
 		Registration registration = loginDao.loadRegistration(registrationDTO);
 		registrationDTO.setRegistrationId(registration.getRegistrationId());
 		registrationDTO.setBloodGroup(registration.getBloodGroup());
-		registrationDTO.setBirthDate(DateUtil.convertDateToDateStr(registration.getBirthDate(), DateUtil.DATE_FORMAT_dd_MM_yyyy_SEP_HIPHEN));
+		if(null != registration.getBirthDate()){
+			registrationDTO.setBirthDate(DateUtil.convertDateToDateStr(registration.getBirthDate(), DateUtil.DATE_FORMAT_dd_MM_yyyy_SEP_HIPHEN));
+		}
 		registrationDTO.setGender(registration.getGender());
 		registrationDTO.setUserName(registration.getUserName());
 		registrationDTO.setPassword(registration.getPassword());
@@ -172,8 +175,12 @@ public class LoginServiceImpl implements LoginService {
 	public void processSignup(RegistrationDTO registrationDTO) throws ApplicationException{
 		loginValidator.validateProcessSignup(registrationDTO);
 		Registration registration = new Registration();
-		registration.setBloodGroup(registrationDTO.getBloodGroup());
-		registration.setBirthDate(DateUtil.convertDateStrToDate(registrationDTO.getBirthDate(), DateUtil.DATE_FORMAT_dd_MM_yyyy_SEP_HIPHEN));
+		if(null != registrationDTO.getBloodGroup()){
+			registration.setBloodGroup(registrationDTO.getBloodGroup());
+		}
+		if(StringUtils.isNotEmpty(registrationDTO.getBirthDate())){
+			registration.setBirthDate(DateUtil.convertDateStrToDate(registrationDTO.getBirthDate(), DateUtil.DATE_FORMAT_dd_MM_yyyy_SEP_HIPHEN));
+		}
 		registration.setGender(registrationDTO.getGender());
 		registration.setUserName(registrationDTO.getUserName());
 		registration.setPassword(registrationDTO.getPassword());
@@ -246,7 +253,9 @@ public class LoginServiceImpl implements LoginService {
 	public BloodGroupMstDTO loadBloodGroup(BloodGroupMstDTO bloodGroupMstDTO) {
 		// TODO, place validation...
 		BloodGroupMst bloodGroupMst = loginDao.loadBloodGroup(bloodGroupMstDTO);
-		bloodGroupMstDTO.setBloodGroupName(bloodGroupMst.getBloodGroupName());
+		if(null != bloodGroupMst){
+			bloodGroupMstDTO.setBloodGroupName(bloodGroupMst.getBloodGroupName());
+		}
 		return bloodGroupMstDTO;
 	}
 	
@@ -433,31 +442,23 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	@Override
-	public ListDTO<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO) throws ApplicationException {
-		ListDTO<BloodDonationDTO> listDTO = new ListDTO<BloodDonationDTO>();
-		listDTO.setList(loginDao.viewBloodAvailability(bloodDonationDTO));
-		listDTO.setTotalSize(bloodDonationDTO.getTotalSize());
-		return listDTO;
-	}
-
-	@Override
 	public void processBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException {
 		// TODO, place validation here...
 		RegistrationDTO registrationDTO = new RegistrationDTO();
 		registrationDTO.setUserName(bloodRequestDTO.getPatientUserName());
 		Registration registration = loginDao.loadRegistration(registrationDTO);
-		BloodDonationDTO bloodDonationDTO = new BloodDonationDTO();
-		bloodDonationDTO.setBloodGroupId(registration.getBloodGroup());
-		bloodDonationDTO.setBloodBankId(bloodRequestDTO.getBloodBankId());
-		List<BloodDonationDTO> list = loginDao.viewBloodAvailability(bloodDonationDTO);
+		registrationDTO = new RegistrationDTO();
+		registrationDTO.setBloodGroup(registration.getBloodGroup());
+		registrationDTO.setRegistrationId(bloodRequestDTO.getBloodBankId());
+		List<BloodBankStockDTO> list = loginDao.viewBloodBankStock(registrationDTO);
 		if(CollectionUtils.isEmpty(list)){
-			throw new ApplicationException(ErrorConstants.INVALID_BLOOD_BANK);
-		}
-		if(CollectionUtils.isNotEmpty(list) && list.get(0).getBloodUnits() <= 0){
 			throw new ApplicationException(ErrorConstants.BLOOD_OUT_OF_STOCK);
 		}
-		if(list.get(0).getBloodUnits() < bloodRequestDTO.getBloodUnits()){
-			throw new ApplicationException("Sorry, only " + list.get(0).getBloodUnits() + " " + ErrorConstants.UNITS_OF_BLOOD_AVAILABLE);
+		if(CollectionUtils.isNotEmpty(list) && list.get(0).getTotalAvailableBloodUnits() <= 0){
+			throw new ApplicationException(ErrorConstants.BLOOD_OUT_OF_STOCK);
+		}
+		if(list.get(0).getTotalAvailableBloodUnits() < bloodRequestDTO.getBloodUnits()){
+			throw new ApplicationException("Sorry, only " + list.get(0).getTotalAvailableBloodUnits() + " " + ErrorConstants.UNITS_OF_BLOOD_AVAILABLE);
 		}
 		PatientBloodbankMapping patientBloodbankMapping = new PatientBloodbankMapping();
 		patientBloodbankMapping.setPatientId(registration.getRegistrationId());
@@ -534,8 +535,6 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public ListDTO<BloodBankStockDTO> viewBloodBankStock(RegistrationDTO registrationDTO) throws ApplicationException {
-		Registration registration = loginDao.loadRegistration(registrationDTO);
-		registrationDTO.setRegistrationId(registration.getRegistrationId());
 		ListDTO<BloodBankStockDTO> listDTO = new ListDTO<BloodBankStockDTO>();
 		listDTO.setList(loginDao.viewBloodBankStock(registrationDTO));
 		listDTO.setTotalSize(registrationDTO.getTotalSize());

@@ -15,11 +15,8 @@ public class RegistrationDTO extends BaseDTO implements UserDetails{
 	private static final long serialVersionUID = 2220043525853280045L;
 	private Long registrationId;
 	private StatusMstDTO statusMstDTO;
-	@NotNull(groups = {validateProcessSignup.class})
 	private Integer bloodGroup;
-	@NotEmpty(groups = {validateProcessSignup.class})
 	private String birthDate;
-	@NotEmpty(groups = {validateProcessSignup.class})
 	private String gender;
 	@NotEmpty(groups = {validateLoadRegistration.class, validateVerifySecurityQuestion.class, validateProcessSignup.class})
 	private String userName;

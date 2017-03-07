@@ -36,8 +36,6 @@ public class ViewConstants {
 	
 	public static final String BLOODDONATIONVIEW = "blooddonationView";
 	
-	public static final String BLOODAVAILABILITYVIEW = "bloodavailabilityView";
-
 	public static final String BLOODREQUESTADD = "bloodrequestAdd";
 	
 	public static final String BLOODREQUESTVIEW = "bloodrequestView";

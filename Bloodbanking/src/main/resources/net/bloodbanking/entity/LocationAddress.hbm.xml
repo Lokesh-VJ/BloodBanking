@@ -22,7 +22,7 @@
    <column length="20" name="mobile_number"/>
   </property>
   <property generated="never" lazy="false" name="emailId" type="string">
-   <column length="30" name="email_id"/>
+   <column length="50" name="email_id"/>
   </property>
   <property generated="never" lazy="false" name="address" type="string">
    <column name="address"/>

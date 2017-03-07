@@ -35,7 +35,6 @@ public interface LoginDao extends BaseDao{
 	public List<Feedback> viewFeedback(FeedbackDTO feedbackDTO);
 	public List<EnquiryForm> viewEnquiry(EnquiryFormDTO enquiryFormDTO);
 	public List<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO);
-	public List<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO);
 	public List<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO);
 	public PatientBloodbankMapping loadPatientBloodMapping(BloodRequestDTO bloodRequestDTO);
 	public List<BloodDonationDTO> viewDonor(RegistrationDTO registrationDTO);

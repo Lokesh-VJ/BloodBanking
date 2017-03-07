@@ -60,7 +60,7 @@
 								</c:if>
 								<c:if test="${not empty isPatient}">
 									<c:if test="${item.status == activeFlag}">
-										Not supplied
+										Pending
 									</c:if>
 									<c:if test="${item.status != activeFlag}">
 										<c:out value="${item.statusStr}" />

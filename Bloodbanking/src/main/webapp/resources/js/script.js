@@ -38,6 +38,29 @@ function goBackModuleFormFunc(url, pKName, pKValue){
 	}
 	document.getElementById("goBackModuleForm").submit();
 }
+function userTypeSignupOnchange(){
+	var isBloodBank = false;
+	for(var i = 0; i < document.getElementsByName("usertypeId").length; i++){
+		if(!isBloodBank && document.getElementsByName("usertypeId")[i].value == 2 && document.getElementsByName("usertypeId")[i].checked ){
+			isBloodBank = true;
+		}
+	}
+	for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationFieldDiv").length; j++){
+		document.getElementsByClassName("nonBloodBankRegistrationFieldDiv")[j].style.display = "block";
+	}
+	for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationField").length; j++){
+		document.getElementsByClassName("nonBloodBankRegistrationField")[j].removeAttribute("required");
+	}
+	
+	if(isBloodBank){
+		for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationFieldDiv").length; j++){
+			document.getElementsByClassName("nonBloodBankRegistrationFieldDiv")[j].style.display = "none";
+		}
+		for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationField").length; j++){
+			document.getElementsByClassName("nonBloodBankRegistrationField")[j].setAttribute("required");
+		}
+	}
+}
 function onPageLoadFunction(){
 	// messages section...
     if(document.getElementById("successMessageDiv") != null){
@@ -72,6 +95,10 @@ function onPageLoadFunction(){
     	}
     	password.onchange = validatePassword;
     	confirmPassword.onkeyup = validatePassword;
+    }
+    
+    if(document.getElementById("signupForm").length > 0){
+    	userTypeSignupOnchange();
     }
 }
 document.addEventListener( "DOMContentLoaded", onPageLoadFunction, false );

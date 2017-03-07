@@ -46,15 +46,46 @@
 		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
 		<beans:property name="securityMetadataSource">
 			<filter-security-metadata-source>
-				<!-- Login Logout Management -->
+				<intercept-url pattern="/login.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processLogin.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/forgotPassword.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/verifySecurityQuestion.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processForgotPassword.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/signup.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processSignup.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/enquiry.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processEnquiry.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/feedback.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processFeedback.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/welcome.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/passwordAttempts.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/accessDenied.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/sessionTimeout.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/logout.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/viewHome.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/viewProfile.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/editProfile.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/processEditProfile.html" access="IS_AUTHENTICATED_FULLY" />
-				<intercept-url pattern="/viewUser.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/viewChangePassword.html" access="IS_AUTHENTICATED_FULLY" />
 				<intercept-url pattern="/processChangePassword.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewUser.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/detailUser.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/activateUser.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/deactivateUser.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewFeedback.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewEnquiry.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/addBloodDonation.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processBloodDonation.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewBloodDonation.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewBloodAvailability.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/addBloodRequest.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/processBloodRequest.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewBloodRequest.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/supplyBloodRequest.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/rejectBloodRequest.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewDonor.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewPatient.html" access="IS_AUTHENTICATED_FULLY" />
+				<intercept-url pattern="/viewBloodBankStock.html" access="IS_AUTHENTICATED_FULLY" />
 			</filter-security-metadata-source>
 		</beans:property>
 	</beans:bean>

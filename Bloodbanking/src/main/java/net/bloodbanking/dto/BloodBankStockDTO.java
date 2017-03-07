@@ -1,12 +1,19 @@
 package net.bloodbanking.dto;
 
 public class BloodBankStockDTO extends BaseDTO{
+	private String bloodBankName;
 	private String bloodGroupName;
 	private Long donotedBloodUnits;
 	private Long suppliedBloodUnits;
 	private Long rejectedBloodUnits;
 	private Long pendingBloodUnits;
 	private Long totalAvailableBloodUnits;
+	public String getBloodBankName() {
+		return bloodBankName;
+	}
+	public void setBloodBankName(String bloodBankName) {
+		this.bloodBankName = bloodBankName;
+	}
 	public String getBloodGroupName() {
 		return bloodGroupName;
 	}

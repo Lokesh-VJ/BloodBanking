@@ -180,41 +180,6 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 	}
 
 	@Override
-	public List<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO) {
-		String additionalFilter = "";
-		if(null != bloodDonationDTO.getBloodBankId()){
-			additionalFilter = " AND donor.bloodbank_id = "+bloodDonationDTO.getBloodBankId()+" ";
-		}
-		if(null != bloodDonationDTO.getBloodGroupId()){
-			additionalFilter = " AND donor.blood_group = "+bloodDonationDTO.getBloodGroupId()+" ";
-		}
-		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
-				+ " donor.bloodbank_id AS bloodBankId, labb.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName, "
-				+ " (donor.blood_units - patient.blood_units) AS bloodUnits, CONCAT(labb.address, ' ', labb.city, ' ', labb.state, ' ', labb.pincode) AS bloodBankAddress "
-				+ " FROM ("
-					+ "	SELECT dbm.bloodbank_id, rd.blood_group, SUM(dbm.blood_units) AS blood_units "
-					+ " FROM donor_bloodbank_mapping dbm "
-					+ " JOIN registration rd ON rd.registration_id = dbm.donor_id "
-					+ " GROUP BY dbm.bloodbank_id, rd.blood_group) donor "
-				+ " JOIN ("
-					+ " SELECT pbm.bloodbank_id, rp.blood_group, SUM(pbm.blood_units) AS blood_units "
-					+ " FROM patient_bloodbank_mapping pbm "
-					+ " JOIN registration rp ON rp.registration_id = pbm.patient_id AND pbm.status =:supplied "
-					+ " GROUP BY pbm.bloodbank_id, rp.blood_group) patient ON patient.bloodbank_id = donor.bloodbank_id "+additionalFilter
-				+ " JOIN location_address labb ON labb.reference_id=donor.bloodbank_id AND labb.reference_type=:referenceTypeUser "
-				+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=donor.blood_group ")
-			.addScalar("bloodBankId", LongType.INSTANCE)
-			.addScalar("bloodBankName", StringType.INSTANCE)
-			.addScalar("bloodGroupName", StringType.INSTANCE)
-			.addScalar("bloodUnits", IntegerType.INSTANCE)
-			.addScalar("bloodBankAddress", StringType.INSTANCE)
-			.setParameter("referenceTypeUser", ReferenceTypeEnum.USER.getCode())
-			.setParameter("supplied", AppConstants.SUPPLIED)
-			.setResultTransformer( Transformers.aliasToBean(BloodDonationDTO.class));
-		return viewList(bloodDonationDTO, query);
-	}
-
-	@Override
 	public List<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO) {
 		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery("SELECT "
 				+ " pbm.patient_bloodbank_mapping_id AS patientBloodbankMappingId, pbm.patient_id AS patientId, rla.name AS patientName, "
@@ -294,25 +259,27 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 			patientBloodBankFilter = " AND pbm.bloodbank_id="+registrationDTO.getRegistrationId()+" ";
 		}
 		Query query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(
-			"SELECT bgm.blood_group_name AS bloodGroupName, t1.bloodUnits AS donotedBloodUnits, t2.bloodUnits AS suppliedBloodUnits, "
+			"SELECT labb.name AS bloodBankName, bgm.blood_group_name AS bloodGroupName, t1.bloodUnits AS donotedBloodUnits, t2.bloodUnits AS suppliedBloodUnits, "
 			+ " t3.bloodUnits AS rejectedBloodUnits, t4.bloodUnits AS pendingBloodUnits, (t1.bloodUnits-t2.bloodUnits) AS totalAvailableBloodUnits "
-			+ " FROM (SELECT r.blood_group AS bloodGroup, SUM(dbm.blood_units) AS bloodUnits "
+			+ " FROM (SELECT dbm.bloodbank_id AS bloodBankId, r.blood_group AS bloodGroup, SUM(dbm.blood_units) AS bloodUnits "
 			+ "	FROM `donor_bloodbank_mapping` dbm "
 			+ " JOIN registration r ON r.registration_id=dbm.donor_id "+donorBloodBankFilter+" "+bloodGroupFilter+" "
-			+ " GROUP BY r.blood_group) t1 "
-			+ " LEFT JOIN (SELECT r.blood_group AS bloodGroup, SUM(pbm.blood_units) AS bloodUnits, pbm.status AS `status` "
+			+ " GROUP BY dbm.bloodbank_id, r.blood_group) t1 "
+			+ " LEFT JOIN (SELECT pbm.bloodbank_id AS bloodBankId, r.blood_group AS bloodGroup, SUM(pbm.blood_units) AS bloodUnits, pbm.status AS `status` "
 			+ " FROM `patient_bloodbank_mapping` pbm "
 			+ " JOIN registration r ON r.registration_id=pbm.patient_id AND pbm.status =:suppliedStatus "+patientBloodBankFilter+" "+bloodGroupFilter+" "
-			+ " GROUP BY r.blood_group) t2 ON t2.bloodGroup = t1.bloodGroup "
-			+ " LEFT JOIN (SELECT r.blood_group AS bloodGroup, SUM(pbm.blood_units) AS bloodUnits, pbm.status AS `status` "
+			+ " GROUP BY pbm.bloodbank_id, r.blood_group) t2 ON t2.bloodBankId = t1.bloodBankId AND t2.bloodGroup = t1.bloodGroup "
+			+ " LEFT JOIN (SELECT pbm.bloodbank_id AS bloodBankId, r.blood_group AS bloodGroup, SUM(pbm.blood_units) AS bloodUnits, pbm.status AS `status` "
 			+ " FROM `patient_bloodbank_mapping` pbm "
 			+ " JOIN registration r ON r.registration_id=pbm.patient_id AND pbm.status =:rejectedStatus "+patientBloodBankFilter+" "+bloodGroupFilter+" "
-			+ " GROUP BY r.blood_group) t3 ON t3.bloodGroup = t1.bloodGroup "
-			+ " LEFT JOIN (SELECT r.blood_group AS bloodGroup, SUM(pbm.blood_units) AS bloodUnits, pbm.status AS `status` "
+			+ " GROUP BY pbm.bloodbank_id, r.blood_group) t3 ON t3.bloodBankId = t1.bloodBankId AND t3.bloodGroup = t1.bloodGroup "
+			+ " LEFT JOIN (SELECT pbm.bloodbank_id AS bloodBankId, r.blood_group AS bloodGroup, SUM(pbm.blood_units) AS bloodUnits, pbm.status AS `status` "
 			+ " FROM `patient_bloodbank_mapping` pbm "
 			+ " JOIN registration r ON r.registration_id=pbm.patient_id AND pbm.status =:pendingStatus "+patientBloodBankFilter+" "+bloodGroupFilter+" "
-			+ " GROUP BY r.blood_group) t4 ON t4.bloodGroup = t1.bloodGroup "
-			+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=t1.bloodGroup")
+			+ " GROUP BY pbm.bloodbank_id, r.blood_group) t4 ON t4.bloodBankId = t1.bloodBankId AND t4.bloodGroup = t1.bloodGroup "
+			+ " JOIN blood_group_mst bgm ON bgm.blood_group_id=t1.bloodGroup "
+			+ " JOIN location_address labb ON labb.reference_id = t1.bloodBankId AND labb.reference_type =:referenceTypeUser ")
+			.addScalar("bloodBankName", StringType.INSTANCE)
 			.addScalar("bloodGroupName", StringType.INSTANCE)
 			.addScalar("donotedBloodUnits", LongType.INSTANCE)
 			.addScalar("suppliedBloodUnits", LongType.INSTANCE)
@@ -322,6 +289,7 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao {
 			.setParameter("suppliedStatus", AppConstants.SUPPLIED)
 			.setParameter("rejectedStatus", AppConstants.REJECTED)
 			.setParameter("pendingStatus", AppConstants.ACTIVE)
+			.setParameter("referenceTypeUser", ReferenceTypeEnum.USER.getCode())
 			.setResultTransformer( Transformers.aliasToBean(BloodBankStockDTO.class));
 		return viewList(registrationDTO, query);
 	}

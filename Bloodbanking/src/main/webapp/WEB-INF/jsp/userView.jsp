@@ -26,7 +26,7 @@
 						<th>Address</th>
 						<th>Action</th>
 					</tr>
-					<c:if test="${null == searchResult.list}">
+					<c:if test="${fn:length(searchResult.list) == 0}">
 						<tr class="noResults">
 							<td colspan="9">No Data</td>
 						</tr>

@@ -5,7 +5,7 @@
 	<form method="post" action="processEnquiry.html" id="enquiryForm" name="enquiryForm">
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<label class="label_content">Name<span class="fieldMandatory">*</span></label>
-			<input type="text" name="locationAddressDTO.name" id="locationAddressDTO_name" value="${baseDTO.locationAddressDTO.name}" required />
+			<input type="text" name="locationAddressDTO.name" id="locationAddressDTO_name" value="${baseDTO.locationAddressDTO.name}" maxlength="50" required />
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<label class="label_content">Email<span class="fieldMandatory">*</span></label>
@@ -17,7 +17,7 @@
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<label class="label_content">Message<span class="fieldMandatory">*</span></label>
-			<textarea name="message" id="message" required >${baseDTO.message}</textarea>
+			<textarea name="message" id="message" maxlength="250" required >${baseDTO.message}</textarea>
 		</div>
 		<div class="marginBetweenFields loginPageFormContents_Div">
 			<input type="submit" name="submit" id="submit" value="Send" />

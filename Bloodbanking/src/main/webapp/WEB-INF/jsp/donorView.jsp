@@ -15,7 +15,7 @@
 						<th>User name</th>
 						<th>Address</th>
 					</tr>
-					<c:if test="${null == searchResult.list}">
+					<c:if test="${fn:length(searchResult.list) == 0}">
 						<tr class="noResults">
 							<td colspan="7">No Data</td>
 						</tr>

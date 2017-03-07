@@ -13,7 +13,7 @@
 						<th>Contact Number</th>
 						<th>Inquiry</th>
 					</tr>
-					<c:if test="${null == searchResult.list}">
+					<c:if test="${fn:length(searchResult.list) == 0}">
 						<tr class="noResults">
 							<td colspan="5">No Data</td>
 						</tr>

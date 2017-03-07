@@ -14,6 +14,8 @@ public class AppConstants {
 	
 	public static final String USER_NAME = "userName";
 	
+	public static final String USER_ID = "userId";
+	
 	public static final String NAME = "name";
 	
 	public final static String SESSION_TIMEOUT_PAGE = "/sessionTimeout.htm";

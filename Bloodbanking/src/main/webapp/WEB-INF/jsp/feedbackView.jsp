@@ -12,7 +12,7 @@
 						<th>Email Id</th>
 						<th>Feedback</th>
 					</tr>
-					<c:if test="${null == searchResult.list}">
+					<c:if test="${fn:length(searchResult.list) == 0}">
 						<tr class="noResults">
 							<td colspan="4">No Data</td>
 						</tr>

@@ -91,9 +91,6 @@ public interface LoginService {
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public ListDTO<BloodDonationDTO> viewBloodDonation(BloodDonationDTO bloodDonationDTO) throws ApplicationException;
 
-	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
-	public ListDTO<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO) throws ApplicationException;
-
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public void processBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException;
 	

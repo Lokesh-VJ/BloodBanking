@@ -14,17 +14,17 @@
             </column>
         </many-to-one>
         <property name="bloodGroup" type="int">
-            <column name="blood_group" not-null="true">
+            <column name="blood_group">
                 <comment>to store the blood group</comment>
             </column>
         </property>
         <property name="birthDate" type="timestamp">
-            <column name="birth_date" length="19" not-null="true">
+            <column name="birth_date" length="19">
                 <comment>to store the birth date</comment>
             </column>
         </property>
         <property name="gender" type="string">
-            <column name="gender" length="6" not-null="true">
+            <column name="gender" length="6">
                 <comment>to store the gender</comment>
             </column>
         </property>
@@ -49,7 +49,7 @@
             </column>
         </property>
         <property name="answer" type="string">
-            <column name="answer" length="15" not-null="true">
+            <column name="answer" length="50" not-null="true">
                 <comment>to store the answer</comment>
             </column>
         </property>

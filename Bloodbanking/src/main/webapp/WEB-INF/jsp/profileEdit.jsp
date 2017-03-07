@@ -14,18 +14,20 @@
 					<label class="label_content">User Name<span class="colorSeparator">:</span></label>
 					<span class="elementData"><c:out value="${baseDTO.userName}" /></span>
 				</div>
-				<div class="marginBetweenFields loginPageFormContents_Div">
-					<label class="label_content">Gender<span class="colorSeparator">:</span></label>
-					<span class="elementData"><c:out value="${baseDTO.gender}" /></span>
-				</div>
-				<div class="marginBetweenFields loginPageFormContents_Div">
-					<label class="label_content">Date of Birth<span class="colorSeparator">:</span></label>
-					<span class="elementData"><c:out value="${baseDTO.birthDate}" /></span>
-				</div>
-				<div class="marginBetweenFields loginPageFormContents_Div">
-					<label class="label_content">Blood Group<span class="colorSeparator">:</span></label>
-					<span class="elementData"><c:out value="${baseDTO.bloodGroupName}" /></span>
-				</div>
+				<c:if test="${empty isBloodBank}">
+					<div class="marginBetweenFields loginPageFormContents_Div">
+						<label class="label_content">Gender<span class="colorSeparator">:</span></label>
+						<span class="elementData"><c:out value="${baseDTO.gender}" /></span>
+					</div>
+					<div class="marginBetweenFields loginPageFormContents_Div">
+						<label class="label_content">Date of Birth<span class="colorSeparator">:</span></label>
+						<span class="elementData"><c:out value="${baseDTO.birthDate}" /></span>
+					</div>
+					<div class="marginBetweenFields loginPageFormContents_Div">
+						<label class="label_content">Blood Group<span class="colorSeparator">:</span></label>
+						<span class="elementData"><c:out value="${baseDTO.bloodGroupName}" /></span>
+					</div>
+				</c:if>
 				<br /><br /><br /><br /><br />
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<input type="button" name="backBtn" id="backBtn" value="Back" onclick="goBackModuleFormFunc('viewProfile.html');" style="width: 48%" />
