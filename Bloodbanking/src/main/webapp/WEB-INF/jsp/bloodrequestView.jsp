@@ -45,16 +45,26 @@
 							<td><c:out value="${item.bloodGroupName}" /></td>
 							<td><c:out value="${item.bloodUnits}" /></td>
 							<td>
-								<c:if test="${item.status == activeFlag}">
-									<a href="javascript:doModuleActionWithConfirmation('supplyBloodRequest.html', 'Supply blood as per request, are you sure?', 'patientBloodbankMappingIdAMF', '${item.patientBloodbankMappingId}')">
-										Supply
-									</a> / 
-									<a href="javascript:doModuleActionWithConfirmation('rejectBloodRequest.html', 'Reject blood request, are you sure?', 'patientBloodbankMappingIdAMF', '${item.patientBloodbankMappingId}')">
-										Reject
-									</a>
+								<c:if test="${empty isPatient}">
+									<c:if test="${item.status == activeFlag}">
+										<a href="javascript:doModuleActionWithConfirmation('supplyBloodRequest.html', 'Supply blood as per request, are you sure?', 'patientBloodbankMappingIdAMF', '${item.patientBloodbankMappingId}')">
+											Supply
+										</a> / 
+										<a href="javascript:doModuleActionWithConfirmation('rejectBloodRequest.html', 'Reject blood request, are you sure?', 'patientBloodbankMappingIdAMF', '${item.patientBloodbankMappingId}')">
+											Reject
+										</a>
+									</c:if>
+									<c:if test="${item.status != activeFlag}">
+										<c:out value="${item.statusStr}" />
+									</c:if>
 								</c:if>
-								<c:if test="${item.status != activeFlag}">
-									<c:out value="${item.statusStr}" />
+								<c:if test="${not empty isPatient}">
+									<c:if test="${item.status == activeFlag}">
+										Not supplied
+									</c:if>
+									<c:if test="${item.status != activeFlag}">
+										<c:out value="${item.statusStr}" />
+									</c:if>
 								</c:if>
 							</td>
 						</tr>

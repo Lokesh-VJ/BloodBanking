@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.constants.ViewConstants;
+import net.bloodbanking.dto.BloodBankStockDTO;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.BloodRequestDTO;
@@ -307,6 +309,7 @@ public class LoginController extends BaseController {
 		} catch (ApplicationException e) {
 			handleApplicationExceptionForJson(registrationDTO, e);
 		}
+		map.put("userTypeList", loginService.listUserTypes(new UserTypeMstDTO()));
 		setLoginRelatedParams(map, "User", registrationDTO);
 		return ViewConstants.USERVIEW;
 	}
@@ -499,5 +502,60 @@ public class LoginController extends BaseController {
 			handleApplicationExceptionForJson(bloodRequestDTO, e);
 		}
 		return viewBloodRequest(bloodRequestDTO, request, response, map);
+	}
+	
+	@RequestMapping("/viewDonor.html")
+	public String viewDonor(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			if(StringUtils.isEmpty(registrationDTO.getUserName()) && !isSuperUserLogin(request)){
+				registrationDTO.setUserName((String)getValueFromSession(request, AppConstants.USER_NAME));
+			}
+			ListDTO<RegistrationDTO> listDTO = loginService.viewDonor(registrationDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, registrationDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		setLoginRelatedParams(map, "Donor", registrationDTO);
+		return ViewConstants.DONORVIEW;
+	}
+	
+	@RequestMapping("/viewPatient.html")
+	public String viewPatient(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			if(StringUtils.isEmpty(registrationDTO.getUserName()) && !isSuperUserLogin(request)){
+				registrationDTO.setUserName((String)getValueFromSession(request, AppConstants.USER_NAME));
+			}
+			ListDTO<RegistrationDTO> listDTO = loginService.viewPatient(registrationDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, registrationDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		setLoginRelatedParams(map, "Patient", registrationDTO);
+		return ViewConstants.PATIENTVIEW;
+	}
+	
+	@RequestMapping("/viewBloodBankStock.html")
+	public String viewBloodBankStock(RegistrationDTO registrationDTO, HttpServletRequest request, HttpServletResponse response, Map<String, Object> map) {
+		try {
+			if(StringUtils.isEmpty(registrationDTO.getUserName()) && !isSuperUserLogin(request)){
+				registrationDTO.setUserName((String)getValueFromSession(request, AppConstants.USER_NAME));
+			}
+			ListDTO<BloodBankStockDTO> listDTO = loginService.viewBloodBankStock(registrationDTO);
+			if(CollectionUtils.isNotEmpty(listDTO.getList())){
+				applyPagination(listDTO, registrationDTO, AppConstants.RESULTSPERPAGE);
+			}
+			map.put(AppConstants.SEARCHRESULT, listDTO);
+		} catch (ApplicationException e) {
+			handleApplicationExceptionForJson(registrationDTO, e);
+		}
+		map.put("bloodGroupList", loginService.listBloodGroups(new BloodGroupMstDTO()));
+		setLoginRelatedParams(map, "BloodBankStock", registrationDTO);
+		return ViewConstants.BLOODBANKSTOCKVIEW;
 	}
 }

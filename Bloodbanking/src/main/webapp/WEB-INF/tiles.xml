@@ -89,4 +89,16 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/bloodrequestView.jsp" />
 	</definition>
 	
+	<definition name="donorView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/donorView.jsp" />
+	</definition>
+	
+	<definition name="patientView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/patientView.jsp" />
+	</definition>
+	
+	<definition name="bloodBankStockView" extends="baseTile">
+		<put-attribute name="body" value="/WEB-INF/jsp/bloodBankStockView.jsp" />
+	</definition>
+	
 </tiles-definitions>

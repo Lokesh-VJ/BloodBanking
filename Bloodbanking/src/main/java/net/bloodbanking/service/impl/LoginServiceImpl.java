@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import net.bloodbanking.constants.AppConstants;
 import net.bloodbanking.constants.ErrorConstants;
 import net.bloodbanking.dao.LoginDao;
+import net.bloodbanking.dto.BloodBankStockDTO;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.BloodRequestDTO;
@@ -445,6 +446,19 @@ public class LoginServiceImpl implements LoginService {
 		RegistrationDTO registrationDTO = new RegistrationDTO();
 		registrationDTO.setUserName(bloodRequestDTO.getPatientUserName());
 		Registration registration = loginDao.loadRegistration(registrationDTO);
+		BloodDonationDTO bloodDonationDTO = new BloodDonationDTO();
+		bloodDonationDTO.setBloodGroupId(registration.getBloodGroup());
+		bloodDonationDTO.setBloodBankId(bloodRequestDTO.getBloodBankId());
+		List<BloodDonationDTO> list = loginDao.viewBloodAvailability(bloodDonationDTO);
+		if(CollectionUtils.isEmpty(list)){
+			throw new ApplicationException(ErrorConstants.INVALID_BLOOD_BANK);
+		}
+		if(CollectionUtils.isNotEmpty(list) && list.get(0).getBloodUnits() <= 0){
+			throw new ApplicationException(ErrorConstants.BLOOD_OUT_OF_STOCK);
+		}
+		if(list.get(0).getBloodUnits() < bloodRequestDTO.getBloodUnits()){
+			throw new ApplicationException("Sorry, only " + list.get(0).getBloodUnits() + " " + ErrorConstants.UNITS_OF_BLOOD_AVAILABLE);
+		}
 		PatientBloodbankMapping patientBloodbankMapping = new PatientBloodbankMapping();
 		patientBloodbankMapping.setPatientId(registration.getRegistrationId());
 		patientBloodbankMapping.setBloodbankId(bloodRequestDTO.getBloodBankId());
@@ -481,6 +495,50 @@ public class LoginServiceImpl implements LoginService {
 		ListDTO<BloodRequestDTO> listDTO = new ListDTO<BloodRequestDTO>();
 		listDTO.setList(loginDao.viewBloodRequest(bloodRequestDTO));
 		listDTO.setTotalSize(bloodRequestDTO.getTotalSize());
+		return listDTO;
+	}
+
+	@Override
+	public ListDTO<RegistrationDTO> viewDonor(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<BloodDonationDTO> donorList = loginDao.viewDonor(registrationDTO);
+		if(CollectionUtils.isNotEmpty(donorList)){
+			List<Long> registrationIdList = new ArrayList<Long>();
+			for(BloodDonationDTO dto: donorList){
+				registrationIdList.add(dto.getDonorId());
+			}
+			registrationDTO.setRegistrationIdList(registrationIdList);
+			return this.viewUser(registrationDTO);
+		}
+		ListDTO<RegistrationDTO> listDTO = new ListDTO<RegistrationDTO>();
+		listDTO.setList(new ArrayList<RegistrationDTO>());
+		listDTO.setTotalSize(0);
+		return listDTO;
+	}
+
+	@Override
+	public ListDTO<RegistrationDTO> viewPatient(RegistrationDTO registrationDTO) throws ApplicationException {
+		List<BloodRequestDTO> patientList = loginDao.viewPatient(registrationDTO);
+		if(CollectionUtils.isNotEmpty(patientList)){
+			List<Long> registrationIdList = new ArrayList<Long>();
+			for(BloodRequestDTO dto: patientList){
+				registrationIdList.add(dto.getPatientId());
+			}
+			registrationDTO.setRegistrationIdList(registrationIdList);
+			return this.viewUser(registrationDTO);
+		}
+		ListDTO<RegistrationDTO> listDTO = new ListDTO<RegistrationDTO>();
+		listDTO.setList(new ArrayList<RegistrationDTO>());
+		listDTO.setTotalSize(0);
+		return listDTO;
+	}
+
+	@Override
+	public ListDTO<BloodBankStockDTO> viewBloodBankStock(RegistrationDTO registrationDTO) throws ApplicationException {
+		Registration registration = loginDao.loadRegistration(registrationDTO);
+		registrationDTO.setRegistrationId(registration.getRegistrationId());
+		ListDTO<BloodBankStockDTO> listDTO = new ListDTO<BloodBankStockDTO>();
+		listDTO.setList(loginDao.viewBloodBankStock(registrationDTO));
+		listDTO.setTotalSize(registrationDTO.getTotalSize());
 		return listDTO;
 	}
 }

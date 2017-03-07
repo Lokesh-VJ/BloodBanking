@@ -38,6 +38,7 @@ public class RegistrationDTO extends BaseDTO implements UserDetails{
 	private List<String> privileges;
 	private String usertypeName;
 	private String bloodGroupName;
+	private List<Long> registrationIdList;
 	public Long getRegistrationId() {
 		return registrationId;
 	}
@@ -169,5 +170,11 @@ public class RegistrationDTO extends BaseDTO implements UserDetails{
 	}
 	public void setBloodGroupName(String bloodGroupName) {
 		this.bloodGroupName = bloodGroupName;
+	}
+	public List<Long> getRegistrationIdList() {
+		return registrationIdList;
+	}
+	public void setRegistrationIdList(List<Long> registrationIdList) {
+		this.registrationIdList = registrationIdList;
 	}
 }

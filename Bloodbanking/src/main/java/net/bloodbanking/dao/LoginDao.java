@@ -2,6 +2,7 @@ package net.bloodbanking.dao;
 
 import java.util.List;
 
+import net.bloodbanking.dto.BloodBankStockDTO;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.BloodRequestDTO;
@@ -37,4 +38,7 @@ public interface LoginDao extends BaseDao{
 	public List<BloodDonationDTO> viewBloodAvailability(BloodDonationDTO bloodDonationDTO);
 	public List<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO);
 	public PatientBloodbankMapping loadPatientBloodMapping(BloodRequestDTO bloodRequestDTO);
+	public List<BloodDonationDTO> viewDonor(RegistrationDTO registrationDTO);
+	public List<BloodRequestDTO> viewPatient(RegistrationDTO registrationDTO);
+	public List<BloodBankStockDTO> viewBloodBankStock(RegistrationDTO registrationDTO);
 }

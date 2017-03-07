@@ -15,7 +15,7 @@
 					</tr>
 					<c:if test="${null == searchResult.list}">
 						<tr class="noResults">
-							<td colspan="3">No Data</td>
+							<td colspan="5">No Data</td>
 						</tr>
 					</c:if>
 					<c:set var="slNO" value="${ (searchResult.page.currentPage - 1) * searchResult.page.resultsPerPage}" />

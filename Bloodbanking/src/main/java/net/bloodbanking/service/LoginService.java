@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.bloodbanking.dto.BloodBankStockDTO;
 import net.bloodbanking.dto.BloodDonationDTO;
 import net.bloodbanking.dto.BloodGroupMstDTO;
 import net.bloodbanking.dto.BloodRequestDTO;
@@ -104,4 +105,13 @@ public interface LoginService {
 
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
 	public ListDTO<BloodRequestDTO> viewBloodRequest(BloodRequestDTO bloodRequestDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<RegistrationDTO> viewDonor(RegistrationDTO registrationDTO) throws ApplicationException;
+	
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<RegistrationDTO> viewPatient(RegistrationDTO registrationDTO) throws ApplicationException;
+
+	@Transactional(readOnly = true, propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT)
+	public ListDTO<BloodBankStockDTO> viewBloodBankStock(RegistrationDTO registrationDTO) throws ApplicationException;
 }

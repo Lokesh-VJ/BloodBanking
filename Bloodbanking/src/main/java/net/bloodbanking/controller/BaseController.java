@@ -96,7 +96,7 @@ public abstract class BaseController {
 		return (null != getValueFromSession(request, AppConstants.SUPERUSER))?true:false;
 	}
 	
-	protected <T extends BaseDTO> void applyPagination(ListDTO<T> listDTO, T baseDTO, Integer resultPerPage) {
+	protected <T extends BaseDTO> void applyPagination(ListDTO<?> listDTO, T baseDTO, Integer resultPerPage) {
 		if (null != listDTO && null != listDTO.getList()) {
 			listDTO.setPageNumber(baseDTO.getPageNumber());
 			listDTO.setPage(PaginationHelper.getPage(listDTO, resultPerPage, baseDTO.getPageNumber()));

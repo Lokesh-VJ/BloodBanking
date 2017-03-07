@@ -4,6 +4,15 @@
 <form method="post" action="viewUser.html" id="moduleForm" name="moduleForm">
 	 <div id="moduleDetailDivContainer" class="marginBetweenFields">
 		<div id="tableLayoutContainer">
+			<div id="viewResultsSearchCriteria">
+				<select name="usertypeId" id="usertypeId" style="width: 150px;">
+					<option value="">Select blood group</option>
+					<c:forEach items="${userTypeList}" var="userType">
+						<option value="${userType.usertypeId}" ${(userType.usertypeId == baseDTO.usertypeId)?'selected':''}>${userType.usertypeName}</option>
+					</c:forEach>
+				</select>
+				<input type="submit" id="searchBtn" name="searchBtn" value="Search" style="width: 60px;" />
+			</div>
 			<table id="viewResultsTable">
 				<tbody>
 					<tr>
@@ -19,7 +28,7 @@
 					</tr>
 					<c:if test="${null == searchResult.list}">
 						<tr class="noResults">
-							<td colspan="3">No Data</td>
+							<td colspan="9">No Data</td>
 						</tr>
 					</c:if>
 					<c:set var="slNO" value="${ (searchResult.page.currentPage - 1) * searchResult.page.resultsPerPage}" />

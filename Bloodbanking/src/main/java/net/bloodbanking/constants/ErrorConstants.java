@@ -25,4 +25,10 @@ public class ErrorConstants {
 	public static final String USER_ADDRESS_NOT_AVAILABLE = "User address not available";
 	
 	public static final String INVALID_BLOOD_REQUEST = "Invalid blood request";
+	
+	public static final String INVALID_BLOOD_BANK = "Invalid blood bank";
+	
+	public static final String BLOOD_OUT_OF_STOCK = "Blood out of stock";
+	
+	public static final String UNITS_OF_BLOOD_AVAILABLE = "Unit(s) of blood available";
 }
