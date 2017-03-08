@@ -56,15 +56,15 @@
 			<div class="marginBetweenFields loginPageFormContents text-left margin-center columnLayoutContainerCol">
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">User Name<span class="fieldMandatory">*</span></label>
-					 <input type="text" name="userName" id="userName" value="${baseDTO.userName}" maxlength="20" required readonly onfocus="this.removeAttribute('readonly')"  />
+					 <input type="text" name="userName" id="userName" value="${baseDTO.userName}" maxlength="20" required />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Password<span class="fieldMandatory">*</span></label> 
-					<input type="password" name="password" id="password" value="" maxlength="20" required readonly onfocus="this.removeAttribute('readonly')"  />
+					<input type="password" name="password" id="password" value="" maxlength="20" required />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Confirm Password<span class="fieldMandatory">*</span></label>
-					 <input type="password" name="confirmPassword" id="confirmPassword" value="" maxlength="20" required readonly onfocus="this.removeAttribute('readonly')"  />
+					 <input type="password" name="confirmPassword" id="confirmPassword" value="" maxlength="20" required />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Security Question<span class="fieldMandatory">*</span></label> 
