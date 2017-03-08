@@ -8,11 +8,11 @@
 			 <div class="marginBetweenFields loginPageFormContents text-left margin-center columnLayoutContainerCol">
 			 	<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Password<span class="fieldMandatory">*</span></label> 
-					<input type="password" name="password" id="password" value="" required />
+					<input type="password" name="password" id="password" value="" required readonly onfocus="this.removeAttribute('readonly')" />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<label class="label_content">Confirm Password<span class="fieldMandatory">*</span></label>
-					 <input type="password" name="confirmPassword" id="confirmPassword" value="" required />
+					 <input type="password" name="confirmPassword" id="confirmPassword" value="" required readonly onfocus="this.removeAttribute('readonly')" />
 				</div>
 				<div class="marginBetweenFields loginPageFormContents_Div">
 					<input type="submit" name="submit" id="submit" value="Update" />
