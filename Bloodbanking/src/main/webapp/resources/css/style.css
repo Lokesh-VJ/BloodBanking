@@ -107,11 +107,7 @@ ul#nonLoggedInUserNavigationBar {
 
 ul#nonLoggedInUserNavigationBar li {
 	float: left;
-	width: 24.91%;
-}
-
-ul#nonLoggedInUserNavigationBar li:not(:last-child ) {
-	border-right: 1px solid red;
+	width: 25%;
 }
 
 ul#nonLoggedInUserNavigationBar li a {
@@ -122,9 +118,11 @@ ul#nonLoggedInUserNavigationBar li a {
 	text-decoration: none;
 }
 
-/* ul#nonLoggedInUserNavigationBar li a:hover:not(.active) {
-    
-} */
+ul#nonLoggedInUserNavigationBar li a:hover:not(.active) {
+    background-color: #d45656;
+    color: white;
+}
+
 ul#nonLoggedInUserNavigationBar li a.active {
 	background-color: red;
 	color: white;
@@ -295,4 +293,16 @@ table#viewResultsTable tr:nth-child(even) {
 }
 div#viewResultsSearchCriteria{
 	margin-bottom: 5px;
+}
+
+@media (max-width:768px){
+	ul#nonLoggedInUserNavigationBar{
+		width: 100%;
+	}
+}
+
+@media (max-width:1100px){
+	ul#nonLoggedInUserNavigationBar{
+		width: 75%;
+	}
 }
