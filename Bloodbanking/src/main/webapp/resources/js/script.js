@@ -57,7 +57,7 @@ function userTypeSignupOnchange(){
 			document.getElementsByClassName("nonBloodBankRegistrationFieldDiv")[j].style.display = "none";
 		}
 		for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationField").length; j++){
-			document.getElementsByClassName("nonBloodBankRegistrationField")[j].setAttribute("required");
+			document.getElementsByClassName("nonBloodBankRegistrationField")[j].setAttribute("required", true);
 		}
 	}
 }
@@ -97,8 +97,8 @@ function onPageLoadFunction(){
     	confirmPassword.onkeyup = validatePassword;
     }
     
-    if(document.getElementById("signupForm").length > 0){
+    if(document.getElementById("signupForm") != null){
     	userTypeSignupOnchange();
-    }
+    }    
 }
 document.addEventListener( "DOMContentLoaded", onPageLoadFunction, false );
