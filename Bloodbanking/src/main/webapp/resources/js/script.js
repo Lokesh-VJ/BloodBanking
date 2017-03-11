@@ -49,15 +49,14 @@ function userTypeSignupOnchange(){
 		document.getElementsByClassName("nonBloodBankRegistrationFieldDiv")[j].style.display = "block";
 	}
 	for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationField").length; j++){
-		document.getElementsByClassName("nonBloodBankRegistrationField")[j].removeAttribute("required");
+		document.getElementsByClassName("nonBloodBankRegistrationField")[j].setAttribute("required", true);
 	}
-	
 	if(isBloodBank){
 		for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationFieldDiv").length; j++){
 			document.getElementsByClassName("nonBloodBankRegistrationFieldDiv")[j].style.display = "none";
 		}
 		for(var j = 0; j < document.getElementsByClassName("nonBloodBankRegistrationField").length; j++){
-			document.getElementsByClassName("nonBloodBankRegistrationField")[j].setAttribute("required", true);
+			document.getElementsByClassName("nonBloodBankRegistrationField")[j].removeAttribute("required");
 		}
 	}
 }
